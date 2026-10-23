@@ -109,6 +109,23 @@ public final class AspectRegistry {
         entities.computeIfAbsent(type, key -> new ArrayList<>()).add(EntityAspects.of(aspects, nbt));
     }
 
+    public void mergeEntity(EntityType<?> type, AspectList additions, Object... nbt) {
+        List<EntityAspects.Condition> conditions = EntityAspects.of(new AspectList(), nbt).conditions();
+        List<EntityAspects> candidates = entities.computeIfAbsent(type, key -> new ArrayList<>());
+        for (int index = candidates.size() - 1; index >= 0; index--) {
+            EntityAspects candidate = candidates.get(index);
+            if (candidate.conditions().equals(conditions)) {
+                AspectList merged = candidate.aspects().copy();
+                for (Aspect aspect : additions.getAspects()) {
+                    merged.add(aspect, additions.getAmount(aspect));
+                }
+                candidates.set(index, new EntityAspects(merged, candidate.conditions()));
+                return;
+            }
+        }
+        candidates.add(EntityAspects.of(additions.copy(), nbt));
+    }
+
     public @Nullable AspectList getEntityTags(Entity entity) {
         List<EntityAspects> candidates = entities.get(entity.getType());
         if (candidates == null) {
