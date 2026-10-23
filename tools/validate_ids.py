@@ -497,8 +497,9 @@ class Validator:
         relative = path.relative_to(self.out).as_posix()
         root = read_nbt(path.read_bytes())
         for entry in root["palette"]:
-            if entry["id"].startswith("minecraft:"):
-                self.check(relative, entry["id"], "block")
+            name = entry[mcformat.PROFILES[self.version].block_state_keys[0]]
+            if name.startswith("minecraft:"):
+                self.check(relative, name, "block")
         for entry in root["blocks"]:
             nbt = entry.get("nbt")
             if nbt and nbt["id"].startswith("minecraft:"):
