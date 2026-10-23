@@ -9,9 +9,11 @@
           "name": "thaumcraft:air_shard"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     },
     {
       "rolls": 1,
@@ -21,9 +23,11 @@
           "name": "thaumcraft:fire_shard"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     },
     {
       "rolls": 1,
@@ -33,9 +37,11 @@
           "name": "thaumcraft:water_shard"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     },
     {
       "rolls": 1,
@@ -45,9 +51,11 @@
           "name": "thaumcraft:earth_shard"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     },
     {
       "rolls": 1,
@@ -57,9 +65,11 @@
           "name": "thaumcraft:order_shard"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     },
     {
       "rolls": 1,
@@ -69,9 +79,11 @@
           "name": "thaumcraft:entropy_shard"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/mixed_crystal_cluster"

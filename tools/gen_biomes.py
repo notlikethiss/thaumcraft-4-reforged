@@ -14,12 +14,8 @@ FLOWERS = [
     "oxeye_daisy",
 ]
 
-OFFSET = {
-    "type": "minecraft:offset",
-    "x": {"type": "minecraft:trapezoid", "max": 7, "min": -7, "plateau": 0},
-    "y": {"type": "minecraft:trapezoid", "max": 3, "min": -3, "plateau": 0},
-    "z": {"type": "minecraft:trapezoid", "max": 7, "min": -7, "plateau": 0},
-}
+SPREAD_XZ = {"type": "minecraft:trapezoid", "max": 7, "min": -7, "plateau": 0}
+SPREAD_Y = {"type": "minecraft:trapezoid", "max": 3, "min": -3, "plateau": 0}
 AIR_ONLY = {
     "type": "minecraft:block_predicate_filter",
     "predicate": {"type": "minecraft:matching_block_tag", "tag": "minecraft:air"},
@@ -107,6 +103,23 @@ def spawns(categories):
     return {"argument": {"spawn_costs": {}, "spawns_by_category": by_category}, "modifier": "overlay"}
 
 
+def spawner(spawn):
+    count = spawn["count"]
+    if isinstance(count, dict):
+        minimum, maximum = count["min_inclusive"], count["max_inclusive"]
+    else:
+        minimum = maximum = count
+    return {"type": spawn["type"], "weight": spawn["weight"], "minCount": minimum, "maxCount": maximum}
+
+
+def attribute_spawners(attributes):
+    by_category = attributes["minecraft:gameplay/natural_mob_spawns"]["argument"]["spawns_by_category"]
+    return {
+        "spawners": {category: [spawner(spawn) for spawn in entries] for category, entries in by_category.items()},
+        "spawn_costs": {},
+    }
+
+
 def sky_for_temperature(temperature):
     value = max(-1.0, min(1.0, temperature / 3.0))
     red, green, blue = colorsys.hsv_to_rgb(0.62222224 - value * 0.05, 0.5 + value * 0.1, 1.0)
@@ -125,8 +138,9 @@ def heightmap(kind):
     return {"type": "minecraft:heightmap", "heightmap": kind}
 
 
-def patch(count, kind, tries):
-    return counted(count, heightmap(kind), BIOME_FILTER, {"type": "minecraft:count", "count": tries}, OFFSET, AIR_ONLY)
+def patch(profile, count, kind, tries):
+    offset = profile.patch_offset(SPREAD_XZ, SPREAD_Y)
+    return counted(count, heightmap(kind), BIOME_FILTER, {"type": "minecraft:count", "count": tries}, offset, AIR_ONLY)
 
 
 def surface_trees(count):
@@ -147,7 +161,9 @@ def generate(ctx):
         ctx.write(ctx.DATA / NS / "worldgen" / kind / f"{name}.json", content)
 
     def feature(name, content):
-        if not modern:
+        if "to_place" in content:
+            content = {**content, "to_place": profile.state_provider(content["to_place"])}
+        if not modern or profile.feature_folder == "configured_feature":
             content = {"type": content["type"], "config": {key: value for key, value in content.items() if key != "type"}}
         worldgen(profile.feature_folder, name, content)
 
@@ -164,7 +180,7 @@ def generate(ctx):
             "to_place": {"type": "minecraft:weighted", "entries": [{"data": f"minecraft:{flower}", "weight": 1} for flower in FLOWERS]},
         },
     )
-    placed("magical_flowers", f"{NS}:magical_flowers", patch(10, "MOTION_BLOCKING", 64))
+    placed("magical_flowers", f"{NS}:magical_flowers", patch(profile, 10, "MOTION_BLOCKING", 64))
     feature(
         "magical_grass",
         {
@@ -175,14 +191,14 @@ def generate(ctx):
             },
         },
     )
-    placed("magical_grass", f"{NS}:magical_grass", patch(12, "WORLD_SURFACE_WG", 32))
-    placed("magical_lily_pads", "minecraft:waterlily", patch(6, "WORLD_SURFACE_WG", 10))
+    placed("magical_grass", f"{NS}:magical_grass", patch(profile, 12, "WORLD_SURFACE_WG", 32))
+    placed("magical_lily_pads", "minecraft:waterlily", patch(profile, 6, "WORLD_SURFACE_WG", 10))
 
     placed("eerie_trees", "minecraft:oak", surface_trees(2))
     placed("tainted_trees", "minecraft:oak", surface_trees(2))
-    placed("tainted_grass", "minecraft:grass", patch(2, "WORLD_SURFACE_WG", 32))
-    placed("eerie_flowers", "minecraft:flower_default", patch(1, "MOTION_BLOCKING", 64))
-    placed("eerie_grass", "minecraft:grass", patch(2, "WORLD_SURFACE_WG", 32))
+    placed("tainted_grass", "minecraft:grass", patch(profile, 2, "WORLD_SURFACE_WG", 32))
+    placed("eerie_flowers", "minecraft:flower_default", patch(profile, 1, "MOTION_BLOCKING", 64))
+    placed("eerie_grass", "minecraft:grass", patch(profile, 2, "WORLD_SURFACE_WG", 32))
     feature("taint_decoration", {"type": f"{NS}:taint_decoration"})
     placed("taint_decoration", f"{NS}:taint_decoration", [])
 
@@ -197,19 +213,19 @@ def generate(ctx):
     def biome(name, temperature, downfall, attributes, effects, steps, carvers=True, precipitation=True):
         carver_list = ["minecraft:cave", "minecraft:cave_extra_underground", "minecraft:canyon"] if carvers else []
         if modern:
-            worldgen(
-                "biome",
-                name,
-                {
-                    "attributes": attributes,
-                    "carvers": carver_list,
-                    "downfall": downfall,
-                    "effects": effects,
-                    "features": steps,
-                    "has_precipitation": precipitation,
-                    "temperature": temperature,
-                },
-            )
+            content = {
+                "attributes": attributes,
+                "carvers": carver_list,
+                "downfall": downfall,
+                "effects": effects,
+                "features": steps,
+                "has_precipitation": precipitation,
+                "temperature": temperature,
+            }
+            if not profile.attribute_spawns:
+                content["attributes"] = {key: value for key, value in attributes.items() if key != "minecraft:gameplay/natural_mob_spawns"}
+                content.update(attribute_spawners(attributes))
+            worldgen("biome", name, content)
             return
         legacy = {key: int(value[1:], 16) for key, value in effects.items()}
         legacy["sky_color"] = int(attributes["minecraft:visual/sky_color"][1:], 16)

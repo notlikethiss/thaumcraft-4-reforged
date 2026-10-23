@@ -3,7 +3,8 @@
   "biomes": "#minecraft:is_nether",
   "spawners": {
     "type": "thaumcraft:wisp",
-    "count": 1,
-    "weight": 5
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
   }
 }

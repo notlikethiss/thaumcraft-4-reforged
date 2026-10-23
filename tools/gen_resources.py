@@ -46,6 +46,8 @@ CANDLE_COLORS = [
     10526880, 2651799, 8073150, 2437522, 5320730, 3887386, 11743532, 1973019,
 ]
 DIRECTIONS = ["down", "up", "north", "south", "west", "east"]
+FUELS = {"alumentum": 6400, "magical_log": 400}
+FUEL_ITEMS = {"alumentum": ["alumentum"], "magical_log": ["greatwood_log", "silverwood_log"]}
 ASPECT_TINT = {"type": f"{NS}:aspect"}
 
 block_tags = defaultdict(set)
@@ -765,6 +767,13 @@ def galactic_font():
     write(ASSETS / "font" / "galactic.json", {"providers": providers})
 
 
+def write_fuels():
+    if not profile.fuel_data_map:
+        return
+    values = {f"{NS}:{item}": ticks for name, ticks in FUELS.items() for item in FUEL_ITEMS[name]}
+    write(DATA / "neoforge" / "data_maps" / "item" / "furnace_fuels.json", {"values": {key: {"burn_time": ticks} for key, ticks in values.items()}})
+
+
 def main():
     if OUT.exists():
         if mcformat.out_overridden and OUT == ROOT:
@@ -797,6 +806,7 @@ def main():
     gen_warp_shaders.generate(mcformat.profile.name, OUT)
     gen_node_shaders.generate(mcformat.profile.name, OUT)
     gen_phase5.recipes(ctx)
+    write_fuels()
     write_tags()
     validate_textures()
     validate_models()

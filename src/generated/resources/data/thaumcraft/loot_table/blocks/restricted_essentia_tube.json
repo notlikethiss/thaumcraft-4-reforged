@@ -9,9 +9,11 @@
           "name": "thaumcraft:restricted_essentia_tube"
         }
       ],
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      }
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ],
   "random_sequence": "thaumcraft:blocks/restricted_essentia_tube"

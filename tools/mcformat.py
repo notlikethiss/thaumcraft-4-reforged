@@ -45,6 +45,10 @@ class Profile:
     tag_expansions = {}
     data_maps = True
     enchantment_json = True
+    shader_dialect = "26.3"
+    item_definitions = True
+    attribute_spawns = True
+    fuel_data_map = False
 
     def rename_vanilla(self, value):
         prefix = "#" if value.startswith("#") else ""
@@ -122,6 +126,18 @@ class Profile:
     def configured_feature(self, content):
         return content
 
+    def patch_offset(self, xz, y):
+        return {"type": "minecraft:offset", "x": xz, "y": y, "z": xz}
+
+    def bed_rule(self, rule):
+        return rule
+
+    def state_provider(self, provider):
+        return provider
+
+    def villager_trade(self, trade):
+        return trade
+
     def model_element(self, element, name, notes):
         return element
 
@@ -131,6 +147,9 @@ class Profile:
 
 class Legacy(Profile):
     modern = False
+    item_definitions = False
+    attribute_spawns = False
+    fuel_data_map = True
     explicit_render_types = True
     feature_folder = "configured_feature"
 
@@ -276,6 +295,64 @@ class Profile1211(Legacy):
         return {"function": function["type"], **{key: value for key, value in function.items() if key != "type"}}
 
 
+class Profile2612(Profile):
+    name = "26.1.2"
+    data_version = 4790
+    feature_folder = "configured_feature"
+    shader_dialect = "26.1"
+    attribute_spawns = False
+    fuel_data_map = True
+    random_sequence = True
+    loot_table_reference_key = "value"
+    loot_condition_namespace = "neoforge:"
+    loot_modifier_type = "neoforge:add_table"
+
+    loot_table = Legacy.loot_table
+    loot_modifier = Legacy.loot_modifier
+    configured_feature = Legacy.configured_feature
+    _entry = Legacy._entry
+    _pool = Legacy._pool
+    _condition_list = Legacy._condition_list
+    _function_list = Legacy._function_list
+    _common_condition = Legacy._common_condition
+    _condition = Profile1211._condition
+    spawn_modifier = Profile1211.spawn_modifier
+
+    def _function(self, function):
+        result = {"function": function["type"]}
+        for key, value in function.items():
+            if key == "condition":
+                result["conditions"] = self._condition_list(value)
+            elif key != "type":
+                result[key] = value
+        return result
+
+    def state_provider(self, provider):
+        if provider.get("type") != "minecraft:weighted":
+            return provider
+        return {
+            "type": "minecraft:weighted_state_provider",
+            "entries": [{"data": {"Name": entry["data"]} if isinstance(entry["data"], str) else entry["data"], "weight": entry["weight"]} for entry in provider["entries"]],
+        }
+
+    def patch_offset(self, xz, y):
+        return {"type": "minecraft:random_offset", "xz_spread": xz, "y_spread": y}
+
+    def bed_rule(self, rule):
+        rule = dict(rule)
+        if rule.pop("destroy_on_use", False):
+            rule["explodes"] = True
+        return rule
+
+    def villager_trade(self, trade):
+        trade = dict(trade)
+        modifier = trade.pop("given_item_modifier", None)
+        if modifier is not None:
+            modifiers = modifier if isinstance(modifier, list) else [modifier]
+            trade["given_item_modifiers"] = [self._function(function) for function in modifiers]
+        return trade
+
+
 class Profile1192(Legacy):
     name = "1.19.2"
     data_version = 3120
@@ -389,7 +466,7 @@ class Profile1192(Legacy):
         return {"function": kind, **rest}
 
 
-PROFILES = {"26.3": Profile(), "1.21.1": Profile1211(), "1.19.2": Profile1192()}
+PROFILES = {"26.3": Profile(), "26.1.2": Profile2612(), "1.21.1": Profile1211(), "1.19.2": Profile1192()}
 
 profile = PROFILES["26.3"]
 out_root = DEFAULT_OUT

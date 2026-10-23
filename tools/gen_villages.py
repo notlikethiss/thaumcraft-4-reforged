@@ -58,7 +58,7 @@ def generate(ctx):
             }
             if gives[1] != 1 or gives[2] != 1:
                 content["given_item_modifier"] = {"type": "minecraft:set_count", "count": uniform(gives[1], gives[2])}
-            ctx.write(ctx.DATA / ns / "villager_trade" / profession / f"{name}.json", content)
+            ctx.write(ctx.DATA / ns / "villager_trade" / profession / f"{name}.json", ctx.profile.villager_trade(content))
             names.append(f"{ns}:{profession}/{name}")
         ctx.write(ctx.DATA / ns / "tags" / "villager_trade" / profession / "pool.json", {"values": names})
         for level in range(1, 6):

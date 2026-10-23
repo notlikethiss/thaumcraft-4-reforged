@@ -7,21 +7,23 @@
         {
           "type": "minecraft:item",
           "name": "thaumcraft:ancient_stone_slab",
-          "modifier": [
+          "functions": [
             {
-              "type": "minecraft:set_count",
+              "function": "minecraft:set_count",
               "count": 2,
               "add": false,
-              "condition": {
-                "type": "minecraft:match_block",
-                "blocks": "thaumcraft:ancient_stone_slab",
-                "state": {
-                  "type": "double"
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "thaumcraft:ancient_stone_slab",
+                  "properties": {
+                    "type": "double"
+                  }
                 }
-              }
+              ]
             },
             {
-              "type": "minecraft:explosion_decay"
+              "function": "minecraft:explosion_decay"
             }
           ]
         }

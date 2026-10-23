@@ -44,7 +44,7 @@ def generate(ctx):
     for kind in TYPES:
         name = f"{kind}_golem"
         icon(ctx, name, f"golem_{kind}")
-        if ctx.mcformat.profile.name == "26.3":
+        if ctx.mcformat.profile.item_definitions:
             ctx.write(ctx.ASSETS / "items" / f"{name}.json", {"model": {
                 "type": "minecraft:composite", "models": [
                     {"type": "minecraft:model", "model": ctx.ref(name, "item")},

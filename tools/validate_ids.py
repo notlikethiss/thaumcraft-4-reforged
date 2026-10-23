@@ -16,7 +16,7 @@ import mcformat
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "tools" / "cache"
 MANIFEST_URL = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
-JAVA_HOMES = {"26.3": "openjdk@25", "1.21.1": "openjdk@21", "1.19.2": "openjdk@17"}
+JAVA_HOMES = {"26.3": "openjdk@25", "26.1.2": "openjdk@25", "1.21.1": "openjdk@21", "1.19.2": "openjdk@17"}
 ASPECTS = ROOT / "src" / "main" / "java" / "thaumcraft" / "aspect" / "ConfigAspects.java"
 ID_PATTERN = re.compile(r'"(#?minecraft:[a-z0-9_./]+)"')
 LOOT_TYPES = ["loot_condition_type", "loot_function_type", "loot_pool_entry_type", "loot_number_provider_type", "enchantment_level_based_value_type"]

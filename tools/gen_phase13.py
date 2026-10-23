@@ -184,6 +184,7 @@ def generate(ctx):
         "monster_spawn_light_level": 0,
         "skybox": "none",
     }
+    dimension_type["attributes"]["minecraft:gameplay/bed_rule"] = ctx.mcformat.profile.bed_rule(dimension_type["attributes"]["minecraft:gameplay/bed_rule"])
     if not ctx.mcformat.profile.modern:
         for field in ["attributes", "cardinal_light", "has_ender_dragon_fight", "has_fixed_time", "skybox"]:
             dimension_type.pop(field)
@@ -202,7 +203,7 @@ def generate(ctx):
 
     biome_path = data / NS / "worldgen" / "biome" / "eldritch.json"
     biome = json.loads(biome_path.read_text(encoding="utf-8"))
-    if ctx.mcformat.profile.modern:
+    if ctx.mcformat.profile.attribute_spawns:
         biome["attributes"]["minecraft:gameplay/natural_mob_spawns"]["argument"]["spawns_by_category"]["monster"] = [
             {"type": f"{NS}:{name}", "count": 1, "weight": 1} for name in ["inhabited_zombie", "eldritch_guardian"]
         ]

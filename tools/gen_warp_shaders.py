@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Generate TC4 warp post-effects. Use --mc 26.3|1.21.1|1.19.2 [--out RESOURCE_ROOT]."""
-import argparse, json
+"""Generate TC4 warp post-effects. Use --mc 26.3|26.1.2|1.21.1|1.19.2 [--out RESOURCE_ROOT]."""
+import argparse, json, re
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PENDING = ROOT / "tools/warp_shader_sources"
@@ -71,6 +71,9 @@ void main(){ vec4 c=texture(InSampler,texCoord); vec3 s=c.rgb*ColorScale; float 
 """)
     put(a/"shaders/post/warp_bloom_color.fsh",modernize(PENDING / "program/bloomColor.fsh","InSampler","warp_bloom_color"))
     put(a/"shaders/post/warp_bloom_add.fsh",modernize(PENDING / "program/bloom2.fsh","InSampler","warp_bloom_add"))
+def glsl_26_1(source):
+    source = source.replace("#extension GL_ARB_separate_shader_objects : require\n", "").replace("#include <", "#moj_import <")
+    return re.sub(r"layout\(\s*location\s*=\s*\d+\s*\)\s*", "", source)
 def generate_legacy(root):
     a=root/"assets/thaumcraft/shaders"; post=a/"post"; prog=a/"program"
     p=PENDING / "post"; q=PENDING / "program"
@@ -100,7 +103,7 @@ void main(){ vec4 c=texture(DiffuseSampler,texCoord); vec3 s=c.rgb*ColorScale; f
     program("warp_bloom_color","warp_bloom_vertex","warp_bloom_color",[]); program("warp_bloom_add","warp_bloom_vertex","warp_bloom_add",[])
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mc",required=True,choices=("26.3","1.21.1","1.19.2"))
+    parser.add_argument("--mc",required=True,choices=("26.3","26.1.2","1.21.1","1.19.2"))
     parser.add_argument("--out",type=Path,default=DEFAULT_OUT,help="resource root (defaults to src/generated/resources)")
     args=parser.parse_args(); out=args.out.resolve()
     generate(args.mc, out)
@@ -111,6 +114,10 @@ def generate(mc, out=DEFAULT_OUT):
     output = Path(out).resolve()
     if mc == "26.3":
         generate_modern(output)
+    elif mc == "26.1.2":
+        generate_modern(output)
+        for shader in (output / "assets/thaumcraft/shaders/post").glob("*.fsh"):
+            shader.write_text(glsl_26_1(shader.read_text(encoding="utf-8")), encoding="utf-8")
     elif mc in ("1.21.1", "1.19.2"):
         generate_legacy(output)
     else:

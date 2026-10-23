@@ -1,32 +1,5 @@
 {
   "attributes": {
-    "minecraft:gameplay/natural_mob_spawns": {
-      "argument": {
-        "spawn_costs": {},
-        "spawns_by_category": {
-          "ambient": [],
-          "axolotls": [],
-          "creature": [],
-          "misc": [],
-          "monster": [
-            {
-              "type": "thaumcraft:inhabited_zombie",
-              "count": 1,
-              "weight": 1
-            },
-            {
-              "type": "thaumcraft:eldritch_guardian",
-              "count": 1,
-              "weight": 1
-            }
-          ],
-          "underground_water_creature": [],
-          "water_ambient": [],
-          "water_creature": []
-        }
-      },
-      "modifier": "overlay"
-    },
     "minecraft:visual/sky_color": "#000000"
   },
   "carvers": [],
@@ -48,5 +21,29 @@
     []
   ],
   "has_precipitation": false,
-  "temperature": 0.5
+  "temperature": 0.5,
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "thaumcraft:inhabited_zombie",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "thaumcraft:eldritch_guardian",
+        "minCount": 1,
+        "maxCount": 1,
+        "weight": 1
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "spawn_costs": {}
 }

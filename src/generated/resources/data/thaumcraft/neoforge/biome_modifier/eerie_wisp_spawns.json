@@ -3,7 +3,8 @@
   "biomes": "thaumcraft:eerie",
   "spawners": {
     "type": "thaumcraft:wisp",
-    "count": 1,
-    "weight": 3
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
   }
 }

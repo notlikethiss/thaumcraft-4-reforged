@@ -3,7 +3,8 @@
   "biomes": "thaumcraft:eerie",
   "spawners": {
     "type": "thaumcraft:giant_brainy_zombie",
-    "count": 1,
-    "weight": 8
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 1
   }
 }

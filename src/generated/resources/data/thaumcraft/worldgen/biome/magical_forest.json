@@ -7,143 +7,6 @@
         "sound": "minecraft:music.overworld.forest"
       }
     },
-    "minecraft:gameplay/natural_mob_spawns": {
-      "argument": {
-        "spawn_costs": {},
-        "spawns_by_category": {
-          "ambient": [
-            {
-              "type": "minecraft:bat",
-              "count": 8,
-              "weight": 10
-            }
-          ],
-          "axolotls": [],
-          "creature": [
-            {
-              "type": "minecraft:sheep",
-              "count": 4,
-              "weight": 12
-            },
-            {
-              "type": "minecraft:pig",
-              "count": 4,
-              "weight": 10
-            },
-            {
-              "type": "minecraft:chicken",
-              "count": 4,
-              "weight": 10
-            },
-            {
-              "type": "minecraft:cow",
-              "count": 4,
-              "weight": 8
-            },
-            {
-              "type": "minecraft:wolf",
-              "count": 4,
-              "weight": 5
-            },
-            {
-              "type": "minecraft:wolf",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 1,
-                "max_inclusive": 3
-              },
-              "weight": 2
-            },
-            {
-              "type": "minecraft:horse",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 1,
-                "max_inclusive": 3
-              },
-              "weight": 2
-            }
-          ],
-          "misc": [],
-          "monster": [
-            {
-              "type": "minecraft:spider",
-              "count": 4,
-              "weight": 100
-            },
-            {
-              "type": "minecraft:zombie",
-              "count": 4,
-              "weight": 95
-            },
-            {
-              "type": "minecraft:zombie_villager",
-              "count": 1,
-              "weight": 5
-            },
-            {
-              "type": "minecraft:skeleton",
-              "count": 4,
-              "weight": 100
-            },
-            {
-              "type": "minecraft:creeper",
-              "count": 4,
-              "weight": 100
-            },
-            {
-              "type": "minecraft:slime",
-              "count": 4,
-              "weight": 100
-            },
-            {
-              "type": "minecraft:enderman",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 1,
-                "max_inclusive": 4
-              },
-              "weight": 10
-            },
-            {
-              "type": "minecraft:witch",
-              "count": 1,
-              "weight": 5
-            },
-            {
-              "type": "minecraft:witch",
-              "count": 1,
-              "weight": 3
-            },
-            {
-              "type": "minecraft:enderman",
-              "count": 1,
-              "weight": 3
-            }
-          ],
-          "underground_water_creature": [
-            {
-              "type": "minecraft:glow_squid",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 4,
-                "max_inclusive": 6
-              },
-              "weight": 10
-            }
-          ],
-          "water_ambient": [],
-          "water_creature": [
-            {
-              "type": "minecraft:squid",
-              "count": 4,
-              "weight": 10
-            }
-          ]
-        }
-      },
-      "modifier": "overlay"
-    },
     "minecraft:visual/sky_color": "#79a6ff"
   },
   "carvers": [
@@ -222,5 +85,141 @@
     ]
   ],
   "has_precipitation": true,
-  "temperature": 0.7
+  "temperature": 0.7,
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "weight": 10,
+        "minCount": 8,
+        "maxCount": 8
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "minecraft:sheep",
+        "weight": 12,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:pig",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:chicken",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:cow",
+        "weight": 8,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:wolf",
+        "weight": 5,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:wolf",
+        "weight": 2,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      {
+        "type": "minecraft:horse",
+        "weight": 2,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:spider",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:zombie",
+        "weight": 95,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:zombie_villager",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "minecraft:skeleton",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:creeper",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:slime",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:enderman",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:witch",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "minecraft:witch",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "minecraft:enderman",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "underground_water_creature": [
+      {
+        "type": "minecraft:glow_squid",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 6
+      }
+    ],
+    "water_ambient": [],
+    "water_creature": [
+      {
+        "type": "minecraft:squid",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 4
+      }
+    ]
+  },
+  "spawn_costs": {}
 }

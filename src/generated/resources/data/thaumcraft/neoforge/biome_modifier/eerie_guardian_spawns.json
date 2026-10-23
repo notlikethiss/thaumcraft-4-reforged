@@ -3,7 +3,8 @@
   "biomes": "thaumcraft:eerie",
   "spawners": {
     "type": "thaumcraft:eldritch_guardian",
-    "count": 1,
-    "weight": 1
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
   }
 }
