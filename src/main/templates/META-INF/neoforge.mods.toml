@@ -36,7 +36,7 @@ Adding a touch of magic to Minecraft. Unofficial port of Thaumcraft 4.2.3.5.
 [[dependencies.${mod_id}]]
     modId="terrablender"
     type="required"
-    versionRange="[26.3.0.0.9,)"
+    versionRange="[26.1.2.0.3,)"
     ordering="AFTER"
     side="BOTH"
 

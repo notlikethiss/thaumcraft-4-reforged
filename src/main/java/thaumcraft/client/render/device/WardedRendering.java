@@ -49,7 +49,7 @@ public final class WardedRendering {
         poseStack.pushPose();
         poseStack.translate(pointX / 16.0F, pointY / 16.0F, pointZ / 16.0F);
         if (angleX != 0.0F) {
-            poseStack.rotateDegrees(Axis.XP, angleX * DEGREES);
+            poseStack.mulPose(Axis.XP.rotationDegrees(angleX * DEGREES));
         }
         ItemGeometry.solid(collector.order(order), poseStack, texture, translucent, geometry);
         poseStack.popPose();
@@ -72,7 +72,7 @@ public final class WardedRendering {
         poseStack.translate(0.0F, 1.0F, 1.0F);
         poseStack.scale(1.0F, -1.0F, -1.0F);
         poseStack.translate(0.5F, 0.5F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, chestRotation(facing));
+        poseStack.mulPose(Axis.YP.rotationDegrees(chestRotation(facing)));
         poseStack.translate(-0.5F, -0.5F, -0.5F);
         part(collector, poseStack, CHEST_TEXTURE, false, 0, 1.0F, 7.0F, 15.0F, angle, sink ->
             ModelBoxGeometry.box(sink, 0.0F, -5.0F, -14.0F, 14, 5, 14, 0, 0, 64.0F, 64.0F, false, WHITE, light));
@@ -87,11 +87,11 @@ public final class WardedRendering {
         float bob = Mth.sin(ticks / 14.0F) * 0.03F + 0.03F;
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.01F, 0.5F);
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         poseStack.pushPose();
         poseStack.translate(0.0F, -0.8F + bob, 0.0F);
-        poseStack.rotateDegrees(Axis.YP, rotation * 180.0F / 3.141593F);
-        poseStack.rotateDegrees(Axis.YP, -90.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotation * 180.0F / 3.141593F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
         poseStack.scale(0.4F, 0.4F, 0.4F);
         part(collector, poseStack, BRAIN_TEXTURE, false, 0, -6.0F, 8.0F, -8.0F, 0.0F, sink ->
             ModelBoxGeometry.box(sink, 0.0F, 0.0F, 0.0F, 12, 10, 16, 0, 0, 128.0F, 64.0F, true, WHITE, light));
@@ -125,10 +125,10 @@ public final class WardedRendering {
         int tint = color < 0 || color >= ModBlocks.CANDLE_TINTS.length ? WHITE : ARGB.opaque(ModBlocks.CANDLE_TINTS[color]);
         poseStack.pushPose();
         poseStack.translate(0.5F, 1.5F, 0.5F);
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         if (inWorld) {
-            poseStack.rotateDegrees(Axis.YP, 180.0F);
-            poseStack.rotateDegrees(Axis.YP, facing * 360 / 16.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(facing * 360 / 16.0F));
         }
         if (!onWall) {
             part(collector, poseStack, texture, false, 0, -1.0F, -7.0F, -2.0F, 0.0F, sink ->
@@ -148,8 +148,8 @@ public final class WardedRendering {
             poseStack.pushPose();
             poseStack.translate(0.0F, 0.0F, 0.05001F);
             poseStack.scale(0.0375F, 0.0375F, 0.0375F);
-            poseStack.rotateDegrees(Axis.YP, 180.0F);
-            poseStack.rotateDegrees(Axis.XP, -swing * DEGREES * 2.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(-swing * DEGREES * 2.0F));
             int argb = ARGB.color(Mth.floor(0.75F * 255.0F), aspect.getColor());
             ItemGeometry.solid(collector.order(1), poseStack, aspect.getImage(), true, sink -> tag(sink, -8.0F, 4.0F, argb, light));
             poseStack.popPose();

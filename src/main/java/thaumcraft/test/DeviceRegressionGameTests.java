@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -115,7 +115,7 @@ public final class DeviceRegressionGameTests {
         level.setBlockAndUpdate(stone, ModBlocks.WARDING_PAVING_STONE.get().defaultBlockState());
         level.setBlockAndUpdate(stone.above(), ModBlocks.WARDING_AURA.get().defaultBlockState());
         level.setBlockAndUpdate(stone.above(2), ModBlocks.WARDING_AURA.get().defaultBlockState());
-        var mob = EntityTypes.ZOMBIE.create(level, EntitySpawnReason.COMMAND);
+        var mob = EntityType.ZOMBIE.create(level, EntitySpawnReason.COMMAND);
         var player = helper.makeMockPlayer(GameType.SURVIVAL);
         helper.assertTrue(mob != null, "no test mob");
         for (int height = 1; height <= 2; height++) {

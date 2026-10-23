@@ -10,7 +10,7 @@ import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.effect.MobEffects;
@@ -68,7 +68,7 @@ public final class ProjectileGameTests {
 
     private static void alumentumExplodes(GameTestHelper helper) {
         BlockPos targetPos = helper.absolutePos(new BlockPos(3, 2, 3));
-        LivingEntity target = (LivingEntity) EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity target = (LivingEntity) EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(target != null, "cow factory returned null");
         target.snapTo(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5, 0.0F, 0.0F);
         helper.getLevel().setBlock(targetPos.below(), Blocks.STONE.defaultBlockState(), 3);
@@ -86,8 +86,8 @@ public final class ProjectileGameTests {
 
     private static void bottleTaintPoisons(GameTestHelper helper) {
         BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3));
-        LivingEntity cow = (LivingEntity) EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        LivingEntity zombie = (LivingEntity) EntityTypes.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity cow = (LivingEntity) EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity zombie = (LivingEntity) EntityType.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(cow != null && zombie != null, "test mob factory returned null");
         cow.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         zombie.snapTo(pos.getX() + 1.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
@@ -104,7 +104,7 @@ public final class ProjectileGameTests {
 
     private static void dartDealsOneDamage(GameTestHelper helper) {
         BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3));
-        LivingEntity target = (LivingEntity) EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity target = (LivingEntity) EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(target != null, "cow factory returned null");
         target.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         helper.getLevel().addFreshEntity(target);
@@ -118,8 +118,8 @@ public final class ProjectileGameTests {
 
     private static void eldritchOrbWeakens(GameTestHelper helper) {
         BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3));
-        Monster owner = (Monster) EntityTypes.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        LivingEntity target = (LivingEntity) EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        Monster owner = (Monster) EntityType.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity target = (LivingEntity) EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(owner != null && target != null, "test mob factory returned null");
         owner.snapTo(pos.getX() - 1.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         target.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
@@ -138,9 +138,9 @@ public final class ProjectileGameTests {
 
     private static void golemOrbDamageScaling(GameTestHelper helper) {
         BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3));
-        Monster owner = (Monster) EntityTypes.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        LivingEntity normalTarget = (LivingEntity) EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        LivingEntity redTarget = (LivingEntity) EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        Monster owner = (Monster) EntityType.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity normalTarget = (LivingEntity) EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity redTarget = (LivingEntity) EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(owner != null && normalTarget != null && redTarget != null, "cow factory returned null");
         owner.snapTo(pos.getX() - 2.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         normalTarget.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);

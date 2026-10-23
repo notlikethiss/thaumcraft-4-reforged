@@ -12,7 +12,7 @@ public final class Billboards {
 
     public static void submit(PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera, RenderType renderType, float u0, float u1, float v0, float v1, float scale, int argb, int light) {
         poseStack.pushPose();
-        poseStack.rotate(camera.orientation);
+        poseStack.mulPose(camera.orientation);
         poseStack.scale(scale, scale, scale);
         collector.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> {
             EntityQuadSink sink = new EntityQuadSink(pose, buffer);

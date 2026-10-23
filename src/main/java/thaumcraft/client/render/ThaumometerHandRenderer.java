@@ -76,10 +76,10 @@ public final class ThaumometerHandRenderer {
                 int side = index * 2 - 1;
                 poseStack.pushPose();
                 poseStack.translate(0.0F, -0.6F, 1.1F * side);
-                poseStack.rotateDegrees(Axis.XP, -45 * side);
-                poseStack.rotateDegrees(Axis.ZP, -90.0F);
-                poseStack.rotateDegrees(Axis.ZP, 59.0F);
-                poseStack.rotateDegrees(Axis.YP, -65 * side);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-45 * side));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(59.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(-65 * side));
                 renderer.renderRightHand(poseStack, collector, light, skin, avatar.showRightSleeve);
                 poseStack.popPose();
             }
@@ -102,29 +102,29 @@ public final class ThaumometerHandRenderer {
             poseStack.translate(-swingSqrt * 0.4F, Mth.sin(Mth.sqrt(swing) * Mth.PI * 2.0F) * 0.2F, -Mth.sin(swing * Mth.PI) * 0.2F);
         }
         poseStack.translate(0.7F * 0.8F, -0.65F * 0.8F - hidden * 1.5F, -0.9F * 0.8F);
-        poseStack.rotateDegrees(Axis.YP, 45.0F);
-        poseStack.rotateDegrees(Axis.YP, -Mth.sin(swing * swing * Mth.PI) * 20.0F);
-        poseStack.rotateDegrees(Axis.ZP, -swingSqrt * 20.0F);
-        poseStack.rotateDegrees(Axis.XP, -swingSqrt * 80.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(-Mth.sin(swing * swing * Mth.PI) * 20.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(-swingSqrt * 20.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-swingSqrt * 80.0F));
         poseStack.scale(0.4F, 0.4F, 0.4F);
         poseStack.translate(-0.5F, -0.5F, -0.5F);
     }
 
     static void applyGripTransform(PoseStack poseStack, float pitchBob, float yawBob) {
         poseStack.translate(1.0F, 0.75F, -1.0F);
-        poseStack.rotateDegrees(Axis.YN, 135.0F);
-        poseStack.rotateDegrees(Axis.XP, pitchBob * 0.1F);
-        poseStack.rotateDegrees(Axis.YP, yawBob * 0.1F);
+        poseStack.mulPose(Axis.YN.rotationDegrees(135.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(pitchBob * 0.1F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(yawBob * 0.1F));
         // The outer transform already lowers the instrument during a slot change.
         // An equip offset here used to cancel that movement after the 0.4 scale.
         poseStack.translate(-0.7F * 0.8F, 0.65F * 0.8F, 0.9F * 0.8F);
-        poseStack.rotateDegrees(Axis.YP, 90.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         poseStack.translate(0.0F, 0.0F, -0.9F * 0.8F);
-        poseStack.rotateDegrees(Axis.YP, 90.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
     }
 
     static void applyModelTransform(PoseStack poseStack) {
-        poseStack.rotateDegrees(Axis.ZP, 90.0F);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
         poseStack.translate(0.4F, -0.4F, 0.0F);
         poseStack.scale(2.0F, 2.0F, 2.0F);
     }

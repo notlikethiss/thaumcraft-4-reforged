@@ -541,7 +541,7 @@ public final class BossGameTests {
     private static void portalDeathExplosionAndPearl(GameTestHelper helper) {
         BlockPos pos = helper.absolutePos(new BlockPos(5, 2, 5));
         CultistPortal portal = EldritchEntities.CULTIST_PORTAL.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        net.minecraft.world.entity.monster.zombie.Zombie zombie = net.minecraft.world.entity.EntityTypes.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        net.minecraft.world.entity.monster.zombie.Zombie zombie = net.minecraft.world.entity.EntityType.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(portal != null && zombie != null, "portal or zombie factory returned null");
         portal.snapTo(pos, 0.0F, 0.0F);
         portal.setHealth(1.0F);

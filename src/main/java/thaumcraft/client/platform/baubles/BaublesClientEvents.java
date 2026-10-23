@@ -39,7 +39,7 @@ public final class BaublesClientEvents {
     static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
         while (OPEN_KEY.consumeClick()) {
-            if (minecraft.player != null && minecraft.gui.screen() == null) {
+            if (minecraft.player != null && minecraft.screen == null) {
                 ClientNetwork.sendToServer(new OpenBaublesPayload());
             }
         }
@@ -54,7 +54,7 @@ public final class BaublesClientEvents {
                 Minecraft minecraft = Minecraft.getInstance();
                 minecraft.player.connection.send(new ServerboundContainerClosePacket(screen.getMenu().containerId));
                 minecraft.player.containerMenu = minecraft.player.inventoryMenu;
-                minecraft.gui.setScreen(new InventoryScreen(minecraft.player));
+                minecraft.setScreen(new InventoryScreen(minecraft.player));
             }));
         }
     }

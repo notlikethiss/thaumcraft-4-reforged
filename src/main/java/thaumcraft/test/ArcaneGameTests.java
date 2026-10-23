@@ -245,7 +245,7 @@ public final class ArcaneGameTests {
     }
 
     private static void tubesShiftedInputs(GameTestHelper helper) {
-        Item[] additions = {Items.LEVER, ModItems.VIS_FILTER.get(), Items.STONE, Items.DYE.blue()};
+        Item[] additions = {Items.LEVER, ModItems.VIS_FILTER.get(), Items.STONE, Items.BLUE_DYE};
         Item[] outputs = {ModBlocks.ESSENTIA_VALVE.get().asItem(), ModBlocks.FILTERED_ESSENTIA_TUBE.get().asItem(), ModBlocks.RESTRICTED_ESSENTIA_TUBE.get().asItem(), ModBlocks.DIRECTIONAL_ESSENTIA_TUBE.get().asItem()};
         int[][] positions = {{0, 1}, {3, 4}, {6, 7}, {0, 3}, {1, 4}, {2, 5}, {3, 6}, {4, 7}, {5, 8}, {0, 8}};
         for (int recipe = 0; recipe < additions.length; recipe++) {

@@ -1,7 +1,7 @@
 {
   "pack": {
     "description": "Thaumcraft Outer Lands GameTest dimensions",
-    "min_format": 121,
-    "max_format": 121
+    "min_format": 101,
+    "max_format": 101
   }
 }

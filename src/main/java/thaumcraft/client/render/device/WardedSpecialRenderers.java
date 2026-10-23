@@ -31,7 +31,7 @@ public final class WardedSpecialRenderers {
 
     private static void inventoryTurn(PoseStack poseStack) {
         poseStack.translate(0.5F, 0.5F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, 90.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         poseStack.translate(-0.5F, -0.5F, -0.5F);
     }
 
@@ -110,7 +110,7 @@ public final class WardedSpecialRenderers {
             BannerData banner = data == null ? new BannerData(-1, null) : data;
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.5F, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, 180.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             poseStack.translate(-0.5F, -1.0F, -0.5F);
             WardedRendering.banner(collector, poseStack, lightCoords, banner.color(), banner.aspect(), false, 0, false, WardedRendering.bannerSwing(0, 0, 0, 0L, 0.0F));
             poseStack.popPose();

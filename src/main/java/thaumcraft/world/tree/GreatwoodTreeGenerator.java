@@ -3,7 +3,7 @@ package thaumcraft.world.tree;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -116,7 +116,7 @@ public class GreatwoodTreeGenerator extends BranchedTreeGenerator {
         level.setBlock(spawnerPos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_ALL);
         BlockEntity spawner = level.getBlockEntity(spawnerPos);
         if (spawner instanceof SpawnerBlockEntity spawnerEntity) {
-            spawnerEntity.setEntityId(EntityTypes.CAVE_SPIDER, level.getRandom());
+            spawnerEntity.setEntityId(EntityType.CAVE_SPIDER, level.getRandom());
             for (int attempt = 0; attempt < 50; attempt++) {
                 BlockPos webPos = new BlockPos(
                     pos.getX() - 7 + random.nextInt(14),

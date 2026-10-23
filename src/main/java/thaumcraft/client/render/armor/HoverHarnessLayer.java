@@ -36,9 +36,9 @@ public class HoverHarnessLayer extends RenderLayer<AvatarRenderState, PlayerMode
         }
         poseStack.pushPose();
         poseStack.scale(0.1F, 0.1F, 0.1F);
-        poseStack.rotateDegrees(Axis.XN, 90.0F);
+        poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
         if (state.isCrouching) {
-            poseStack.rotateDegrees(Axis.XP, 28.64789F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(28.64789F));
         }
         poseStack.translate(0.0F, 0.33F, -3.7F);
         collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(TEXTURE), (pose, buffer) -> ObjModel.get(MODEL).renderAll(pose, buffer, 0xFFFFFFFF, lightCoords));
@@ -49,7 +49,7 @@ public class HoverHarnessLayer extends RenderLayer<AvatarRenderState, PlayerMode
         TextureAtlasSprite ring = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.ITEMS).getSprite(RING);
         poseStack.pushPose();
         if (state.isCrouching) {
-            poseStack.rotateDegrees(Axis.XP, 28.64789F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(28.64789F));
             poseStack.translate(0.0F, 0.075F, -0.05F);
         }
         poseStack.translate(0.0F, 0.2F, 0.55F);
@@ -58,7 +58,7 @@ public class HoverHarnessLayer extends RenderLayer<AvatarRenderState, PlayerMode
         ItemGeometry.blended(collector.order(1), poseStack, ring.atlasLocation(), 1, sink -> quad(sink, ring, 0xFFFFFFFF));
         poseStack.popPose();
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.YP, 180.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.translate(0.0F, 0.0F, 0.03F);
         poseStack.scale(1.5F, 1.5F, 1.5F);
         ItemGeometry.blended(collector.order(1), poseStack, ring.atlasLocation(), 1, sink -> quad(sink, ring, 0xFFFF80FF));

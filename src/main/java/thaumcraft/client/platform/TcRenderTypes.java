@@ -1,7 +1,7 @@
 package thaumcraft.client.platform;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.renderpearl.api.textures.FilterMode;
+import com.mojang.blaze3d.textures.FilterMode;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.renderer.RenderPipelines;

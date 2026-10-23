@@ -91,7 +91,7 @@ public final class TravelingTrunkScreen extends AbstractContainerScreen<Travelin
         @SubscribeEvent
         static void tick(ClientTickEvent.Post event) {
             var minecraft = net.minecraft.client.Minecraft.getInstance();
-            if (minecraft.gui.screen() instanceof TravelingTrunkScreen screen && screen.trunk != null && !screen.trunk.isAlive()) {
+            if (minecraft.screen instanceof TravelingTrunkScreen screen && screen.trunk != null && !screen.trunk.isAlive()) {
                 if (minecraft.player != null) minecraft.player.closeContainer();
             }
         }

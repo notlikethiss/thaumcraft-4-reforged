@@ -125,7 +125,7 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
         poseStack.translate(0.5F, 1.0F + bob, 0.5F);
         for (int index = 0; index < 4; index++) {
             poseStack.pushPose();
-            poseStack.rotateDegrees(Axis.YP, index * 90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(index * 90.0F));
             poseStack.translate(0.0F, 0.0F, -0.5F);
             this.submitPortalLayers(poseStack, collector, state, -0.5F, 0.0F, 0.005F, 0.5F, 3.0F, 0.005F);
             EldritchSurfaces.submitRectangle(collector.order(2), poseStack, TcRenderTypes.entityTranslucent(side), -0.5F, 0.0F, 0.0F, 0.5F, 3.0F, 0.0F, 1.0F, 0.0F, 0xFFFFFFFF, 0xF000F0);
@@ -134,12 +134,12 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
         poseStack.popPose();
         poseStack.pushPose();
         poseStack.translate(0.5F, 1.0F + bob, 0.5F);
-        poseStack.rotateDegrees(Axis.XP, 90.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
         collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(cap), (pose, buffer) -> this.obelisk.renderPart("Cap", pose, buffer, 0xFFFFFFFF, 0xF000F0));
         poseStack.popPose();
         poseStack.pushPose();
         poseStack.translate(0.5F, 4.0F + bob, 0.5F);
-        poseStack.rotateDegrees(Axis.XN, 90.0F);
+        poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
         collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(cap), (pose, buffer) -> this.obelisk.renderPart("Cap", pose, buffer, 0xFFFFFFFF, 0xF000F0));
         poseStack.popPose();
     }
@@ -147,7 +147,7 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
     private void submitCap(State state, PoseStack poseStack, SubmitNodeCollector collector) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.0F, 0.5F);
-        poseStack.rotateDegrees(Axis.XN, 90.0F);
+        poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
         collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(Thaumcraft.id(state.outer ? "textures/model/obelisk_cap_2.png" : "textures/model/obelisk_cap.png")), (pose, buffer) -> this.obelisk.renderPart("Cap", pose, buffer, 0xFFFFFFFF, 0xF000F0));
         poseStack.popPose();
     }
@@ -156,11 +156,11 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
         switch (state.facing) {
-            case DOWN -> poseStack.rotateDegrees(Axis.XP, 90.0F);
-            case UP -> poseStack.rotateDegrees(Axis.XN, 90.0F);
-            case NORTH -> poseStack.rotateDegrees(Axis.YP, 180.0F);
-            case WEST -> poseStack.rotateDegrees(Axis.YN, 90.0F);
-            case EAST -> poseStack.rotateDegrees(Axis.YP, 90.0F);
+            case DOWN -> poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            case UP -> poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
+            case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            case WEST -> poseStack.mulPose(Axis.YN.rotationDegrees(90.0F));
+            case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
             default -> {
             }
         }
@@ -189,16 +189,16 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
     private void submitEyes(State state, PoseStack poseStack, SubmitNodeCollector collector) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.0F, 0.5F);
-        poseStack.rotateDegrees(Axis.XN, 90.0F);
+        poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
         collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(Thaumcraft.id(state.outer ? "textures/model/obelisk_cap_2.png" : "textures/model/obelisk_cap_altar.png")), (pose, buffer) -> this.obelisk.renderPart("Cap", pose, buffer, 0xFFFFFFFF, 0xF000F0));
         poseStack.popPose();
         for (int index = 0; index < state.eyeCount && index < state.eyes.length; index++) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.0F, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, index * 90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(index * 90.0F));
             poseStack.translate(0.46F, 0.2F, 0.0F);
-            poseStack.rotateDegrees(Axis.YP, 90.0F);
-            poseStack.rotateDegrees(Axis.XP, -18.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(-18.0F));
             state.eyes[index].submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
@@ -208,7 +208,7 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
         for (int side = 0; side < 4; side++) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.5F, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, side * 90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(side * 90.0F));
             for (int level = 1; level < 5 - (state.phase + side * 5) / 20; level++) {
                 float wave = Mth.sin((state.time + level * 10.0F + side * 20.0F) / 20.0F) * 0.1F;
                 if (level == 1 || level == 4) {
@@ -226,7 +226,7 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
             Direction facing = state.facing;
             poseStack.pushPose();
             poseStack.translate(0.5F + facing.getStepX() * 0.525F, 0.285F, 0.5F + facing.getStepZ() * 0.525F);
-            poseStack.rotateDegrees(Axis.YP, facing.toYRot());
+            poseStack.mulPose(Axis.YP.rotationDegrees(facing.toYRot()));
             state.key.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
@@ -237,7 +237,7 @@ public final class EldritchBlockRenderer implements BlockEntityRenderer<Eldritch
         Direction facing = state.facing;
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.0F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, facing.toYRot());
+        poseStack.mulPose(Axis.YP.rotationDegrees(facing.toYRot()));
         poseStack.translate(0.0F, 0.0F, -0.505F);
         EldritchSurfaces.submitPortalRectangle(collector, poseStack, state.nearby, state.time, -2.5F, -2.0F, 0.0F, 2.5F, 3.0F, 0.0F);
         poseStack.popPose();

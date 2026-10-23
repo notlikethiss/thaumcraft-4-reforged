@@ -36,15 +36,15 @@ public final class DeviceProperties {
     }
 
     public static BlockBehaviour.Properties nitorLight(BlockBehaviour.Properties properties) {
-        return airy(properties).instabreak().lightLevel(state -> 15).pushReaction(PushReaction.IMMOVEABLE);
+        return airy(properties).instabreak().lightLevel(state -> 15).pushReaction(PushReaction.BLOCK);
     }
 
     public static BlockBehaviour.Properties lampLight(BlockBehaviour.Properties properties) {
-        return airy(properties).air().replaceable().instabreak().lightLevel(state -> 15).pushReaction(PushReaction.POPPED).noLootTable();
+        return airy(properties).air().replaceable().instabreak().lightLevel(state -> 15).pushReaction(PushReaction.DESTROY).noLootTable();
     }
 
     public static BlockBehaviour.Properties wardingAura(BlockBehaviour.Properties properties) {
-        return airy(properties).replaceable().instabreak().pushReaction(PushReaction.IMMOVEABLE).noLootTable();
+        return airy(properties).replaceable().instabreak().pushReaction(PushReaction.BLOCK).noLootTable();
     }
 
     public static BlockBehaviour.Properties metalDevice(BlockBehaviour.Properties properties) {

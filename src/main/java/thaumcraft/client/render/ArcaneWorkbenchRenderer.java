@@ -52,8 +52,8 @@ public class ArcaneWorkbenchRenderer implements BlockEntityRenderer<ArcaneWorkbe
         }
         poseStack.pushPose();
         poseStack.translate(0.65F, 1.0625F, 0.25F);
-        poseStack.rotateDegrees(Axis.XP, 90.0F);
-        poseStack.rotateDegrees(Axis.ZP, 20.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(20.0F));
         state.wand.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }

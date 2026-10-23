@@ -55,7 +55,7 @@ public final class EldritchPortalBlockRenderer implements BlockEntityRenderer<El
         int frame = (int) (System.nanoTime() / 50_000_000L) & 15;
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
-        poseStack.rotate(camera.orientation);
+        poseStack.mulPose(camera.orientation);
         collector.submitCustomGeometry(poseStack, TcRenderTypes.eldritchPortal(TEXTURE), (pose, buffer) -> {
             EntityQuadSink sink = new EntityQuadSink(pose, buffer);
             int color = ARGB.color(255, 255, 255, 255);

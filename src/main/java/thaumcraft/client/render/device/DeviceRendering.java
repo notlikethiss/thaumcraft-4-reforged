@@ -44,15 +44,15 @@ public final class DeviceRendering {
         switch (facing) {
             case DOWN -> {
                 poseStack.translate(-0.5F, 0.5F, 0.0F);
-                poseStack.rotateDegrees(Axis.ZN, 90.0F);
+                poseStack.mulPose(Axis.ZN.rotationDegrees(90.0F));
             }
             case UP -> {
                 poseStack.translate(0.5F, 0.5F, 0.0F);
-                poseStack.rotateDegrees(Axis.ZP, 90.0F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
             }
-            case NORTH -> poseStack.rotateDegrees(Axis.YP, 90.0F);
-            case SOUTH -> poseStack.rotateDegrees(Axis.YP, 270.0F);
-            case WEST -> poseStack.rotateDegrees(Axis.YP, 180.0F);
+            case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+            case SOUTH -> poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
+            case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             default -> {
             }
         }
@@ -68,24 +68,24 @@ public final class DeviceRendering {
         switch (facing) {
             case DOWN -> {
                 poseStack.translate(0.5F, 1.3F, 0.5F);
-                poseStack.rotateDegrees(Axis.XP, 180.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             }
             case UP -> poseStack.translate(0.5F, -0.3F, 0.5F);
             case NORTH -> {
                 poseStack.translate(0.5F, 0.5F, 1.3F);
-                poseStack.rotateDegrees(Axis.XP, -90.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             }
             case SOUTH -> {
                 poseStack.translate(0.5F, 0.5F, -0.3F);
-                poseStack.rotateDegrees(Axis.XP, 90.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             }
             case WEST -> {
                 poseStack.translate(1.3F, 0.5F, 0.5F);
-                poseStack.rotateDegrees(Axis.ZP, 90.0F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
             }
             case EAST -> {
                 poseStack.translate(-0.3F, 0.5F, 0.5F);
-                poseStack.rotateDegrees(Axis.ZP, -90.0F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
             }
         }
     }
@@ -112,13 +112,13 @@ public final class DeviceRendering {
         int argb = tint(color, 1.0F);
         poseStack.pushPose();
         translateFromOrientation(poseStack, facing);
-        poseStack.rotateDegrees(Axis.YP, angleY);
-        poseStack.rotateDegrees(Axis.XP, angleX);
+        poseStack.mulPose(Axis.YP.rotationDegrees(angleY));
+        poseStack.mulPose(Axis.XP.rotationDegrees(angleX));
         poseStack.scale((0.15F + random.nextFloat() * 0.075F) * size, (0.5F + random.nextFloat() * 0.1F) * size, (0.15F + random.nextFloat() * 0.05F) * size);
         int light = WorldRendering.emissiveLight(210.0F * shade);
         poseStack.translate(0.0F, 2.0F, 0.0F);
-        poseStack.rotateDegrees(Axis.ZP, MODEL_ANGLE);
-        poseStack.rotateDegrees(Axis.XP, MODEL_ANGLE);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(MODEL_ANGLE));
+        poseStack.mulPose(Axis.XP.rotationDegrees(MODEL_ANGLE));
         collector.submitCustomGeometry(
             poseStack,
             TcRenderTypes.of(Kind.ENTITY_TRANSLUCENT, CRYSTAL_TEXTURE),
@@ -146,16 +146,16 @@ public final class DeviceRendering {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
         switch (facing) {
-            case DOWN -> poseStack.rotateDegrees(Axis.XP, 90.0F);
-            case UP -> poseStack.rotateDegrees(Axis.XP, -90.0F);
-            case NORTH -> poseStack.rotateDegrees(Axis.YP, 180.0F);
-            case WEST -> poseStack.rotateDegrees(Axis.YP, -90.0F);
-            case EAST -> poseStack.rotateDegrees(Axis.YP, 90.0F);
+            case DOWN -> poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            case UP -> poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
+            case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
             default -> {
             }
         }
         poseStack.translate(0.0F, 0.0F, -0.5F);
-        poseStack.rotateDegrees(Axis.ZP, 90.0F * rotation);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F * rotation));
         collector.submitCustomGeometry(poseStack, TcRenderTypes.of(Kind.ENTITY_CUTOUT, STRANGE_BASE), (pose, buffer) -> obj.renderPart("Base", pose, buffer, WHITE, light));
         float shade = Mth.sin(ticks / 6.0F) * 0.075F + 0.925F;
         int glow = WorldRendering.emissiveLight(210.0F * shade);

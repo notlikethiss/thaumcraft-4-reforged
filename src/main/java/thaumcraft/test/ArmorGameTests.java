@@ -113,7 +113,7 @@ public final class ArmorGameTests {
 
     private static void robeDyeMixesColor(GameTestHelper helper) {
         ItemStack robe = new ItemStack(ModItems.ROBE_CHESTPLATE.get());
-        CraftingInput input = CraftingInput.of(2, 1, List.of(robe, new ItemStack(Items.DYE.red())));
+        CraftingInput input = CraftingInput.of(2, 1, List.of(robe, new ItemStack(Items.RED_DYE)));
         helper.assertTrue(RobeArmorDyeRecipe.INSTANCE.matches(input, helper.getLevel()), "recipe does not match");
         ItemStack result = RobeArmorDyeRecipe.INSTANCE.assemble(input);
         helper.assertTrue(result.has(DataComponents.DYED_COLOR), "no color applied");
@@ -121,7 +121,7 @@ public final class ArmorGameTests {
         int red = color >> 16 & 0xFF;
         int blue = color & 0xFF;
         helper.assertTrue(red > 0x6A && blue < 0x80, "color not reddened");
-        CraftingInput invalid = CraftingInput.of(2, 1, List.of(new ItemStack(ModItems.VOID_ROBE_CHESTPLATE.get()), new ItemStack(Items.DYE.red())));
+        CraftingInput invalid = CraftingInput.of(2, 1, List.of(new ItemStack(ModItems.VOID_ROBE_CHESTPLATE.get()), new ItemStack(Items.RED_DYE)));
         helper.assertFalse(RobeArmorDyeRecipe.INSTANCE.matches(invalid, helper.getLevel()), "void robe matched robe recipe");
         helper.succeed();
     }

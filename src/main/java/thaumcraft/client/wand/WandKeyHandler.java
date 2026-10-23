@@ -48,7 +48,7 @@ public final class WandKeyHandler {
         if (player == null) {
             return;
         }
-        boolean inGame = minecraft.gui.screen() == null;
+        boolean inGame = minecraft.screen == null;
         boolean focusClicked = false;
         while (CHANGE_FOCUS.consumeClick()) {
             focusClicked = true;

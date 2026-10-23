@@ -38,8 +38,8 @@ public class FrostShardRenderer extends EntityRenderer<FrostShard, SpriteRenderS
     @Override
     public void submit(SpriteRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.YP, state.yaw);
-        poseStack.rotateDegrees(Axis.ZP, state.pitch);
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yaw));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.pitch));
         Random random = new Random(state.seed);
         float base = state.damage * 0.1F;
         poseStack.scale(base + random.nextFloat() * 0.1F, base + random.nextFloat() * 0.1F, base + random.nextFloat() * 0.1F);

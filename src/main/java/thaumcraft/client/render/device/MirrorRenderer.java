@@ -119,19 +119,19 @@ public class MirrorRenderer implements BlockEntityRenderer<LinkedMirrorBlockEnti
         switch (facing) {
             case DOWN -> {
                 poseStack.translate(0.0F, 1.0F, 1.0F);
-                poseStack.rotateDegrees(Axis.XP, -90.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             }
-            case UP -> poseStack.rotateDegrees(Axis.XP, 90.0F);
+            case UP -> poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             case NORTH -> poseStack.translate(0.0F, 0.0F, 1.0F);
             case SOUTH -> {
                 poseStack.translate(1.0F, 0.0F, 0.0F);
-                poseStack.rotateDegrees(Axis.YP, 180.0F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             }
             case WEST -> {
                 poseStack.translate(1.0F, 0.0F, 1.0F);
-                poseStack.rotateDegrees(Axis.YP, 90.0F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
             }
-            case EAST -> poseStack.rotateDegrees(Axis.YP, -90.0F);
+            case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
         }
     }
 }

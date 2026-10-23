@@ -46,8 +46,8 @@ final class ThaumometerLens {
         lens.mulPose(bob.last().pose());
         float pitchBob = hands.viewXRot - hands.xBob;
         float yawBob = hands.viewYRot - hands.yBob;
-        lens.rotateDegrees(Axis.XP, pitchBob * 0.1F);
-        lens.rotateDegrees(Axis.YP, yawBob * 0.1F);
+        lens.mulPose(Axis.XP.rotationDegrees(pitchBob * 0.1F));
+        lens.mulPose(Axis.YP.rotationDegrees(yawBob * 0.1F));
         float swing = hands.attackHand == InteractionHand.MAIN_HAND ? avatar.swingAnimation : 0.0F;
         float hidden = hands.mainHandSwapScale * (1.0F - Mth.lerp(camera.cameraEntityPartialTicks, hands.oldMainHandHeight, hands.mainHandHeight));
         ThaumometerHandRenderer.applyEquipTransform(lens, swing, hidden, avatar.isUsingItem);
@@ -71,21 +71,21 @@ final class ThaumometerLens {
         if (entity.isLiving) {
             if (entity.isDeadOrDying) {
                 float duration = Math.min(entity.deathTime, 20.0F);
-                pose.rotateDegrees(Axis.ZP, 40.0F - 8000.0F / (duration + 200.0F));
+                pose.mulPose(Axis.ZP.rotationDegrees(40.0F - 8000.0F / (duration + 200.0F)));
             }
             if (entity.hurtTime >= 0.0F && entity.hurtDuration > 0 && !entity.preventFlinch) {
                 float hurt = entity.hurtTime / entity.hurtDuration;
                 hurt = Mth.sin(hurt * hurt * hurt * hurt * Mth.PI);
-                pose.rotateDegrees(Axis.YP, -entity.hurtDir);
-                pose.rotateDegrees(Axis.ZP, (float) (-hurt * 14.0 * options.damageTiltStrength));
-                pose.rotateDegrees(Axis.YP, entity.hurtDir);
+                pose.mulPose(Axis.YP.rotationDegrees(-entity.hurtDir));
+                pose.mulPose(Axis.ZP.rotationDegrees((float) (-hurt * 14.0 * options.damageTiltStrength)));
+                pose.mulPose(Axis.YP.rotationDegrees(entity.hurtDir));
             }
         }
         if (options.bobView && entity.isPlayer) {
             float walk = entity.backwardsInterpolatedWalkDistance * Mth.PI;
             pose.translate(Mth.sin(walk) * entity.bob * 0.5F, -Math.abs(Mth.cos(walk) * entity.bob), 0);
-            pose.rotateDegrees(Axis.ZP, Mth.sin(walk) * entity.bob * 3.0F);
-            pose.rotateDegrees(Axis.XP, Math.abs(Mth.cos(walk - 0.2F) * entity.bob) * 5.0F);
+            pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin(walk) * entity.bob * 3.0F));
+            pose.mulPose(Axis.XP.rotationDegrees(Math.abs(Mth.cos(walk - 0.2F) * entity.bob) * 5.0F));
         }
     }
 

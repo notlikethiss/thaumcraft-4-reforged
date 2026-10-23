@@ -116,7 +116,7 @@ public final class ParityRegressionGameTests {
     }
 
     private static void wardedAndWisp(GameTestHelper helper) {
-        var zombie = net.minecraft.world.entity.EntityTypes.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        var zombie = net.minecraft.world.entity.EntityType.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         ChampionModifier.assign(zombie, 5, false);
         helper.assertValueEqual(zombie.getAbsorptionAmount(), 10.0F, "warded absorption was clamped to zero");
         zombie.setAbsorptionAmount(0);
@@ -139,7 +139,7 @@ public final class ParityRegressionGameTests {
 
     private static void championWarp(GameTestHelper helper) {
         var player = player(helper);
-        var attacker = net.minecraft.world.entity.EntityTypes.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        var attacker = net.minecraft.world.entity.EntityType.ZOMBIE.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         ChampionModifier.applyAttackEffect(6, attacker, player, 2, 0, 2);
         helper.assertValueEqual(Warp.get(player, WarpType.TEMPORARY), 3, "warp champion did not grant temporary warp");
         helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 0, "warp champion granted permanent warp");

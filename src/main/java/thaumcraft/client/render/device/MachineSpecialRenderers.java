@@ -30,7 +30,7 @@ public final class MachineSpecialRenderers {
         public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.5F, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, 180.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             poseStack.translate(-0.5F, -0.5F, -0.5F);
             BoreRendering.boreBase(collector, poseStack, lightCoords, Direction.NORTH);
             poseStack.popPose();
@@ -61,7 +61,7 @@ public final class MachineSpecialRenderers {
         public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords, int overlayCoords, boolean hasFocus, int outlineColor) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.5F, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, 180.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             poseStack.translate(-0.5F, -0.75F, -0.5F);
             Minecraft minecraft = Minecraft.getInstance();
             int ticks = minecraft.getCameraEntity() == null ? 0 : minecraft.getCameraEntity().tickCount;

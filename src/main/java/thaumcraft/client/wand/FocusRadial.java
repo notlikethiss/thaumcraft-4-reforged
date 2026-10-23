@@ -75,12 +75,12 @@ public final class FocusRadial {
         }
         long time = Util.getMillis();
         if (!WandKeyHandler.radialActive) {
-            if (minecraft.gui.screen() == null && lastState) {
+            if (minecraft.screen == null && lastState) {
                 minecraft.mouseHandler.grabMouse();
                 lastState = false;
             }
         } else {
-            if (minecraft.gui.screen() != null) {
+            if (minecraft.screen != null) {
                 WandKeyHandler.radialActive = false;
                 WandKeyHandler.radialLock = true;
                 return;

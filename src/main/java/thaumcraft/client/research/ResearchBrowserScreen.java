@@ -82,7 +82,7 @@ public class ResearchBrowserScreen extends Screen {
     public static void open() {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null) {
-            minecraft.gui.setScreen(new ResearchBrowserScreen());
+            minecraft.setScreen(new ResearchBrowserScreen());
         }
     }
 

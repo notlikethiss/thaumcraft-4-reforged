@@ -12,7 +12,7 @@ import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,7 +67,7 @@ public final class EldritchFieldGameTests {
     }
 
     private static void sapping(GameTestHelper helper) {
-        LivingEntity cow = EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity cow = EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(cow != null, "cow creation");
         cow.setDeltaMovement(1, 0.2, 1);
         touch(helper, ModBlocks.SAPPING_FIELD.get().defaultBlockState(), cow);

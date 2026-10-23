@@ -16,7 +16,7 @@ import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
@@ -207,7 +207,7 @@ public final class TaintGameTests {
     }
 
     private static void poisonReplacementPreservesPosition(GameTestHelper helper) {
-        Cow original = EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        Cow original = EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(original != null, "failed to create test cow");
         BlockPos worldPos = helper.absolutePos(new BlockPos(2, 2, 4));
         original.absSnapTo(worldPos.getX() + 0.25, worldPos.getY(), worldPos.getZ() + 0.75, 47.0F, 0.0F);
@@ -222,7 +222,7 @@ public final class TaintGameTests {
     }
 
     private static void poisonConversionRemovesOriginal(GameTestHelper helper) {
-        Cow original = EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        Cow original = EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(original != null, "failed to create test cow");
         BlockPos worldPos = helper.absolutePos(new BlockPos(2, 2, 4));
         double x = worldPos.getX() + 0.25;
@@ -407,7 +407,7 @@ public final class TaintGameTests {
         BlockPos pos = helper.absolutePos(new BlockPos(3, 2, 3));
         BlockPos protectedBlock = pos.east(8);
         helper.getLevel().setBlockAndUpdate(protectedBlock, Blocks.STONE.defaultBlockState());
-        Cow victim = EntityTypes.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        Cow victim = EntityType.COW.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(victim != null, "failed to create infection target");
         victim.absSnapTo(pos.getX() + 1.0, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         helper.getLevel().addFreshEntity(victim);

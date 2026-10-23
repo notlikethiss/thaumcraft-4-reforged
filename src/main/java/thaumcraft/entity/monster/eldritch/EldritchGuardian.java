@@ -32,7 +32,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.AABB;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.entity.monster.Cultist;
 import thaumcraft.entity.projectile.EldritchOrb;

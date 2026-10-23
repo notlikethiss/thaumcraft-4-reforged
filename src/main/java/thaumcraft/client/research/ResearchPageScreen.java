@@ -50,7 +50,7 @@ public class ResearchPageScreen extends Screen {
 
     public static void open(ResearchItem item) {
         HISTORY.clear();
-        Minecraft.getInstance().gui.setScreen(new ResearchPageScreen(item, 0));
+        Minecraft.getInstance().setScreen(new ResearchPageScreen(item, 0));
     }
 
     private static List<DisplayPage> buildPages(Minecraft minecraft, ResearchItem research) {
@@ -227,7 +227,7 @@ public class ResearchPageScreen extends Screen {
             if (previous == null) {
                 ResearchBrowserScreen.open();
             } else {
-                minecraft.gui.setScreen(new ResearchPageScreen(previous, entry.page()));
+                minecraft.setScreen(new ResearchPageScreen(previous, entry.page()));
             }
             return true;
         }
@@ -236,7 +236,7 @@ public class ResearchPageScreen extends Screen {
                 playPage();
                 HISTORY.push(new HistoryEntry(research.key(), page));
                 ResearchItem target = hit.reference().research();
-                minecraft.gui.setScreen(new ResearchPageScreen(target, pageIndex(target, hit.reference().page())));
+                minecraft.setScreen(new ResearchPageScreen(target, pageIndex(target, hit.reference().page())));
                 return true;
             }
         }

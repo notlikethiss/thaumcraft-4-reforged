@@ -39,9 +39,9 @@ public final class NodeRendering {
         float ticks = clientTicks();
         submit(collector, poseStack, aspects, type, modifier, ticks);
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.YP, 90.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         submit(collector, poseStack, aspects, type, modifier, ticks);
-        poseStack.rotateDegrees(Axis.XP, 90.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
         submit(collector, poseStack, aspects, type, modifier, ticks);
         poseStack.popPose();
     }

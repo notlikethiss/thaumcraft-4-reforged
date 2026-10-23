@@ -61,7 +61,7 @@ public class FocalManipulatorRenderer implements BlockEntityRenderer<FocalManipu
         }
         poseStack.pushPose();
         poseStack.translate(0.5F, 1.0F + state.bob, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, state.ticks % 360.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.ticks % 360.0F));
         state.item.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }

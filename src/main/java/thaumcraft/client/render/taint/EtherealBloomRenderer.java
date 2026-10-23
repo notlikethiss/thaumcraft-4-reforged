@@ -78,9 +78,9 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
         for (int index = 0; index < 4; index++) {
             poseStack.pushPose();
             poseStack.translate(0.5F, y, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, rotation);
-            poseStack.rotateDegrees(Axis.XP, 180.0F);
-            poseStack.rotateDegrees(Axis.YP, index * 90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
+            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(index * 90.0F));
             poseStack.scale(width, height, width);
             ItemGeometry.blended(collector, poseStack, Thaumcraft.id(texture), ADDITIVE, EtherealBloomRenderer::quad);
             poseStack.popPose();
@@ -90,7 +90,7 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
     private static void renderCore(OrderedSubmitNodeCollector collector, PoseStack poseStack, float width, float height, int counter) {
         poseStack.pushPose();
         poseStack.translate(0.5F - width / 8.0F, height - width / 6.0F, 0.5F - width / 8.0F);
-        poseStack.rotateDegrees(Axis.YP, counter * 11.25F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(counter * 11.25F));
         poseStack.scale(width / 4.0F, height / 3.0F, width / 4.0F);
         ItemGeometry.blended(collector, poseStack, Thaumcraft.id("textures/model/crystalcapacitor.png"), ADDITIVE,
             sink -> ModelBoxGeometry.box(sink, 0.0F, 0.0F, 0.0F, 16, 16, 16, 0, 0, 64.0F, 32.0F, true, 0xFFFFFFFF, LIGHT));

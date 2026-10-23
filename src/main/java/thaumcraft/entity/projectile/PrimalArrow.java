@@ -14,7 +14,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Enderman;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -164,7 +164,7 @@ public class PrimalArrow extends AbstractArrow {
                 living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 4));
             }
         }
-        if (fire > 0 && !(entity instanceof Enderman)) {
+        if (fire > 0 && !(entity instanceof EnderMan)) {
             entity.igniteForSeconds(fire);
         }
         if (entity.hurtOrSimulate(source, amount)) {
@@ -182,7 +182,7 @@ public class PrimalArrow extends AbstractArrow {
                 doPostHurtEffects(living);
             }
             playSound(getHitGroundSoundEvent(), 1.0F, 1.2F / (random.nextFloat() * 0.2F + 0.9F));
-            if (!(entity instanceof Enderman)) {
+            if (!(entity instanceof EnderMan)) {
                 discard();
             }
         } else {

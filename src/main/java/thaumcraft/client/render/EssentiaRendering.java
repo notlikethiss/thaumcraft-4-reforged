@@ -58,11 +58,11 @@ public final class EssentiaRendering {
     public static void orientation(PoseStack poseStack, Direction facing) {
         poseStack.translate(0.5F, 0.5F, 0.5F);
         switch (facing) {
-            case DOWN -> poseStack.rotateDegrees(Axis.XP, -90.0F);
-            case UP -> poseStack.rotateDegrees(Axis.XP, 90.0F);
-            case SOUTH -> poseStack.rotateDegrees(Axis.YP, 180.0F);
-            case WEST -> poseStack.rotateDegrees(Axis.YP, 90.0F);
-            case EAST -> poseStack.rotateDegrees(Axis.YP, -90.0F);
+            case DOWN -> poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            case UP -> poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            case SOUTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+            case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
             default -> {
             }
         }
@@ -72,12 +72,12 @@ public final class EssentiaRendering {
     public static void tubeOrientation(PoseStack poseStack, Direction facing) {
         poseStack.translate(0.5F, 0.5F, 0.5F);
         if (facing.getStepY() == 0) {
-            poseStack.rotateDegrees(Axis.YP, 90.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         } else {
-            poseStack.rotateDegrees(Axis.XN, 90.0F);
-            poseStack.rotateDegrees(Axis.XP, 90.0F * facing.getStepY());
+            poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F * facing.getStepY()));
         }
-        poseStack.rotate(new Quaternionf().rotationAxis((float) Math.PI / 2.0F, facing.getStepX(), facing.getStepY(), facing.getStepZ()));
+        poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.PI / 2.0F, facing.getStepX(), facing.getStepY(), facing.getStepZ()));
     }
 
     public static void valveRod(SubmitNodeCollector collector, PoseStack poseStack, int argb, int light) {
@@ -91,11 +91,11 @@ public final class EssentiaRendering {
     public static void valve(SubmitNodeCollector collector, PoseStack poseStack, Direction facing, float rotation, int light) {
         poseStack.pushPose();
         tubeOrientation(poseStack, facing);
-        poseStack.rotateDegrees(Axis.YP, -rotation * 1.5F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(-rotation * 1.5F));
         poseStack.translate(0.0F, -(rotation / 360.0F) * 0.12F, 0.0F);
         valveRod(collector, poseStack, WHITE, light);
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.XP, 90.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
         poseStack.translate(-0.25F, -0.25F, -0.25F);
         poseStack.scale(0.5F, 0.5F, 0.5F);
         TextureAtlasSprite sprite = blockSprite(Thaumcraft.id("block/pipe_valve"));
@@ -161,7 +161,7 @@ public final class EssentiaRendering {
             ModelBoxGeometry.box(sink, -4.0F, -8.0F, -4.0F, 8, 4, 8, 20, 16, 64.0F, 32.0F, true, WHITE, light);
             ModelBoxGeometry.box(sink, -4.0F, 4.0F, -4.0F, 8, 4, 8, 20, 16, 64.0F, 32.0F, true, WHITE, light);
         });
-        poseStack.rotateDegrees(Axis.YP, rotation);
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
         collector.submitCustomGeometry(poseStack, TcRenderTypes.of(Kind.ENTITY_CUTOUT, CENTRIFUGE_TEXTURE), (pose, buffer) -> {
             EntityQuadSink sink = new EntityQuadSink(pose, buffer);
             ModelBoxGeometry.box(sink, -4.0F, -1.0F, -1.0F, 8, 2, 2, 16, 0, 64.0F, 32.0F, true, WHITE, light);
@@ -194,9 +194,9 @@ public final class EssentiaRendering {
             poseStack.scale(0.75F, 0.75F, 0.75F);
             float glow = Mth.sin((ticks + index * 10) / 2.0F) * 0.05F + 0.95F;
             int crystalLight = WorldRendering.emissiveLight(50 + (int) (150.0F * glow));
-            poseStack.rotateDegrees(Axis.ZP, 90 * index);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(90 * index));
             poseStack.translate(0.34F, 0.0F, 1.2125F);
-            poseStack.rotateDegrees(Axis.ZP, spin);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(spin));
             collector.submitCustomGeometry(
                 poseStack,
                 TcRenderTypes.of(Kind.ENTITY_TRANSLUCENT, RELAY_TEXTURE),

@@ -75,17 +75,17 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
     public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 1.0F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, state.rotation);
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.rotation));
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         int light = state.lightCoords;
         if (state.scribe) {
             collector.submitCustomGeometry(poseStack, TcRenderTypes.entityTranslucent(TABLE), (pose, buffer) ->
                 ModelBoxGeometry.box(new EntityQuadSink(pose, buffer), -6, -1.98F, 3, 3, 2, 3, 0, 44, 128, 64, true, 0xFFFFFFFF, light));
             poseStack.pushPose();
-            poseStack.rotateDegrees(Axis.YP, -90.0F);
-            poseStack.rotateDegrees(Axis.XP, 180.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             poseStack.translate(-0.17F, 0.1F, -0.15F);
-            poseStack.rotateDegrees(Axis.YP, 15.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(15.0F));
             poseStack.scale(0.5F, 0.5F, 0.5F);
             collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutoutNoCull(QUILL), (pose, buffer) ->
                 ExtrudedGeometry.render(new EntityQuadSink(pose, buffer), 1, 0, 0, 1, 16, 16, 0.025F, 0xFFFFFFFF, light));
@@ -94,8 +94,8 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
         for (int page = 0; page < 6; page++) {
             poseStack.pushPose();
             poseStack.translate(0.1F, -0.01F - page * 0.015F, 0.35F);
-            poseStack.rotateDegrees(Axis.XN, 90.0F);
-            poseStack.rotateDegrees(Axis.ZP, 15 + page % 3 * 2);
+            poseStack.mulPose(Axis.XN.rotationDegrees(90.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(15 + page % 3 * 2));
             poseStack.scale(0.5F, 0.6F, 0.6F);
             collector.submitCustomGeometry(poseStack, TcRenderTypes.translucent(PARCHMENT), (pose, buffer) -> {
                 VertexQuadSink sink = new VertexQuadSink(pose, buffer);
@@ -109,14 +109,14 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
         if (state.note) {
             poseStack.pushPose();
             poseStack.translate(-2.0F / 16, -2.0F / 16, 2.0F / 16);
-            poseStack.rotateDegrees(Axis.YP, (float) Math.toDegrees(10.0));
+            poseStack.mulPose(Axis.YP.rotationDegrees((float) Math.toDegrees(10.0)));
             collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(SCROLL), (pose, buffer) ->
                 ModelBoxGeometry.box(new EntityQuadSink(pose, buffer), -21, -0.5F, -8, 8, 2, 2, 0, 0, 128, 64, true, 0xFFFFFFFF, light));
             poseStack.popPose();
             poseStack.pushPose();
             poseStack.scale(1.2F, 1.2F, 1.2F);
             poseStack.translate(-2.0F / 16, -2.0F / 16, 2.0F / 16);
-            poseStack.rotateDegrees(Axis.YP, (float) Math.toDegrees(10.0));
+            poseStack.mulPose(Axis.YP.rotationDegrees((float) Math.toDegrees(10.0)));
             int color = state.noteColor;
             collector.submitCustomGeometry(poseStack, TcRenderTypes.entityCutout(SCROLL), (pose, buffer) ->
                 ModelBoxGeometry.box(new EntityQuadSink(pose, buffer), -15.1F, -0.275F, -6.75F, 1, 2, 2, 0, 4, 128, 64, true, color, light));

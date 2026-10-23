@@ -103,12 +103,12 @@ public final class ModBlocks {
     public static final DeferredBlock<PurifyingFluidBlock> PURIFYING_FLUID = BLOCKS.registerBlock(
         "purifying_fluid",
         properties -> new PurifyingFluidBlock(ModFluids.PURIFYING_FLUID.get(), properties),
-        properties -> properties.mapColor(MapColor.WATER).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.POPPED).lightLevel(state -> 10).noLootTable().liquid().sound(SoundType.EMPTY)
+        properties -> properties.mapColor(MapColor.WATER).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.DESTROY).lightLevel(state -> 10).noLootTable().liquid().sound(SoundType.EMPTY)
     );
     public static final DeferredBlock<LiquidDeathBlock> LIQUID_DEATH = BLOCKS.registerBlock(
         "liquid_death",
         properties -> new LiquidDeathBlock(ModFluids.LIQUID_DEATH.get(), properties),
-        properties -> properties.mapColor(MapColor.COLOR_PURPLE).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.POPPED).lightLevel(state -> 8).noLootTable().liquid().sound(SoundType.EMPTY)
+        properties -> properties.mapColor(MapColor.COLOR_PURPLE).replaceable().noCollision().strength(100.0F).pushReaction(PushReaction.DESTROY).lightLevel(state -> 8).noLootTable().liquid().sound(SoundType.EMPTY)
     );
 
     public static final String[] CANDLE_COLORS = {
@@ -236,7 +236,7 @@ public final class ModBlocks {
             .sound(SoundType.GRASS)
             .randomTicks()
             .noOcclusion()
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
             .lightLevel(state -> state.getValue(ManaPodBlock.AGE))
     );
     public static final DeferredItem<ManaBeanItem> MANA_BEAN = ModItems.ITEMS.registerItem("mana_bean", ManaBeanItem::new, ManaBeanItem::properties);
@@ -505,7 +505,7 @@ public final class ModBlocks {
             .noLootTable()
             .randomTicks()
             .lightLevel(state -> state.getValue(FluxBlock.LEVEL) * 7 / 8)
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos, box) -> false)
     ));
@@ -522,7 +522,7 @@ public final class ModBlocks {
             .randomTicks()
             .lightLevel(state -> state.getValue(FluxBlock.LEVEL) * 7 / 8)
             .sound(SoundType.SLIME_BLOCK)
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
     ));
     public static final DeferredBlock<FocalManipulatorBlock> FOCAL_MANIPULATOR = withItem(BLOCKS.registerBlock(
         "focal_manipulator",
@@ -532,12 +532,12 @@ public final class ModBlocks {
     public static final DeferredBlock<HoleBlock> HOLE = BLOCKS.registerBlock(
         "hole",
         HoleBlock::new,
-        properties -> properties.mapColor(MapColor.NONE).strength(-1.0F, 6000000.0F).lightLevel(state -> 10).noLootTable().noOcclusion().pushReaction(PushReaction.IMMOVEABLE)
+        properties -> properties.mapColor(MapColor.NONE).strength(-1.0F, 6000000.0F).lightLevel(state -> 10).noLootTable().noOcclusion().pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredBlock<WardedBlock> WARDED_BLOCK = BLOCKS.registerBlock(
         "warded_block",
         WardedBlock::new,
-        properties -> properties.mapColor(MapColor.STONE).sound(SoundType.STONE).strength(-1.0F, 999.0F).noLootTable().isValidSpawn(Blocks::never).pushReaction(PushReaction.IMMOVEABLE)
+        properties -> properties.mapColor(MapColor.STONE).sound(SoundType.STONE).strength(-1.0F, 999.0F).noLootTable().isValidSpawn(Blocks::never).pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredBlock<FluxScrubberBlock> FLUX_SCRUBBER = withItem(BLOCKS.registerBlock(
         "flux_scrubber",
@@ -595,7 +595,7 @@ public final class ModBlocks {
     public static final DeferredBlock<ArcaneDoorBlock> ARCANE_DOOR = BLOCKS.registerBlock(
         "arcane_door",
         ArcaneDoorBlock::new,
-        properties -> properties.mapColor(MapColor.METAL).strength(-1.0F, 999.0F).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.IMMOVEABLE)
+        properties -> properties.mapColor(MapColor.METAL).strength(-1.0F, 999.0F).sound(SoundType.METAL).noOcclusion().pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredItem<ArcaneDoorItem> ARCANE_DOOR_ITEM = ModItems.ITEMS.registerItem(
         "arcane_door",
@@ -611,7 +611,7 @@ public final class ModBlocks {
             .strength(-1.0F, 999.0F)
             .sound(SoundType.WOOD)
             .noCollision()
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
     ));
     public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = withItem(BLOCKS.registerBlock(
         "hungry_chest",
@@ -711,12 +711,12 @@ public final class ModBlocks {
     public static final DeferredBlock<thaumcraft.device.MirrorBlock> MAGIC_MIRROR = BLOCKS.registerBlock(
         "magic_mirror",
         properties -> new thaumcraft.device.MirrorBlock(false, properties),
-        properties -> properties.mapColor(MapColor.NONE).noCollision().noOcclusion().strength(1.0F, 10.0F).pushReaction(PushReaction.IMMOVEABLE)
+        properties -> properties.mapColor(MapColor.NONE).noCollision().noOcclusion().strength(1.0F, 10.0F).pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredBlock<thaumcraft.device.MirrorBlock> ESSENTIA_MIRROR = BLOCKS.registerBlock(
         "essentia_mirror",
         properties -> new thaumcraft.device.MirrorBlock(true, properties),
-        properties -> properties.mapColor(MapColor.NONE).noCollision().noOcclusion().strength(1.0F, 10.0F).pushReaction(PushReaction.IMMOVEABLE)
+        properties -> properties.mapColor(MapColor.NONE).noCollision().noOcclusion().strength(1.0F, 10.0F).pushReaction(PushReaction.BLOCK)
     );
     public static final DeferredItem<thaumcraft.device.MirrorItem> MAGIC_MIRROR_ITEM = ModItems.ITEMS.registerItem(
         "magic_mirror",
@@ -745,7 +745,7 @@ public final class ModBlocks {
                     .strength(0.1F)
                     .sound(SoundType.WOOL)
                     .lightLevel(state -> 14)
-                    .pushReaction(PushReaction.POPPED)
+                    .pushReaction(PushReaction.DESTROY)
             )));
         }
         return candles;
@@ -847,7 +847,7 @@ public final class ModBlocks {
             .sound(SoundType.WOOL)
             .lightLevel(state -> 8)
             .randomTicks()
-            .pushReaction(PushReaction.IMMOVEABLE)
+            .pushReaction(PushReaction.BLOCK)
             .isValidSpawn((state, level, pos, type) -> false)
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos, box) -> false);
@@ -878,7 +878,7 @@ public final class ModBlocks {
             .noOcclusion()
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos, box) -> false)
-            .pushReaction(PushReaction.POPPED)
+            .pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor((state, level, pos) -> false);
     }
 
@@ -889,7 +889,7 @@ public final class ModBlocks {
             .instabreak()
             .sound(SoundType.GRASS)
             .offsetType(BlockBehaviour.OffsetType.NONE)
-            .pushReaction(PushReaction.POPPED);
+            .pushReaction(PushReaction.DESTROY);
     }
 
     public static void register(IEventBus bus) {

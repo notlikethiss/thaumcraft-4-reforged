@@ -60,7 +60,7 @@ public class Thaumcraft {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         modContainer.registerConfig(ModConfig.Type.STARTUP, StartupConfig.SPEC);
         thaumcraft.entity.golem.GolemKeys.init();
         AspectKeys.init();

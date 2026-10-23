@@ -102,14 +102,14 @@ public final class ResearchNotifications {
         } else {
             ResearchItem item = ResearchCategories.getResearch(key);
             if (item != null && !item.isVirtual()) {
-                Minecraft.getInstance().gui.toastManager().addToast(new ResearchToast(item));
+                Minecraft.getInstance().getToastManager().addToast(new ResearchToast(item));
                 ResearchBrowserScreen.lastX = item.column();
                 ResearchBrowserScreen.lastY = item.row();
                 ResearchBrowserScreen.highlight(key);
                 ResearchBrowserScreen.highlight(item.category());
             }
         }
-        if (Minecraft.getInstance().gui.screen() instanceof ResearchBrowserScreen browser) {
+        if (Minecraft.getInstance().screen instanceof ResearchBrowserScreen browser) {
             browser.updateResearch();
         }
     }

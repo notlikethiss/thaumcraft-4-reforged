@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -149,7 +148,7 @@ public final class WarpGameTests {
     }
 
     private static void taintPoisonDamagesBat(GameTestHelper helper) {
-        LivingEntity bat = EntityTypes.BAT.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        LivingEntity bat = EntityType.BAT.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         if (bat == null) {
             helper.fail("bat entity could not be created");
             return;
@@ -380,7 +379,7 @@ public final class WarpGameTests {
 
         BlockPos fluxRelativePos = new BlockPos(3, 2, 3);
         BlockPos fluxAbsolutePos = helper.absolutePos(fluxRelativePos);
-        LivingEntity fluxTarget = createMob(helper, EntityTypes.BAT, fluxAbsolutePos.getX() + 0.5, fluxAbsolutePos.getY(), fluxAbsolutePos.getZ() + 0.5);
+        LivingEntity fluxTarget = createMob(helper, EntityType.BAT, fluxAbsolutePos.getX() + 0.5, fluxAbsolutePos.getY(), fluxAbsolutePos.getZ() + 0.5);
         invokeRandomEffect("applyThaumarhia", helper, fluxTarget, new FixedRandomSource(0));
         helper.assertTrue(helper.getBlockState(fluxRelativePos).is(thaumcraft.registry.ModBlocks.FLUX_GOO), "thaumarhia should create flux goo after a successful server roll");
 
@@ -390,7 +389,7 @@ public final class WarpGameTests {
             helper.setBlock(darkRelativePos.above(relativeY), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
         }
         helper.setBlock(darkRelativePos.above(3), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState());
-        LivingEntity darkTarget = createMob(helper, EntityTypes.BAT, darkAbsolutePos.getX() + 0.5, darkAbsolutePos.getY(), darkAbsolutePos.getZ() + 0.5);
+        LivingEntity darkTarget = createMob(helper, EntityType.BAT, darkAbsolutePos.getX() + 0.5, darkAbsolutePos.getY(), darkAbsolutePos.getZ() + 0.5);
         darkTarget.hurtServer(helper.getLevel(), helper.getLevel().damageSources().generic(), 4.0F);
         helper.getLevel().getServer().getCommands().performPrefixedCommand(
             helper.getLevel().getServer().createCommandSourceStack().withLevel(helper.getLevel()), "time set night"
@@ -409,7 +408,7 @@ public final class WarpGameTests {
         helper.getLevel().updateSkyBrightness();
         BlockPos sunlitRelativePos = new BlockPos(5, 20, 3);
         BlockPos sunlitAbsolutePos = helper.absolutePos(sunlitRelativePos);
-        LivingEntity sunlitTarget = createMob(helper, EntityTypes.SHEEP, sunlitAbsolutePos.getX() + 0.5, sunlitAbsolutePos.getY(), sunlitAbsolutePos.getZ() + 0.5);
+        LivingEntity sunlitTarget = createMob(helper, EntityType.SHEEP, sunlitAbsolutePos.getX() + 0.5, sunlitAbsolutePos.getY(), sunlitAbsolutePos.getZ() + 0.5);
         helper.assertTrue(helper.getLevel().canSeeSky(sunlitTarget.blockPosition()), "sun scorned damage test target must have open sky");
         helper.assertTrue(sunlitTarget.getLightLevelDependentMagicValue() > 0.5F, "sun scorned damage test target must be bright enough for its daylight branch");
         invokeRandomEffect("applySunScorned", helper, sunlitTarget, new FixedRandomSource(0));
@@ -419,7 +418,7 @@ public final class WarpGameTests {
         BlockPos gazeAbsolutePos = helper.absolutePos(gazeRelativePos);
         player.setPos(gazeAbsolutePos.getX() + 0.5, gazeAbsolutePos.getY(), gazeAbsolutePos.getZ() + 0.5);
         helper.assertTrue(helper.getLevel().addFreshEntity(player), "death gaze player must be present in the test level");
-        LivingEntity deathGazeTarget = createMob(helper, EntityTypes.SHEEP, gazeAbsolutePos.getX() + 0.5, gazeAbsolutePos.getY() + 1.0, gazeAbsolutePos.getZ() + 2.5);
+        LivingEntity deathGazeTarget = createMob(helper, EntityType.SHEEP, gazeAbsolutePos.getX() + 0.5, gazeAbsolutePos.getY() + 1.0, gazeAbsolutePos.getZ() + 2.5);
         player.setYRot(0.0F);
         helper.assertTrue(player.hasLineOfSight(deathGazeTarget), "death gaze fixture target must have line of sight");
         net.minecraft.world.phys.Vec3 gazeTarget = new net.minecraft.world.phys.Vec3(
@@ -646,7 +645,7 @@ public final class WarpGameTests {
         BlockPos infectionPos = helper.absolutePos(new BlockPos(3, 2, 3));
         infectedPlayer.setPos(infectionPos.getX() + 0.5, infectionPos.getY(), infectionPos.getZ() + 0.5);
         helper.getLevel().addFreshEntity(infectedPlayer);
-        LivingEntity source = createMob(helper, EntityTypes.BAT, infectionPos.getX() + 2.0, infectionPos.getY(), infectionPos.getZ() + 0.5);
+        LivingEntity source = createMob(helper, EntityType.BAT, infectionPos.getX() + 2.0, infectionPos.getY(), infectionPos.getZ() + 0.5);
         source.addEffect(new MobEffectInstance(ModEffects.INFECTIOUS_VIS_EXHAUST, 100, 0));
         ModEffects.INFECTIOUS_VIS_EXHAUST.value().applyEffectTick(helper.getLevel(), source, 0);
         helper.assertTrue(infectedPlayer.hasEffect(ModEffects.VIS_EXHAUST), "infectious effect should spread an ordinary vis exhaustion instance");

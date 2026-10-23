@@ -32,7 +32,6 @@ import thaumcraft.menu.ResearchTableMenu;
 import thaumcraft.network.AspectCombinePayload;
 import thaumcraft.network.AspectPlacePayload;
 import thaumcraft.registry.ModSounds;
-import thaumcraft.registry.ModSounds;
 import thaumcraft.research.HexGrid;
 import thaumcraft.research.Knowledge;
 import thaumcraft.research.PlayerKnowledge;

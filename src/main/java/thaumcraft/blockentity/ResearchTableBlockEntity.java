@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.LeverBlock;
-import net.minecraft.world.level.block.RedstoneWireBlock;
+import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.TripWireBlock;
@@ -282,7 +282,7 @@ public class ResearchTableBlockEntity extends TcBlockEntity implements Container
     }
 
     private static boolean isCircuits(Block block) {
-        return block instanceof RedstoneWireBlock
+        return block instanceof RedStoneWireBlock
             || block instanceof TorchBlock
             || block instanceof LeverBlock
             || block instanceof ButtonBlock

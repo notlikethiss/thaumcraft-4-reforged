@@ -15,7 +15,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -279,7 +279,7 @@ public class InfernalFurnaceBlockEntity extends TcBlockEntity {
             }
             items.clear();
             Vec3 spawn = new Vec3(pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F);
-            if (this.releaseBlaze && EntityTypes.BLAZE.create(serverLevel, EntitySpawnReason.TRIGGERED) instanceof LivingEntity blaze) {
+            if (this.releaseBlaze && EntityType.BLAZE.create(serverLevel, EntitySpawnReason.TRIGGERED) instanceof LivingEntity blaze) {
                 blaze.snapTo(spawn.x, spawn.y, spawn.z, 0.0F, 0.0F);
                 blaze.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 6000, 2));
                 blaze.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 12000, 0));

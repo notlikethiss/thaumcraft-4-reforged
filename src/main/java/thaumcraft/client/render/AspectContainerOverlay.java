@@ -43,7 +43,7 @@ public final class AspectContainerOverlay {
     static void onSubmit(SubmitCustomGeometryEvent event) {
         Minecraft minecraft = Minecraft.getInstance();
         var player = minecraft.player;
-        if (player == null || minecraft.level == null || minecraft.gui.screen() != null
+        if (player == null || minecraft.level == null || minecraft.screen != null
             || minecraft.gameRenderer.gameRenderState().guiRenderState.isHudHidden
             || !(minecraft.hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) {
             return;
@@ -76,8 +76,8 @@ public final class AspectContainerOverlay {
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
         poseStack.translate(x - camera.x, y - camera.y, z - camera.z);
-        poseStack.rotateDegrees(Axis.YP, yaw + 180.0F);
-        poseStack.rotateDegrees(Axis.ZP, 180.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw + 180.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         poseStack.scale(SCALE, SCALE, SCALE);
         for (int index = 0; index < aspects.size(); index++) {
             Aspect aspect = aspects.get(index);

@@ -63,8 +63,8 @@ public final class NoteOverlay {
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
         poseStack.translate(pos.getX() + 0.5 - camera.x, pos.getY() + 1.5 - camera.y, pos.getZ() + 0.5 - camera.z);
-        poseStack.rotateDegrees(Axis.YP, yaw + 180.0F);
-        poseStack.rotateDegrees(Axis.ZP, 180.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw + 180.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         poseStack.scale(0.02F, 0.02F, 0.02F);
         int width = font.width(text);
         int light = 0xF000F0;

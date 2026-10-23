@@ -27,7 +27,7 @@ public final class DeviceSpecialRenderers {
                 DeviceRendering.strangeCrystal(collector, poseStack, lightCoords, Direction.UP, 0, ticks);
             } else {
                 poseStack.translate(0.5F, 0.0F, 0.5F);
-                poseStack.rotateDegrees(Axis.YP, 90.0F);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
                 poseStack.translate(-0.5F, 0.0F, -0.5F);
                 DeviceRendering.crystalCluster(collector, poseStack, kind, Direction.UP, kind, ticks);
             }

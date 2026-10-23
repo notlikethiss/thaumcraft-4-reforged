@@ -60,9 +60,9 @@ public final class BoreRendering {
         });
         poseStack.pushPose();
         switch (orientation) {
-            case NORTH -> poseStack.rotateDegrees(Axis.YP, 90.0F);
-            case SOUTH -> poseStack.rotateDegrees(Axis.YP, 270.0F);
-            case WEST -> poseStack.rotateDegrees(Axis.YP, 180.0F);
+            case NORTH -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+            case SOUTH -> poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
+            case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             default -> {
             }
         }
@@ -77,10 +77,10 @@ public final class BoreRendering {
     public static void bore(SubmitNodeCollector collector, PoseStack poseStack, int light, BoreState state) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.5F, 0.5F);
-        poseStack.rotateDegrees(Axis.YP, state.rotX());
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.rotX()));
         poseStack.pushPose();
         if (state.baseDown()) {
-            poseStack.rotateDegrees(Axis.ZP, 180.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
         poseStack.translate(0.0F, -0.5F, 0.0F);
         model(collector, poseStack, BORE_TEXTURE, false, sink -> {
@@ -90,9 +90,9 @@ public final class BoreRendering {
             box(sink, 0.0F, 8.0F, 0.0F, -1.0F, -1.0F, -6.0F, 2, 2, 12, 0, 48, light);
         });
         poseStack.popPose();
-        poseStack.rotateDegrees(Axis.ZP, state.rotZ());
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.rotZ()));
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.ZP, 90.0F);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
         poseStack.translate(0.0F, -0.5F, 0.0F);
         model(collector, poseStack, BORE_TEXTURE, false, sink -> {
             box(sink, 0.0F, 8.0F, 0.0F, 4.0F, -2.5F, -2.5F, 4, 5, 5, 30, 14, light);
@@ -100,7 +100,7 @@ public final class BoreRendering {
         });
         poseStack.popPose();
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.YP, state.topRotation());
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.topRotation()));
         poseStack.translate(0.0F, 0.5F, 0.0F);
         model(collector, poseStack, BORE_TEXTURE, false, sink -> {
             if (state.hasFocus()) {
@@ -117,7 +117,7 @@ public final class BoreRendering {
         vortex(collector, poseStack, -0.21F, rotation * 8.0F, 10.0F, 0.3F, 0.8F);
         vortex(collector, poseStack, -0.25F, -(rotation * 8.0F), -10.0F, 0.2F, 0.8F);
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.ZP, 180.0F);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         poseStack.translate(0.0F, 0.3F, 0.0F);
         poseStack.scale(0.6F, 0.6F, 0.6F);
         collector.submitCustomGeometry(
@@ -132,9 +132,9 @@ public final class BoreRendering {
     private static void vortex(SubmitNodeCollector collector, PoseStack poseStack, float offset, float spin, float tilt, float scale, float alpha) {
         poseStack.pushPose();
         poseStack.translate(0.0F, offset, 0.0F);
-        poseStack.rotateDegrees(Axis.XP, -90.0F);
-        poseStack.rotateDegrees(Axis.ZP, spin);
-        poseStack.rotateDegrees(Axis.YP, tilt);
+        poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(spin));
+        poseStack.mulPose(Axis.YP.rotationDegrees(tilt));
         poseStack.scale(scale, scale, scale);
         int argb = (int) (alpha * 255.0F) << 24 | 0xFFFFFF;
         ItemGeometry.blended(collector, poseStack, VORTEX, 771, sink -> {

@@ -17,7 +17,7 @@ import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -233,7 +233,7 @@ public final class FluidGameTests {
         var level = helper.getLevel();
         BlockPos relativePos = new BlockPos(2, 2, 2);
         BlockPos pos = helper.absolutePos(relativePos);
-        Pig pig = new Pig(EntityTypes.PIG, level);
+        Pig pig = new Pig(EntityType.PIG, level);
         pig.getRandom().setSeed(0L);
         pig.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         level.addFreshEntity(pig);

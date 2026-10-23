@@ -35,7 +35,7 @@ public final class EssentiaJarRendering {
     ) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.01F, 0.5F);
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         if (amount > 0 && aspect != null) {
             liquid(collector, poseStack, light, aspect, amount / (float) maxAmount * 0.625F);
         }
@@ -47,7 +47,7 @@ public final class EssentiaJarRendering {
 
     private static void liquid(SubmitNodeCollector collector, PoseStack poseStack, int light, Aspect aspect, float level) {
         poseStack.pushPose();
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         poseStack.translate(-0.5F, 0.0F, -0.5F);
         BoxGeometry.UvRect rect = EssentiaRendering.rect(EssentiaRendering.ANIMATED_GLOW);
         int color = ARGB.opaque(aspect.getColor());
@@ -65,9 +65,9 @@ public final class EssentiaJarRendering {
     private static void label(SubmitNodeCollector collector, PoseStack poseStack, int light, int posX, Aspect filter, Direction facing) {
         poseStack.pushPose();
         switch (facing) {
-            case SOUTH -> poseStack.rotateDegrees(Axis.YP, 180.0F);
-            case WEST -> poseStack.rotateDegrees(Axis.YP, 270.0F);
-            case EAST -> poseStack.rotateDegrees(Axis.YP, 90.0F);
+            case SOUTH -> poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
+            case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
             default -> {
             }
         }
@@ -75,7 +75,7 @@ public final class EssentiaJarRendering {
         poseStack.pushPose();
         poseStack.translate(0.0F, -0.4F, 0.315F);
         if (ClientConfig.crooked()) {
-            poseStack.rotateDegrees(Axis.ZP, rotation);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(rotation));
         }
         poseStack.scale(0.5F, 0.5F, 0.5F);
         ItemGeometry.solid(collector.order(2), poseStack, LABEL, true, sink -> quad(sink, -0.5F, -0.5F, 0.5F, 0.5F, WHITE, light));
@@ -83,10 +83,10 @@ public final class EssentiaJarRendering {
         poseStack.pushPose();
         poseStack.translate(0.0F, -0.4F, 0.316F);
         if (ClientConfig.crooked()) {
-            poseStack.rotateDegrees(Axis.ZP, rotation);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(rotation));
         }
         poseStack.scale(0.021F, 0.021F, 0.021F);
-        poseStack.rotateDegrees(Axis.YP, 180.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         int tint = ARGB.opaque(filter.getColor());
         ItemGeometry.solid(collector.order(3), poseStack, filter.getImage(), true, sink -> quad(sink, -8.0F, -8.0F, 8.0F, 8.0F, tint, light));
         poseStack.popPose();

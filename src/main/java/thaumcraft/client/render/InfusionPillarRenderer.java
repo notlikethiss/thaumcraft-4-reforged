@@ -49,13 +49,13 @@ public class InfusionPillarRenderer implements BlockEntityRenderer<InfusionPilla
         ObjModel model = ObjModel.get(MODEL);
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.0F, 0.5F);
-        poseStack.rotateDegrees(Axis.XP, -90.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
         if (state.orientation == 3) {
-            poseStack.rotateDegrees(Axis.ZP, 90.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
         } else if (state.orientation == 4) {
-            poseStack.rotateDegrees(Axis.ZP, 270.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(270.0F));
         } else if (state.orientation == 5) {
-            poseStack.rotateDegrees(Axis.ZP, 180.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
         int light = state.lightCoords;
         collector.submitCustomGeometry(

@@ -8,7 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.core.RegistryCodecs;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.world.BiomeModifier;

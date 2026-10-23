@@ -81,7 +81,7 @@ public class DeconstructionTableRenderer implements BlockEntityRenderer<Deconstr
         if (!state.item.isEmpty()) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 1.15F + Mth.sin(state.hover) * 0.1F + 0.1F, 0.5F);
-            poseStack.rotateDegrees(Axis.YP, state.ticks % 360.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(state.ticks % 360.0F));
             state.item.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
@@ -89,8 +89,8 @@ public class DeconstructionTableRenderer implements BlockEntityRenderer<Deconstr
         if (aspect != null) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 1.081F, 0.5F);
-            poseStack.rotateDegrees(Axis.XP, 90.0F);
-            poseStack.rotateDegrees(Axis.ZP, state.ticks % 360.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(state.ticks % 360.0F));
             poseStack.scale(TAG_SCALE, TAG_SCALE, TAG_SCALE);
             Identifier image = aspect.getImage();
             int color = 0xCC000000 | aspect.getColor() & 0xFFFFFF;

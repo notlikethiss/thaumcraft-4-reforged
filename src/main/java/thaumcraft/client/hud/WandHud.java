@@ -36,7 +36,7 @@ public final class WandHud {
     public static void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (player == null || minecraft.level == null || minecraft.gui.screen() != null) {
+        if (player == null || minecraft.level == null || minecraft.screen != null) {
             return;
         }
         ItemStack stack = player.getMainHandItem();

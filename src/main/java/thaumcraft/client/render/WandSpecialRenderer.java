@@ -54,7 +54,7 @@ public class WandSpecialRenderer implements SpecialModelRenderer<WandSpecialRend
                 if (staff) {
                     poseStack.scale(0.8F, 0.8F, 0.8F);
                 }
-                poseStack.rotateDegrees(Axis.ZP, 66.0F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(66.0F));
                 poseStack.translate(0.0F, 0.6F, 0.0F);
                 if (staff) {
                     poseStack.translate(-0.7F, 0.6F, 0.0F);
@@ -75,7 +75,7 @@ public class WandSpecialRenderer implements SpecialModelRenderer<WandSpecialRend
                 }
             }
         }
-        poseStack.rotateDegrees(Axis.XP, 180.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
     }
 
     private static final Identifier SCRIPT = Thaumcraft.id("textures/misc/script.png");
@@ -88,18 +88,18 @@ public class WandSpecialRenderer implements SpecialModelRenderer<WandSpecialRend
         float t = Math.min(state.useTicks(), 3.0F);
         poseStack.translate(0.0F, 1.0F, 0.0F);
         if (view != LegacyItemView.FIRST_PERSON) {
-            poseStack.rotateDegrees(Axis.ZP, 33.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(33.0F));
         } else {
-            poseStack.rotateDegrees(Axis.XP, 10.0F);
-            poseStack.rotateDegrees(Axis.ZP, 10.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(10.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(10.0F));
         }
-        poseStack.rotateDegrees(Axis.XN, 60.0F * (t / 3.0F));
+        poseStack.mulPose(Axis.XN.rotationDegrees(60.0F * (t / 3.0F)));
         if (state.wave()) {
-            poseStack.rotateDegrees(Axis.ZP, Mth.sin(state.useTicks() / 10.0F) * 10.0F);
-            poseStack.rotateDegrees(Axis.XP, Mth.sin(state.useTicks() / 15.0F) * 10.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(state.useTicks() / 10.0F) * 10.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(state.useTicks() / 15.0F) * 10.0F));
         } else if (state.charge()) {
-            poseStack.rotateDegrees(Axis.ZP, Mth.sin(state.useTicks() / 0.8F));
-            poseStack.rotateDegrees(Axis.XP, Mth.sin(state.useTicks() / 0.7F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(state.useTicks() / 0.8F)));
+            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(state.useTicks() / 0.7F)));
         }
         poseStack.translate(0.0F, -1.0F, 0.0F);
     }
