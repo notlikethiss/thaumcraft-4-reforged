@@ -80,6 +80,5 @@ public final class ThaumcraftClient {
         event.registerPipeline(ModRenderPipelines.GUI_ADDITIVE);
         event.registerPipeline(ModRenderPipelines.GUI_TEXTURED_ADDITIVE);
         NodeRenderTypes.forEachPipeline(event::registerPipeline);
-        NodeRenderTypes.forEachOitPipelineSet(event::registerOitPipelineSet);
     }
 }

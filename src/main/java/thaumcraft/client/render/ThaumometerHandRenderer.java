@@ -6,22 +6,26 @@ import com.mojang.math.Axis;
 import java.text.DecimalFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Thaumcraft;
@@ -41,7 +45,45 @@ public final class ThaumometerHandRenderer {
     private static final int NODE_TEXT_COLOR = 0xFFEEAE16;
     private static final int TEXT_COLOR = 0xFFFFFFFF;
 
+    private static long frame;
+    private static float spinningTime;
+    private static float spinningSpeed;
+    private static @Nullable HandPose lastPose;
+
+    record HandPose(float swing, float hidden, boolean usingItem, float pitchBob, float yawBob, long frame) {
+    }
+
     private ThaumometerHandRenderer() {
+    }
+
+    static @Nullable HandPose currentPose() {
+        HandPose pose = lastPose;
+        return pose != null && pose.frame() >= frame - 1 ? pose : null;
+    }
+
+    static float spinningAngle(float partialTick) {
+        return spinningTime + partialTick * spinningSpeed;
+    }
+
+    @SubscribeEvent
+    static void onRenderFrame(RenderFrameEvent.Pre event) {
+        frame++;
+    }
+
+    @SubscribeEvent
+    static void onClientTick(ClientTickEvent.Post event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        float portal = player.portalEffectIntensity;
+        float nausea = player.getEffectBlendFactor(MobEffects.NAUSEA, 1.0F);
+        if (!(portal > 0.0F) && !(nausea > 0.0F)) {
+            spinningSpeed = 0.0F;
+        } else {
+            spinningSpeed = (portal * 20.0F + nausea * 7.0F) / (portal + nausea);
+            spinningTime += spinningSpeed;
+        }
     }
 
     @SubscribeEvent
@@ -58,33 +100,34 @@ public final class ThaumometerHandRenderer {
         int light = event.getPackedLight();
         float swing = event.getSwingProgress();
         float hidden = event.getEquipProgress();
-        AvatarRenderState avatar = event.getPlayerState().avatarRenderState;
+        float partialTick = event.getPartialTick();
+        float pitchBob = player.getViewXRot(partialTick) - Mth.lerp(partialTick, player.xBobO, player.xBob);
+        float yawBob = player.getViewYRot(partialTick) - Mth.lerp(partialTick, player.yBobO, player.yBob);
+        boolean usingItem = player.isUsingItem();
+        lastPose = new HandPose(swing, hidden, usingItem, pitchBob, yawBob, frame);
 
         poseStack.pushPose();
-        applyEquipTransform(poseStack, swing, hidden, avatar != null && avatar.isUsingItem);
+        applyEquipTransform(poseStack, swing, hidden, usingItem);
 
         poseStack.pushPose();
-        var hands = event.getPlayerState().firstPersonHandsAndItems;
-        applyGripTransform(poseStack, hands.viewXRot - hands.xBob, hands.viewYRot - hands.yBob);
+        applyGripTransform(poseStack, pitchBob, yawBob);
 
-        if (avatar != null) {
+        poseStack.pushPose();
+        poseStack.scale(5.0F, 5.0F, 5.0F);
+        AvatarRenderer<AbstractClientPlayer> renderer = minecraft.getEntityRenderDispatcher().getPlayerRenderer(player);
+        Identifier skin = player.getSkin().body().texturePath();
+        for (int index = 0; index < 2; index++) {
+            int side = index * 2 - 1;
             poseStack.pushPose();
-            poseStack.scale(5.0F, 5.0F, 5.0F);
-            AvatarRenderer<?> renderer = (AvatarRenderer<?>) minecraft.getEntityRenderDispatcher().getRenderer(avatar);
-            Identifier skin = avatar.skin.body().texturePath();
-            for (int index = 0; index < 2; index++) {
-                int side = index * 2 - 1;
-                poseStack.pushPose();
-                poseStack.translate(0.0F, -0.6F, 1.1F * side);
-                poseStack.mulPose(Axis.XP.rotationDegrees(-45 * side));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(59.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(-65 * side));
-                renderer.renderRightHand(poseStack, collector, light, skin, avatar.showRightSleeve);
-                poseStack.popPose();
-            }
+            poseStack.translate(0.0F, -0.6F, 1.1F * side);
+            poseStack.mulPose(Axis.XP.rotationDegrees(-45 * side));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(-90.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(59.0F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-65 * side));
+            renderer.renderRightHand(poseStack, collector, light, skin, player.isModelPartShown(PlayerModelPart.RIGHT_SLEEVE), player);
             poseStack.popPose();
         }
+        poseStack.popPose();
 
         applyModelTransform(poseStack);
         ThaumometerItemRenderer.submitModel(collector, poseStack, light);

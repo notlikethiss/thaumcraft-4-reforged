@@ -5,43 +5,33 @@ import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.oit.OitPipelineSet;
 import thaumcraft.Thaumcraft;
 
 public final class ModRenderPipelines {
-    public static final OitPipelineSet OIT_ADDITIVE_PARTICLE = OitPipelineSet.builder(
-        Thaumcraft.id("additive_particle"),
-        RenderPipeline.builder(RenderPipelines.OIT_PARTICLE_SNIPPET).withCull(false).withShaderDefine("OIT_ADDITIVE")
-    ).build();
-    public static final OitPipelineSet OIT_ADDITIVE_NO_DEPTH = OitPipelineSet.builder(
-        Thaumcraft.id("additive_no_depth"),
-        RenderPipeline.builder(RenderPipelines.OIT_PARTICLE_SNIPPET).withCull(false).withShaderDefine("OIT_ADDITIVE")
-    ).withoutDepthTest().build();
     public static final RenderPipeline ELDRITCH_PORTAL = RenderPipeline.builder(RenderPipelines.PARTICLE_SNIPPET)
         .withLocation(Thaumcraft.id("pipeline/eldritch_portal"))
         .withCull(false)
         .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-        .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, true))
+        .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, true))
         .build();
     public static final RenderPipeline ELDRITCH_SURFACE = RenderPipeline.builder(RenderPipelines.PARTICLE_SNIPPET)
         .withLocation(Thaumcraft.id("pipeline/eldritch_surface"))
         .withCull(false)
         .withColorTargetState(ColorTargetState.DEFAULT)
-        .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, true))
+        .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, true))
         .build();
     public static final RenderPipeline ADDITIVE_PARTICLE = RenderPipeline.builder(RenderPipelines.PARTICLE_SNIPPET)
         .withLocation(Thaumcraft.id("pipeline/additive_particle"))
         .withCull(false)
         .withColorTargetState(new ColorTargetState(BlendFunction.LIGHTNING))
-        .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
+        .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
         .build();
     public static final RenderPipeline TRANSLUCENT_PARTICLE = RenderPipeline.builder(RenderPipelines.PARTICLE_SNIPPET)
         .withLocation(Thaumcraft.id("pipeline/translucent_particle"))
         .withCull(false)
         .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-        .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
+        .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
         .build();
     public static final RenderPipeline ADDITIVE_NO_DEPTH = RenderPipeline.builder(RenderPipelines.PARTICLE_SNIPPET)
         .withLocation(Thaumcraft.id("pipeline/additive_no_depth"))
@@ -59,9 +49,9 @@ public final class ModRenderPipelines {
         .withLocation(Thaumcraft.id("pipeline/entity_translucent_no_depth"))
         .withShaderDefine("ALPHA_CUTOUT", 0.1F)
         .withShaderDefine("PER_FACE_LIGHTING")
-        .withBindGroupLayout(BindGroupLayouts.SAMPLER1)
+        .withSampler("Sampler1")
         .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-        .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN_OR_EQUAL, false))
+        .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
         .withCull(false)
         .build();
     public static final RenderPipeline GUI_ADDITIVE = RenderPipeline.builder(RenderPipelines.GUI_SNIPPET)

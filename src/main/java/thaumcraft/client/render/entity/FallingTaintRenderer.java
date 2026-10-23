@@ -19,8 +19,8 @@ public final class FallingTaintRenderer extends EntityRenderer<FallingTaint, Fal
     }
 
     @Override
-    public boolean shouldRender(FallingTaint entity, Frustum culler, double camX, double camY, double camZ, float partialTicks) {
-        return super.shouldRender(entity, culler, camX, camY, camZ, partialTicks)
+    public boolean shouldRender(FallingTaint entity, Frustum culler, double camX, double camY, double camZ) {
+        return super.shouldRender(entity, culler, camX, camY, camZ)
             && entity.getBlockState() != entity.level().getBlockState(entity.blockPosition());
     }
 
@@ -49,7 +49,7 @@ public final class FallingTaintRenderer extends EntityRenderer<FallingTaint, Fal
         if (blockState != null && blockState.getRenderShape() == RenderShape.MODEL) {
             poseStack.pushPose();
             poseStack.translate(-0.5, 0.0, -0.5);
-            collector.submitMovingBlock(poseStack, state.movingBlockRenderState, state.outlineColor);
+            collector.submitMovingBlock(poseStack, state.movingBlockRenderState);
             poseStack.popPose();
             super.submit(state, poseStack, collector, camera);
         }

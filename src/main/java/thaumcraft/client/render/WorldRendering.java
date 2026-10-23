@@ -1,6 +1,7 @@
 package thaumcraft.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
@@ -38,9 +39,9 @@ public final class WorldRendering {
         if (level == null) {
             return LightCoordsUtil.FULL_BRIGHT;
         }
-        int light = LightCoordsUtil.getLightCoords(level, pos);
+        int light = LevelRenderer.getLightCoords(level, pos);
         for (Direction direction : Direction.values()) {
-            light = LightCoordsUtil.max(light, LightCoordsUtil.getLightCoords(level, pos.relative(direction)));
+            light = LightCoordsUtil.max(light, LevelRenderer.getLightCoords(level, pos.relative(direction)));
         }
         return light;
     }

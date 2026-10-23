@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.FilterMode;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -69,7 +68,6 @@ public final class TcRenderTypes {
         return ADDITIVE.computeIfAbsent(texture, key -> RenderType.create(
             "thaumcraft_additive",
             RenderSetup.builder(ModRenderPipelines.ADDITIVE_PARTICLE)
-                .setOitPipelines(ModRenderPipelines.OIT_ADDITIVE_PARTICLE)
                 .withTexture("Sampler0", key, () -> RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR))
                 .useLightmap()
                 .createRenderSetup()
@@ -80,7 +78,6 @@ public final class TcRenderTypes {
         return TRANSLUCENT.computeIfAbsent(texture, key -> RenderType.create(
             "thaumcraft_translucent",
             RenderSetup.builder(ModRenderPipelines.TRANSLUCENT_PARTICLE)
-                .setOitPipelines(RenderPipelines.OIT_PARTICLE)
                 .withTexture("Sampler0", key, () -> RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR))
                 .useLightmap()
                 .createRenderSetup()
@@ -91,7 +88,6 @@ public final class TcRenderTypes {
         return ADDITIVE_NO_DEPTH.computeIfAbsent(texture, key -> RenderType.create(
             "thaumcraft_additive_no_depth",
             RenderSetup.builder(ModRenderPipelines.ADDITIVE_NO_DEPTH)
-                .setOitPipelines(ModRenderPipelines.OIT_ADDITIVE_NO_DEPTH)
                 .withTexture("Sampler0", key, () -> RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR))
                 .useLightmap()
                 .createRenderSetup()
@@ -102,7 +98,6 @@ public final class TcRenderTypes {
         return TRANSLUCENT_NO_DEPTH.computeIfAbsent(texture, key -> RenderType.create(
             "thaumcraft_translucent_no_depth",
             RenderSetup.builder(ModRenderPipelines.TRANSLUCENT_NO_DEPTH)
-                .setOitPipelines(RenderPipelines.OIT_PARTICLE)
                 .withTexture("Sampler0", key, () -> RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR))
                 .useLightmap()
                 .createRenderSetup()
@@ -144,7 +139,6 @@ public final class TcRenderTypes {
         return ENTITY_TRANSLUCENT_NO_DEPTH.computeIfAbsent(texture, key -> RenderType.create(
             "thaumcraft_entity_translucent_no_depth",
             RenderSetup.builder(ModRenderPipelines.ENTITY_TRANSLUCENT_NO_DEPTH)
-                .setOitPipelines(RenderPipelines.OIT_ENTITY)
                 .withTexture("Sampler0", key)
                 .useLightmap()
                 .useOverlay()

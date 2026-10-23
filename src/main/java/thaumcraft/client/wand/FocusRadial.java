@@ -183,7 +183,7 @@ public final class FocusRadial {
                 .map(Component::getVisualOrderText)
                 .map(ClientTooltipComponent::create)
                 .toList();
-            graphics.tooltip(minecraft.font, lines, -4, 20, DefaultTooltipPositioner.INSTANCE, null, true);
+            graphics.tooltip(minecraft.font, lines, -4, 20, DefaultTooltipPositioner.INSTANCE, null);
         }
         graphics.pose().popMatrix();
     }

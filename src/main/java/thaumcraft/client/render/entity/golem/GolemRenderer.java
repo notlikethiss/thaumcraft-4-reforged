@@ -134,7 +134,7 @@ public final class GolemRenderer extends MobRenderer<GolemBase, GolemRenderState
                 return;
             }
             model.setupAnim(state);
-            collector.submitModel(model, state, poseStack, TcRenderTypes.entityTranslucent(DECORATION), light, LivingEntityRenderer.getOverlayCoords(state, 0.0F), -1, null, state.outlineColor);
+            collector.submitModel(model, state, poseStack, TcRenderTypes.entityTranslucent(DECORATION), light, LivingEntityRenderer.getOverlayCoords(state, 0.0F), -1, null, state.outlineColor, null);
         }
     }
 
@@ -153,7 +153,7 @@ public final class GolemRenderer extends MobRenderer<GolemBase, GolemRenderState
             }
             model.setupAnim(state);
             int alpha = (int) ((1.0F - Math.max(0.0F, state.healthPercent)) * 255.0F);
-            collector.submitModel(model, state, poseStack, TcRenderTypes.entityTranslucent(DAMAGE), light, OverlayTexture.NO_OVERLAY, ARGB.color(alpha, 255, 255, 255), null, state.outlineColor);
+            collector.submitModel(model, state, poseStack, TcRenderTypes.entityTranslucent(DAMAGE), light, OverlayTexture.NO_OVERLAY, ARGB.color(alpha, 255, 255, 255), null, state.outlineColor, null);
         }
     }
 

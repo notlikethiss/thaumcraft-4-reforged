@@ -55,7 +55,8 @@ public final class EldritchCrabRenderer extends MobRenderer<EldritchCrab, Eldrit
                 state.appearsGlowing() && state.isInvisible ? TcRenderTypes.outline(OVERLAY) : TcRenderTypes.entityTranslucent(OVERLAY),
                 LightCoordsUtil.pack(200, 0),
                 overlay,
-                state.outlineColor
+                state.outlineColor,
+                null
             );
         }
     }

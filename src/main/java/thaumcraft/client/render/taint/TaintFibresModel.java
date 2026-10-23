@@ -170,10 +170,8 @@ public class TaintFibresModel implements DynamicBlockStateModel {
             material.sprite(),
             ChunkSectionLayer.TRANSLUCENT,
             TcRenderTypes.translucentMovingBlock(),
-            material.itemGlintRenderType(),
-            material.itemGlintSpecialRenderType(),
             material.tintIndex(),
-            material.shadeDirectionOverride(),
+            material.shade(),
             OVERLAY_LIGHT,
             false
         );

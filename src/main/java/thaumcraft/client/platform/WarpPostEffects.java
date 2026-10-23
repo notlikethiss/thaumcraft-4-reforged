@@ -1,9 +1,9 @@
 package thaumcraft.client.platform;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
@@ -12,11 +12,20 @@ public final class WarpPostEffects {
     }
 
     public static void sync(LocalPlayer player, Collection<Identifier> ownedEffects, Collection<Identifier> activeEffects) {
-        List<Identifier> active = new ArrayList<>(player.getActivePostEffects());
-        active.removeAll(ownedEffects);
-        active.addAll(activeEffects);
-        if (!player.getActivePostEffects().equals(active)) {
-            player.setActivePostEffects(active);
+        GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
+        Identifier current = gameRenderer.currentPostEffect();
+        if (activeEffects.isEmpty()) {
+            if (current != null && ownedEffects.contains(current)) {
+                gameRenderer.clearPostEffect();
+            }
+            return;
+        }
+        if (current != null && !ownedEffects.contains(current)) {
+            return;
+        }
+        Identifier next = activeEffects.contains(current) ? current : activeEffects.iterator().next();
+        if (!next.equals(current)) {
+            gameRenderer.setPostEffect(next);
         }
     }
 
@@ -24,9 +33,10 @@ public final class WarpPostEffects {
         if (player == null) {
             return;
         }
-        List<Identifier> active = new ArrayList<>(player.getActivePostEffects());
-        if (active.removeAll(ownedEffects)) {
-            player.setActivePostEffects(active);
+        GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
+        Identifier current = gameRenderer.currentPostEffect();
+        if (current != null && ownedEffects.contains(current)) {
+            gameRenderer.clearPostEffect();
         }
     }
 }

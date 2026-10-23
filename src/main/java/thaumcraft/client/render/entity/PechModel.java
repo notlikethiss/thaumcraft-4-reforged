@@ -79,19 +79,19 @@ public final class PechModel extends EntityModel<PechRenderState> implements Arm
         } else {
             rightLeg.yRot = leftLeg.yRot = 0.0F;
         }
-        if (state.swingAnimation > 0.0F) {
+        if (state.attackTime > 0.0F) {
             rightArm.yRot += body.yRot;
             leftArm.yRot += body.yRot;
             leftArm.xRot += body.yRot;
-            float swing = 1.0F - state.swingAnimation;
+            float swing = 1.0F - state.attackTime;
             swing *= swing;
             swing *= swing;
             swing = 1.0F - swing;
             float swingSin = Mth.sin(swing * Mth.PI);
-            float headPull = Mth.sin(state.swingAnimation * Mth.PI) * -(head.xRot - 0.7F) * 0.75F;
+            float headPull = Mth.sin(state.attackTime * Mth.PI) * -(head.xRot - 0.7F) * 0.75F;
             rightArm.xRot -= swingSin * 1.2F + headPull;
             rightArm.yRot += body.yRot * 2.0F;
-            rightArm.zRot = Mth.sin(state.swingAnimation * Mth.PI) * -0.4F;
+            rightArm.zRot = Mth.sin(state.attackTime * Mth.PI) * -0.4F;
         }
         if (state.isCrouching) {
             rightArm.xRot += 0.4F;

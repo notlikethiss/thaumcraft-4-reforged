@@ -23,8 +23,8 @@ public class MindSpiderRenderer extends AbstractTranslucentMobRenderer<MindSpide
     }
 
     @Override
-    public boolean shouldRender(MindSpider entity, Frustum culler, double camX, double camY, double camZ, float partialTicks) {
-        if (!super.shouldRender(entity, culler, camX, camY, camZ, partialTicks)) {
+    public boolean shouldRender(MindSpider entity, Frustum culler, double camX, double camY, double camZ) {
+        if (!super.shouldRender(entity, culler, camX, camY, camZ)) {
             return false;
         }
         String viewer = entity.getViewer();

@@ -8,11 +8,10 @@ import net.minecraft.client.renderer.state.OptionsRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import thaumcraft.client.geom.ProjectedWindow;
-import thaumcraft.registry.ModItems;
 
 /** The scanner's glass projected into the same clip space as the world. */
 final class ThaumometerLens {
@@ -27,15 +26,11 @@ final class ThaumometerLens {
 
     static List<Vector4f> clipPlanes(CameraRenderState camera, BlockPos pos) {
         Minecraft minecraft = Minecraft.getInstance();
-        var game = minecraft.gameRenderer.gameRenderState();
-        var player = game.levelRenderState.playerRenderState;
-        var hands = player.firstPersonHandsAndItems;
-        var avatar = player.avatarRenderState;
-        if (!camera.isFirstPerson || camera.isPanoramicMode || game.guiRenderState.isHudHidden
-            || camera.entityRenderState.isSleeping || !player.hasPlayer || avatar == null
-            || minecraft.player == null || minecraft.player.isSpectator()
-            || !hands.mainHandItem.is(ModItems.THAUMOMETER.get())
-            || hands.handRenderSelection == null || !hands.handRenderSelection.renderMainHand) {
+        var game = minecraft.gameRenderer.getGameRenderState();
+        var hand = ThaumometerHandRenderer.currentPose();
+        if (!game.optionsRenderState.cameraType.isFirstPerson() || camera.isPanoramicMode || game.optionsRenderState.hideGui
+            || camera.entityRenderState.isSleeping || hand == null
+            || minecraft.player == null || minecraft.player.isSpectator()) {
             return ProjectedWindow.hidden();
         }
 
@@ -44,13 +39,11 @@ final class ThaumometerLens {
         // Hand rendering starts at inverse(view), so modelView * pose is bob * hand.
         PoseStack lens = new PoseStack();
         lens.mulPose(bob.last().pose());
-        float pitchBob = hands.viewXRot - hands.xBob;
-        float yawBob = hands.viewYRot - hands.yBob;
+        float pitchBob = hand.pitchBob();
+        float yawBob = hand.yawBob();
         lens.mulPose(Axis.XP.rotationDegrees(pitchBob * 0.1F));
         lens.mulPose(Axis.YP.rotationDegrees(yawBob * 0.1F));
-        float swing = hands.attackHand == InteractionHand.MAIN_HAND ? avatar.swingAnimation : 0.0F;
-        float hidden = hands.mainHandSwapScale * (1.0F - Mth.lerp(camera.cameraEntityPartialTicks, hands.oldMainHandHeight, hands.mainHandHeight));
-        ThaumometerHandRenderer.applyEquipTransform(lens, swing, hidden, avatar.isUsingItem);
+        ThaumometerHandRenderer.applyEquipTransform(lens, hand.swing(), hand.hidden(), hand.usingItem());
         ThaumometerHandRenderer.applyGripTransform(lens, pitchBob, yawBob);
         ThaumometerHandRenderer.applyModelTransform(lens);
         ThaumometerItemRenderer.applyScreenTransform(lens);
@@ -59,8 +52,11 @@ final class ThaumometerLens {
         Matrix4f handProjection = new Matrix4f().setPerspective((float) Math.toRadians(camera.hudFov), aspect, 0.05F, camera.depthFar);
         Matrix4f glassToClip = handProjection.mul(lens.last().pose());
         Matrix4f worldToClip = new Matrix4f(camera.projectionMatrix).mul(bob.last().pose());
-        applyPortalEffects(worldToClip, player.portalEffectIntensity, player.nauseaEffectIntensity,
-            player.spinningEffectAngle, game.optionsRenderState.screenEffectScale);
+        float partialTick = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        applyPortalEffects(worldToClip,
+            Mth.lerp(partialTick, minecraft.player.oPortalEffectIntensity, minecraft.player.portalEffectIntensity),
+            minecraft.player.getEffectBlendFactor(MobEffects.NAUSEA, partialTick),
+            ThaumometerHandRenderer.spinningAngle(partialTick), game.optionsRenderState.screenEffectScale);
         worldToClip.mul(camera.viewRotationMatrix).translate(
             (float) (pos.getX() - camera.pos.x), (float) (pos.getY() - camera.pos.y), (float) (pos.getZ() - camera.pos.z));
         return ProjectedWindow.planes(GLASS, glassToClip, worldToClip);

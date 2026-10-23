@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.oit.OitPipelineSet;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
@@ -27,7 +26,6 @@ public final class NodeRenderTypes {
         TRANSLUCENT_NO_DEPTH(true, true);
 
         final RenderPipeline pipeline;
-        final OitPipelineSet oit;
 
         Layer(boolean translucent, boolean depthIgnore) {
             Identifier id = Thaumcraft.id("node_" + name().toLowerCase(java.util.Locale.ROOT));
@@ -36,16 +34,8 @@ public final class NodeRenderTypes {
                 .withFragmentShader(Thaumcraft.id("core/node"))
                 .withCull(false)
                 .withColorTargetState(new ColorTargetState(translucent ? BlendFunction.TRANSLUCENT : BlendFunction.LIGHTNING))
-                .withDepthStencilState(new DepthStencilState(depthIgnore ? CompareOp.ALWAYS_PASS : CompareOp.GREATER_THAN_OR_EQUAL, false))
+                .withDepthStencilState(new DepthStencilState(depthIgnore ? CompareOp.ALWAYS_PASS : CompareOp.LESS_THAN_OR_EQUAL, false))
                 .build();
-            RenderPipeline.Builder builder = RenderPipeline.builder(RenderPipelines.OIT_PARTICLE_SNIPPET)
-                .withFragmentShader(Thaumcraft.id("core/node"))
-                .withCull(false);
-            if (!translucent) {
-                builder.withShaderDefine("OIT_ADDITIVE");
-            }
-            OitPipelineSet.Builder oitBuilder = OitPipelineSet.builder(id, builder);
-            oit = (depthIgnore ? oitBuilder.withoutDepthTest() : oitBuilder).build();
         }
     }
 
@@ -61,12 +51,6 @@ public final class NodeRenderTypes {
         }
     }
 
-    public static void forEachOitPipelineSet(Consumer<OitPipelineSet> consumer) {
-        for (Layer layer : Layer.values()) {
-            consumer.accept(layer.oit);
-        }
-    }
-
     public static RenderType of(Identifier texture, boolean translucent, boolean depthIgnore) {
         Layer layer = translucent
             ? (depthIgnore ? Layer.TRANSLUCENT_NO_DEPTH : Layer.TRANSLUCENT)
@@ -74,7 +58,6 @@ public final class NodeRenderTypes {
         return TYPES.computeIfAbsent(new Key(texture, layer), key -> RenderType.create(
             "thaumcraft_node_" + layer.name().toLowerCase(java.util.Locale.ROOT),
             RenderSetup.builder(layer.pipeline)
-                .setOitPipelines(layer.oit)
                 .withTexture("Sampler0", key.texture(), () -> RenderSystem.getSamplerCache().getRepeat(FilterMode.LINEAR))
                 .useLightmap()
                 .createRenderSetup()

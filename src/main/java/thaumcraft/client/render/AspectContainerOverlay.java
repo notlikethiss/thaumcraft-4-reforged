@@ -44,7 +44,7 @@ public final class AspectContainerOverlay {
         Minecraft minecraft = Minecraft.getInstance();
         var player = minecraft.player;
         if (player == null || minecraft.level == null || minecraft.screen != null
-            || minecraft.gameRenderer.gameRenderState().guiRenderState.isHudHidden
+            || minecraft.gameRenderer.getGameRenderState().optionsRenderState.hideGui
             || !(minecraft.hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) {
             return;
         }

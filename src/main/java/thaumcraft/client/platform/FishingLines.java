@@ -10,7 +10,7 @@ public final class FishingLines {
     private FishingLines() { }
 
     public static void submit(PoseStack poses, SubmitNodeCollector collector, float dx, float dy, float dz) {
-        float width = Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState.appropriateLineWidth;
+        float width = Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState.appropriateLineWidth;
         collector.submitCustomGeometry(poses, RenderTypes.lines(), (pose, buffer) ->
             FishingLineGeometry.render(dx, dy, dz, (x, y, z, nx, ny, nz) ->
                 buffer.addVertex(pose, x, y, z).setColor(0xFF000000).setNormal(pose, nx, ny, nz).setLineWidth(width)));

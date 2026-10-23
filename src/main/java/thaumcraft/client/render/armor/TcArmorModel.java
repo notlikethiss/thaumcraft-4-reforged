@@ -120,8 +120,8 @@ public class TcArmorModel extends HumanoidModel<HumanoidRenderState> {
     }
 
     private void zombieArms(HumanoidRenderState state) {
-        float f6 = Mth.sin(state.swingAnimation * (float) Math.PI);
-        float f7 = Mth.sin((1.0F - (1.0F - state.swingAnimation) * (1.0F - state.swingAnimation)) * (float) Math.PI);
+        float f6 = Mth.sin(state.attackTime * (float) Math.PI);
+        float f7 = Mth.sin((1.0F - (1.0F - state.attackTime) * (1.0F - state.attackTime)) * (float) Math.PI);
         rightArm.zRot = 0.0F;
         leftArm.zRot = 0.0F;
         rightArm.yRot = -(0.1F - f6 * 0.6F);
