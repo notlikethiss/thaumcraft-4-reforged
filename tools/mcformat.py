@@ -45,10 +45,10 @@ class Profile:
     tag_expansions = {}
     data_maps = True
     enchantment_json = True
-    shader_dialect = "26.3"
     item_definitions = True
     attribute_spawns = True
     fuel_data_map = False
+    block_state_keys = ("id", "properties")
 
     def rename_vanilla(self, value):
         prefix = "#" if value.startswith("#") else ""
@@ -134,6 +134,9 @@ class Profile:
 
     def state_provider(self, provider):
         return provider
+
+    def block_state(self, block):
+        return block
 
     def villager_trade(self, trade):
         return trade
@@ -299,7 +302,7 @@ class Profile2612(Profile):
     name = "26.1.2"
     data_version = 4790
     feature_folder = "configured_feature"
-    shader_dialect = "26.1"
+    block_state_keys = ("Name", "Properties")
     attribute_spawns = False
     fuel_data_map = True
     random_sequence = True
@@ -326,6 +329,9 @@ class Profile2612(Profile):
             elif key != "type":
                 result[key] = value
         return result
+
+    def block_state(self, block):
+        return {"Name": block}
 
     def state_provider(self, provider):
         if provider.get("type") != "minecraft:weighted":

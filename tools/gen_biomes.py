@@ -143,12 +143,12 @@ def patch(profile, count, kind, tries):
     return counted(count, heightmap(kind), BIOME_FILTER, {"type": "minecraft:count", "count": tries}, offset, AIR_ONLY)
 
 
-def surface_trees(count):
+def surface_trees(profile, count):
     return counted(
         count,
         {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
         heightmap("OCEAN_FLOOR"),
-        {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": "minecraft:oak_sapling"}},
+        {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive", "state": profile.block_state("minecraft:oak_sapling")}},
         BIOME_FILTER,
     )
 
@@ -194,8 +194,8 @@ def generate(ctx):
     placed("magical_grass", f"{NS}:magical_grass", patch(profile, 12, "WORLD_SURFACE_WG", 32))
     placed("magical_lily_pads", "minecraft:waterlily", patch(profile, 6, "WORLD_SURFACE_WG", 10))
 
-    placed("eerie_trees", "minecraft:oak", surface_trees(2))
-    placed("tainted_trees", "minecraft:oak", surface_trees(2))
+    placed("eerie_trees", "minecraft:oak", surface_trees(profile, 2))
+    placed("tainted_trees", "minecraft:oak", surface_trees(profile, 2))
     placed("tainted_grass", "minecraft:grass", patch(profile, 2, "WORLD_SURFACE_WG", 32))
     placed("eerie_flowers", "minecraft:flower_default", patch(profile, 1, "MOTION_BLOCKING", 64))
     placed("eerie_grass", "minecraft:grass", patch(profile, 2, "WORLD_SURFACE_WG", 32))

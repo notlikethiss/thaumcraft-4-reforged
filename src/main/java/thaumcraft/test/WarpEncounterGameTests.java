@@ -75,7 +75,7 @@ public final class WarpEncounterGameTests {
         WarpEncounterHooks.spawnGuardians(helper.getLevel(), player, 1);
         helper.assertTrue(entitiesNear(helper, ModEntities.ELDRITCH_GUARDIAN.get(), blockedPos).isEmpty(), "guardian spawned without a sturdy support block");
 
-        long validSeed = findSeed(origin, helper.getLevel().getMaxY());
+        long validSeed = findSeed(origin, helper.getLevel().getMinY(), helper.getLevel().getMaxY());
         BlockPos validPos = candidate(origin, validSeed);
         helper.getLevel().setBlockAndUpdate(validPos.below(), Blocks.STONE.defaultBlockState());
         helper.getLevel().getRandom().setSeed(validSeed);
@@ -97,7 +97,7 @@ public final class WarpEncounterGameTests {
         WarpEncounterHooks.spawnMindSpiders(helper.getLevel(), player, true, 1);
         helper.assertTrue(entitiesNear(helper, ModEntities.MIND_SPIDER.get(), blockedPos).isEmpty(), "mind spider spawned without a sturdy support block");
 
-        long harmlessSeed = findSeed(origin, helper.getLevel().getMaxY());
+        long harmlessSeed = findSeed(origin, helper.getLevel().getMinY(), helper.getLevel().getMaxY());
         BlockPos harmlessPos = candidate(origin, harmlessSeed);
         helper.getLevel().setBlockAndUpdate(harmlessPos.below(), Blocks.STONE.defaultBlockState());
         helper.getLevel().getRandom().setSeed(harmlessSeed);
@@ -112,7 +112,7 @@ public final class WarpEncounterGameTests {
         helper.assertTrue(harmlessReloaded.isHarmless(), "harmless flag was not persisted");
         helper.assertValueEqual(harmlessReloaded.getViewer(), player.getUUID().toString(), "viewer UUID was not persisted");
 
-        long hostileSeed = findSeed(origin, helper.getLevel().getMaxY(), harmlessSeed + 1L);
+        long hostileSeed = findSeed(origin, helper.getLevel().getMinY(), helper.getLevel().getMaxY(), harmlessSeed + 1L);
         BlockPos hostilePos = candidate(origin, hostileSeed);
         helper.getLevel().setBlockAndUpdate(hostilePos.below(), Blocks.STONE.defaultBlockState());
         helper.getLevel().getRandom().setSeed(hostileSeed);
@@ -148,11 +148,11 @@ public final class WarpEncounterGameTests {
         player.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
     }
 
-    private static long findSeed(BlockPos origin, int maxBuildHeight) {
-        return findSeed(origin, maxBuildHeight, 0L);
+    private static long findSeed(BlockPos origin, int minBuildHeight, int maxBuildHeight) {
+        return findSeed(origin, minBuildHeight, maxBuildHeight, 0L);
     }
 
-    private static long findSeed(BlockPos origin, int maxBuildHeight, long startSeed) {
+    private static long findSeed(BlockPos origin, int minBuildHeight, int maxBuildHeight, long startSeed) {
         for (long seed = startSeed; seed < startSeed + 10000L; seed++) {
             BlockPos pos = candidate(origin, seed);
             if (Math.abs(pos.getX() - origin.getX()) <= 12
@@ -161,7 +161,7 @@ public final class WarpEncounterGameTests {
                 && pos.getY() != origin.getY()
                 && Math.abs(pos.getZ() - origin.getZ()) <= 12
                 && pos.getZ() != origin.getZ()
-                && pos.getY() > 1
+                && pos.getY() > minBuildHeight + 1
                 && pos.getY() < maxBuildHeight - 2) {
                 return seed;
             }
