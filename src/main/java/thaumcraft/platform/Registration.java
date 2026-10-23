@@ -13,7 +13,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
-import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.equipment.ArmorMaterial;
@@ -21,9 +20,6 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
-import net.minecraft.world.level.storage.loot.providers.number.floats.ResolvableFloat;
-import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import org.jspecify.annotations.Nullable;
 
 public final class Registration {
@@ -111,10 +107,7 @@ public final class Registration {
     }
 
     public static Item.Properties fuel(Item.Properties properties, int ticks) {
-        return properties.component(
-            DataComponents.COOKING_FUEL,
-            new CookingFuel(new ResolvableInt.Constant(ticks), ResolvableFloat.fromKey(ContextFloatProviders.COOKING_DEFAULT_SPEED_MULTIPLIER))
-        );
+        return properties;
     }
 
     public static Item.Properties food(Item.Properties properties, int nutrition, float saturation) {

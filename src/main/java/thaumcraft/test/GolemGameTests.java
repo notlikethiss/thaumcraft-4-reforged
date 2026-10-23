@@ -91,7 +91,7 @@ public final class GolemGameTests {
         for (String name : TESTS.keySet()) {
             boolean chop = name.startsWith("golem_chop_");
             boolean sky = name.equals("golem_jar_lighting");
-            var data = new TestData<>(environment, net.minecraft.world.level.Level.OVERWORLD,
+            var data = new TestData<>(environment,
                 Thaumcraft.id(chop || sky ? "test/eldritch_regression" : "test/platform"), chop ? 1200 : 600,
                 0, true, net.minecraft.world.level.block.Rotation.NONE, false, chop ? 3 : 1, chop ? 3 : 1, sky, 0);
             event.registerTest(Thaumcraft.id(name), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, Thaumcraft.id(name)), data));
@@ -115,7 +115,7 @@ public final class GolemGameTests {
         BlockPos chestPos = helper.absolutePos(new BlockPos(2, 2, 2));
         level.setBlockAndUpdate(chestPos, Blocks.CHEST.defaultBlockState());
         var chest = (net.minecraft.world.level.block.entity.ChestBlockEntity) level.getBlockEntity(chestPos);
-        var player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        var player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         player.setPos(chestPos.getX() + 0.5, chestPos.getY(), chestPos.getZ() - 2.0);
         for (Direction face : List.of(Direction.UP, Direction.EAST)) {
             ItemStack packed = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("wood_golem")));
@@ -158,12 +158,12 @@ public final class GolemGameTests {
         golem.setCarried(new ItemStack(Items.WHEAT, 7));
         level.addFreshEntity(golem);
         var before = golem.snapshot();
-        var player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        var player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         player.setPos(oldChest.getX() + 0.5, oldChest.getY(), oldChest.getZ() - 1);
         ItemStack bell = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("golem_bell")));
         player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, bell);
         var unbound = player.gameMode.useItemOn(player, level, bell, net.minecraft.world.InteractionHand.MAIN_HAND, golemHit(newChest, Direction.WEST));
-        helper.assertTrue(unbound instanceof net.minecraft.world.InteractionResult.Success success && success.shouldSwing() && player.containerMenu == player.inventoryMenu, "unbound bell opens chest instead of swinging");
+        helper.assertTrue(unbound instanceof net.minecraft.world.InteractionResult.Success success && success.swingSource() != net.minecraft.world.InteractionResult.SwingSource.NONE && player.containerMenu == player.inventoryMenu, "unbound bell opens chest instead of swinging");
         helper.assertTrue(player.interactOn(golem, net.minecraft.world.InteractionHand.MAIN_HAND, golem.position()).consumesAction(), "bell cannot select the golem");
         helper.assertTrue(GolemKeys.BELL.get(bell).entity().equals(golem.getUUID()), "bell selects the wrong golem");
         player.gameMode.useItemOn(player, level, bell, net.minecraft.world.InteractionHand.MAIN_HAND, golemHit(newChest, Direction.WEST));
@@ -174,7 +174,7 @@ public final class GolemGameTests {
         player.setShiftKeyDown(true);
         for (int repeat = 0; repeat < 2; repeat++) {
             var result = player.gameMode.useItemOn(player, level, bell, net.minecraft.world.InteractionHand.MAIN_HAND, golemHit(newChest, Direction.WEST));
-            helper.assertTrue(result instanceof net.minecraft.world.InteractionResult.Success success && success.shouldSwing(), "rebind must request the bell swing");
+            helper.assertTrue(result instanceof net.minecraft.world.InteractionResult.Success success && success.swingSource() != net.minecraft.world.InteractionResult.SwingSource.NONE, "rebind must request the bell swing");
             helper.assertTrue(golem.getHomePosition().equals(newChest.west()) && golem.getHomeFacing() == Direction.WEST, "bell does not rebind chest and face");
         }
         helper.assertTrue(golem.getMarkers().equals(markers), "rebind changes work markers");
@@ -219,7 +219,7 @@ public final class GolemGameTests {
         original.setCarried(new ItemStack(Items.WHEAT, 3));
         var expected = original.snapshot();
         helper.getLevel().addFreshEntity(original);
-        var player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        var player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         player.setPos(original.position().add(3, 0, 0));
         ItemStack bell = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("golem_bell")));
         player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, bell);
@@ -246,7 +246,7 @@ public final class GolemGameTests {
         original.configure(GolemType.THAUMIUM, new GolemSnapshot(2, true, List.of(2, 3, 4), "P", List.of(), ItemContainerContents.EMPTY, List.of(), 0));
         original.setCarried(new ItemStack(Items.WHEAT, 3));
         helper.getLevel().addFreshEntity(original);
-        var player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        var player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         player.setPos(original.position().add(1, 0, 0));
         player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("golem_bell"))));
         player.setShiftKeyDown(true);

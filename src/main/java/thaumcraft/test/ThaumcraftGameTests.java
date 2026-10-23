@@ -108,7 +108,7 @@ public final class ThaumcraftGameTests {
     }
 
     private static ServerPlayer mockServerPlayer(GameTestHelper helper) {
-        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        ServerPlayer player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         CommonListenerCookie cookie = CommonListenerCookie.createInitial(player.getGameProfile(), false);
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);
@@ -197,7 +197,7 @@ public final class ThaumcraftGameTests {
             ItemStack stack = new ItemStack(ModItems.THAUMOMETER.get());
             player.setItemInHand(hand, stack);
             InteractionResult result = stack.getItem().use(helper.getLevel(), player, hand);
-            helper.assertTrue(result instanceof InteractionResult.Success success && !success.shouldSwing(), "scanning must start without a hand swing");
+            helper.assertTrue(result instanceof InteractionResult.Success success && success.swingSource() == net.minecraft.world.InteractionResult.SwingSource.NONE, "scanning must start without a hand swing");
             for (int tick = 0; tick < 60; tick++) {
                 player.tick();
             }

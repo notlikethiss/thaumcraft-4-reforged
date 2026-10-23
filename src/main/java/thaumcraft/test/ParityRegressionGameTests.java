@@ -82,7 +82,7 @@ public final class ParityRegressionGameTests {
     }
 
     private static ServerPlayer player(GameTestHelper helper) {
-        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        ServerPlayer player = TestPlayers.mockServerPlayer(helper, net.minecraft.world.level.GameType.SURVIVAL);
         var connection = new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);
         new io.netty.channel.embedded.EmbeddedChannel(connection);
         new net.minecraft.server.network.ServerGamePacketListenerImpl(helper.getLevel().getServer(), connection, player, net.minecraft.server.network.CommonListenerCookie.createInitial(player.getGameProfile(), false)) {
@@ -120,11 +120,11 @@ public final class ParityRegressionGameTests {
         ChampionModifier.assign(zombie, 5, false);
         helper.assertValueEqual(zombie.getAbsorptionAmount(), 10.0F, "warded absorption was clamped to zero");
         zombie.setAbsorptionAmount(0);
-        zombie.damageCooldownTime = 10;
+        zombie.invulnerableTime = 10;
         zombie.tickCount = 25;
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.tick.EntityTickEvent.Post(zombie));
         helper.assertValueEqual(zombie.getAbsorptionAmount(), 0.0F, "warded absorption regenerated during damage cooldown");
-        zombie.damageCooldownTime = 0;
+        zombie.invulnerableTime = 0;
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.tick.EntityTickEvent.Post(zombie));
         helper.assertValueEqual(zombie.getAbsorptionAmount(), 1.0F, "warded absorption did not resume regeneration");
         var wisp = ModEntities.WISP.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
@@ -308,10 +308,10 @@ public final class ParityRegressionGameTests {
         var registry = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
         for (String biome : List.of("minecraft:desert", "minecraft:swamp", "thaumcraft:magical_forest", "thaumcraft:eerie")) {
             var value = registry.getOrThrow(ResourceKey.create(Registries.BIOME, net.minecraft.resources.Identifier.parse(biome))).value();
-            var spawns = value.getModifiedEnvironmentAttributes().applyModifier(net.minecraft.world.attribute.EnvironmentAttributes.NATURAL_MOB_SPAWNS, net.minecraft.world.level.biome.MobSpawnSettings.EMPTY).getMobsToSpawn(net.minecraft.world.entity.MobCategory.MONSTER);
+            var spawns = value.getMobSettings().getMobs(net.minecraft.world.entity.MobCategory.MONSTER);
             helper.assertTrue(spawns.unwrap().stream().anyMatch(entry -> entry.value().type() == ModEntities.BRAINY_ZOMBIE.get()), "missing brainy zombie in " + biome);
             if (biome.equals("thaumcraft:magical_forest")) {
-                for (var type : List.of(ModEntities.PECH.get(), ModEntities.WISP.get())) helper.assertTrue(spawns.unwrap().stream().anyMatch(entry -> entry.value().type() == type && entry.value().count().maxInclusive() == 2), "forest lacks groups of 1-2 for " + type);
+                for (var type : List.of(ModEntities.PECH.get(), ModEntities.WISP.get())) helper.assertTrue(spawns.unwrap().stream().anyMatch(entry -> entry.value().type() == type && entry.value().maxCount() == 2), "forest lacks groups of 1-2 for " + type);
             }
             if (biome.equals("thaumcraft:eerie")) {
                 for (var type : List.of(ModEntities.GIANT_BRAINY_ZOMBIE.get(), ModEntities.WISP.get(), ModEntities.ELDRITCH_GUARDIAN.get())) helper.assertTrue(spawns.unwrap().stream().anyMatch(entry -> entry.value().type() == type), "Eerie lacks " + type);

@@ -127,7 +127,7 @@ public final class BossGameTests {
         net.minecraft.core.BlockPos pos = helper.absolutePos(new net.minecraft.core.BlockPos(3, 2, 3));
         portal.snapTo(pos, 0.0F, 0.0F);
         helper.getLevel().addFreshEntity(portal);
-        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        ServerPlayer player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         CommonListenerCookie cookie = CommonListenerCookie.createInitial(player.getGameProfile(), false);
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);
@@ -379,13 +379,13 @@ public final class BossGameTests {
         }
         warden.setAbsorptionAmount(0.0F);
         helper.assertTrue(warden.hurtServer(helper.getLevel(), helper.getLevel().damageSources().generic(), 1.0F), "warden did not accept test damage");
-        helper.assertTrue(warden.hurtTime > 0 && warden.damageCooldownTime > 10, "test damage did not start hurt animation and damage cooldown");
+        helper.assertTrue(warden.hurtTime > 0 && warden.invulnerableTime > 10, "test damage did not start hurt animation and damage cooldown");
         helper.runAfterDelay(15, () -> {
-            helper.assertTrue(warden.hurtTime == 0 && warden.damageCooldownTime > 0, "test did not reach the post-animation damage cooldown interval");
+            helper.assertTrue(warden.hurtTime == 0 && warden.invulnerableTime > 0, "test did not reach the post-animation damage cooldown interval");
             helper.assertValueEqual(warden.getAbsorptionAmount(), 0.0F, "absorption regenerated while damage cooldown remained");
             helper.runAfterDelay(25, () -> {
                 helper.assertValueEqual(warden.tickCount % 25, 0, "absorption check did not land on the regen tick boundary");
-                helper.assertValueEqual(warden.damageCooldownTime, 0, "damage cooldown was not clear at the next regen boundary");
+                helper.assertValueEqual(warden.invulnerableTime, 0, "damage cooldown was not clear at the next regen boundary");
                 helper.assertValueEqual(warden.getAbsorptionAmount(), 1.0F, "absorption did not regenerate after damage cooldown ended");
                 for (long chunk : newlyForcedChunks) {
                     helper.getLevel().setChunkForced(ChunkPos.getX(chunk), ChunkPos.getZ(chunk), false);
@@ -491,7 +491,7 @@ public final class BossGameTests {
     }
 
     private static ServerPlayer addMockPlayer(GameTestHelper helper, BlockPos pos) {
-        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        ServerPlayer player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         CommonListenerCookie cookie = CommonListenerCookie.createInitial(player.getGameProfile(), false);
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);

@@ -169,7 +169,7 @@ public final class ParityFocusGameTests {
     }
 
     private static ServerPlayer mockServerPlayer(GameTestHelper helper, GameType gameType) {
-        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(gameType);
+        ServerPlayer player = TestPlayers.mockServerPlayer(helper, gameType);
         CommonListenerCookie cookie = CommonListenerCookie.createInitial(player.getGameProfile(), false);
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);

@@ -14,8 +14,6 @@ public final class FollowingItemMotion {
     }
 
     public static void tick(ItemEntity item, Vec3 movement) {
-        // EntityTickEvent.Pre cancellation skips commonTick as well as ItemEntity.tick.
-        item.commonTick();
         if (item.getItem().onEntityItemUpdate(item)) {
             return;
         }

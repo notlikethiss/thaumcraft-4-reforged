@@ -141,7 +141,7 @@ public final class DeviceRegressionGameTests {
             var state = block.defaultBlockState();
             helper.assertTrue(state.getShadeBrightness(level, pos) == 1.0F, "device casts ambient occlusion: " + block);
             helper.assertTrue(state.getLightDampening() == 0, "device blocks light: " + block);
-            helper.assertTrue(!state.isViewBlocking(level, pos, new AABB(pos)), "device blocks the view: " + block);
+            helper.assertTrue(!state.isViewBlocking(level, pos), "device blocks the view: " + block);
             helper.assertTrue(!state.isSuffocating(level, pos), "device suffocates: " + block);
             helper.assertTrue(!state.getCollisionShape(level, pos).isEmpty(), "device lost collision: " + block);
             helper.assertTrue(state.getLightEmission() == (block == ModBlocks.BRAIN_JAR.get() ? 9 : 7), "device light emission changed");

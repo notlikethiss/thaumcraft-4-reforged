@@ -62,7 +62,7 @@ public final class GolemCoreGameTests {
     static void registerTests(RegisterGameTestsEvent event) {
         Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(Thaumcraft.id("golem_core_default"), new TestEnvironmentDefinition.AllOf());
         TESTS.forEach((name, test) -> {
-            var data = new TestData<>(environment, net.minecraft.world.level.Level.OVERWORLD, Thaumcraft.id("test/eldritch_regression"),
+            var data = new TestData<>(environment, Thaumcraft.id("test/eldritch_regression"),
                 800, 0, true, net.minecraft.world.level.block.Rotation.NONE, false, 1, 1, false, 0);
             event.registerTest(Thaumcraft.id(name), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, Thaumcraft.id(name)), data));
         });
@@ -165,7 +165,7 @@ public final class GolemCoreGameTests {
         helper.assertValueEqual(ChestBlockEntity.getOpenCount(level, pos), 2, "two golems share one opener count");
         first.containers().close();
         helper.assertValueEqual(ChestBlockEntity.getOpenCount(level, pos), 1, "one golem closes chest for the other");
-        var player = helper.makeMockServerPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        var player = TestPlayers.mockServerPlayer(helper, net.minecraft.world.level.GameType.SURVIVAL);
         var chest = (ChestBlockEntity) level.getBlockEntity(pos);
         chest.startOpen(player);
         second.containers().close();

@@ -7,13 +7,11 @@ import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractCraftingMenu;
-import net.minecraft.world.inventory.ArmorSlot;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.RecipeBookType;
 import net.minecraft.world.inventory.Slot;
@@ -58,7 +56,7 @@ public class BaublesMenu extends AbstractCraftingMenu {
         addCraftingGridSlots(106, 26);
         for (int index = 0; index < ARMOR_SLOTS.length; index++) {
             EquipmentSlot equipmentSlot = ARMOR_SLOTS[index];
-            addSlot(new ArmorSlot(inventory, owner, equipmentSlot, 39 - index, 8, 8 + index * 18, EMPTY_ARMOR_ICONS.get(equipmentSlot)));
+            addSlot(new BaubleArmorSlot(inventory, owner, equipmentSlot, 39 - index, 8, 8 + index * 18, EMPTY_ARMOR_ICONS.get(equipmentSlot)));
         }
         addSlot(new BaubleSlot(baubles, BaubleType.AMULET, 0, 80, 8));
         addSlot(new BaubleSlot(baubles, BaubleType.RING, 1, 80, 26));
@@ -178,7 +176,7 @@ public class BaublesMenu extends AbstractCraftingMenu {
             }
             slot.onTake(player, stack);
             if (slotIndex == RESULT_SLOT) {
-                player.drop(stack, false, Prediction.PREDICTED);
+                player.drop(stack, false);
             }
         }
         return clicked;

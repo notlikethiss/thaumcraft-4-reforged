@@ -20,7 +20,6 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import thaumcraft.node.Node;
 import thaumcraft.node.NodeBlockEntity;
@@ -470,7 +469,7 @@ public final class ThaumcraftCommand {
             ItemStack stack = Wands.create(cap, rod, sceptre);
             Wands.fill(stack);
             if (!target.getInventory().add(stack)) {
-                target.drop(stack, false, Prediction.SERVER_ONLY);
+                target.drop(stack, false);
             }
         }
         context.getSource().sendSuccess(

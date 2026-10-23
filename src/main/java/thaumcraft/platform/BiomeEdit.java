@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeResolver;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
@@ -34,14 +35,14 @@ public final class BiomeEdit {
         int quartX = QuartPos.fromBlock(pos.getX());
         int quartZ = QuartPos.fromBlock(pos.getZ());
         boolean[] changed = {false};
-        chunk.fillBiomesFromNoise((x, y, z) -> {
+        chunk.fillBiomesFromNoise((x, y, z, sampler) -> {
             Holder<Biome> current = chunk.getNoiseBiome(x, y, z);
             if (x == quartX && z == quartZ && !current.is(biome)) {
                 changed[0] = true;
                 return biome;
             }
             return current;
-        });
+        }, level.getChunkSource().randomState().sampler());
         if (!changed[0]) {
             return false;
         }
@@ -54,7 +55,7 @@ public final class BiomeEdit {
         ChunkAccess chunk = level.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
         int quartX = QuartPos.fromBlock(pos.getX());
         int quartZ = QuartPos.fromBlock(pos.getZ());
-        chunk.fillBiomesFromNoise((x, y, z) -> x == quartX && z == quartZ ? biome : chunk.getNoiseBiome(x, y, z));
+        chunk.fillBiomesFromNoise((x, y, z, sampler) -> x == quartX && z == quartZ ? biome : chunk.getNoiseBiome(x, y, z), level.getLevel().getChunkSource().randomState().sampler());
         chunk.markUnsaved();
     }
 
@@ -73,11 +74,12 @@ public final class BiomeEdit {
         if (chunk == null) {
             return false;
         }
-        BiomeResolver resolver = level.getChunkSource().getGenerator().getBiomeSource().createUncachedResolver(level.getChunkSource().randomState());
+        Climate.Sampler climateSampler = level.getChunkSource().randomState().sampler();
+        BiomeResolver resolver = level.getChunkSource().getGenerator().getBiomeSource();
         int quartX = QuartPos.fromBlock(pos.getX());
         int quartZ = QuartPos.fromBlock(pos.getZ());
         boolean[] changed = {false};
-        chunk.fillBiomesFromNoise((x, y, z) -> {
+        chunk.fillBiomesFromNoise((x, y, z, sampler) -> {
             Holder<Biome> current = chunk.getNoiseBiome(x, y, z);
             if (x != quartX || z != quartZ) {
                 return current;
@@ -92,7 +94,7 @@ public final class BiomeEdit {
             if (!restore) {
                 return current;
             }
-            Holder<Biome> original = resolver.getNoiseBiome(x, y, z);
+            Holder<Biome> original = resolver.getNoiseBiome(x, y, z, sampler);
             if (original.is(taintedBiome)) {
                 original = taintFallback;
             }
@@ -100,7 +102,7 @@ public final class BiomeEdit {
                 changed[0] = true;
             }
             return original;
-        });
+        }, climateSampler);
         if (!changed[0]) {
             return false;
         }
