@@ -16,6 +16,7 @@
 | Ветка | MC | Загрузчик | Java | Прочее |
 |---|---|---|---|---|
 | `main` | 26.3 | NeoForge 26.3.0.57-beta | 25 | JEI 31.9.0.58, TerraBlender 26.3-26.3.0.0.9, свои слоты бижутерии |
+| `mc/26.1.2` | 26.1.2 | NeoForge 26.1.2.122 | 25 | JEI 29.47.0.111, TerraBlender 26.1.2-26.1.2.0.3, свои слоты бижутерии |
 | `mc/1.21.1` | 1.21.1 | NeoForge 21.1.256 | 21 | Parchment 2024.11.17, JEI 19.57.0.451, TerraBlender 1.21.1-4.1.0.1, Curios 9.5.1 |
 | `mc/1.19.2` | 1.19.2 | Forge 43.x (legacyforge) | 17 | планируется, Parchment 2022.11.27 |
 
@@ -32,7 +33,7 @@
 - `Thaumcraft-1.7.10-4.2.3.5.jar` в корне (в облаке cursemaven `thaumcraft-223628/2227552`).
 - `reference/decompiled/` TC4 (Vineflower 1.12 + MCP `stable_12-1.7.10`), ассеты оригинала в `reference/decompiled/assets/`, оставшиеся SRG-имена в `reference/decompiled-unmapped.txt`.
 - `reference/mc1710/` MC 1.7.10, исходники Forge 10.13.4.1614 и патчи Forge диффами (к ванильным классам не применены, читать рядом).
-- `reference/mc`, `reference/neo`: исходники MC и NeoForge текущей версии `main` (из `build/moddev/artifacts` и `neoforge-*-sources.jar`). `reference/1.21.1`, `reference/1.19.2` для бэкпортов.
+- `reference/mc`, `reference/neo`: исходники MC и NeoForge текущей версии `main` (из `build/moddev/artifacts` и `neoforge-*-sources.jar`). `reference/26.1.2`, `reference/1.21.1`, `reference/1.19.2` для бэкпортов.
 - Пересборка: `tools/fetch_1710.py` (загрузки в `tools/cache/`), затем `tools/decompile.py tc4|mc1710`.
 
 ## Архитектура
@@ -82,15 +83,15 @@ python3 tools/inventory.py --check
 python3 tools/gen_resources.py && git status --short src/generated
 ```
 
-- `validate_ids.py` для 26.3 требует явные отчёты ванильного data generator и jar-ы, для бэкпортов скачивает их сам (`--mc 1.21.1`).
+- `validate_ids.py` для 26.3 и 26.1.2 требует явные отчёты ванильного data generator и jar-ы, для 1.21.1 и 1.19.2 скачивает их сам (`--mc 1.21.1`).
 - Последняя команда: повторная генерация не должна менять файлы.
 - Сервер: `tail -f cmds | ./gradlew runServer` (`cmds` в gitignore, в `run/server.properties` `pause-when-empty-seconds=-1`). Проверять `/reload`, сохранение и перезапуск мира.
 - Визуальную проверку в `runClient` и игру двумя клиентами делает пользователь.
 
 ## Бэкпорт
 
-- Цепочка `main` → `mc/1.21.1` → `mc/1.19.2`. Ветка `mc/1.21.1` в worktree `~/projects/thaumcraft-4-reforged-1.21.1`.
-- Процедура, sha последней синхронизации и отличия ветки в `BACKPORT.md` этой ветки: Java-коммиты через `git show <sha> | python3 tools/backport/rewrite.py --target 1.21.1 | git apply -3`, ресурсы через `gen_resources.py --mc 1.21.1`.
+- Цепочки `main` → `mc/26.1.2` и `main` → `mc/1.21.1` → `mc/1.19.2`. Ветки в worktree `.worktrees/mc-26.1.2` и `.worktrees/mc-1.21.1`.
+- Процедура, sha последней синхронизации и отличия ветки в `BACKPORT.md` этой ветки: Java-коммиты через `git show <sha> | python3 tools/backport/rewrite.py --target <версия> | git apply -3`, ресурсы через `gen_resources.py --mc <версия>`.
 - В ветке правятся только швы, `compat/`, регистрация и ресурсы профиля. Правка игровой логики в ветке значит, что на `main` не хватает шва.
 - Класс, уже портированный в TC3 `mc/1.21.1`, берётся оттуда.
 

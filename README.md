@@ -8,7 +8,7 @@ The goal is to recreate the original gameplay as closely as possible: aspects, a
 
 > **Personal use only.** Thaumcraft and all of its assets belong to Azanor. This repository contains the original mod's logic and assets and is not intended for redistribution.
 
-The `mc/1.21.1` branch contains a partial backport; Minecraft 1.19.2 is planned. Manual visual and multiplayer checks are still in progress.
+The `mc/26.1.2` and `mc/1.21.1` branches contain backports; Minecraft 1.19.2 is planned. Manual visual and multiplayer checks are still in progress.
 
 ## Requirements to build
 
