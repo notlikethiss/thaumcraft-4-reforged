@@ -120,6 +120,9 @@ python3 tools/gen_resources.py && git status --short src/generated
 ## API для аддонов
 
 - `AspectSync.addRegistrar(Consumer<AspectRegistry>)`: вызывается в `rebuild` после `ConfigAspects`, до `registerDerived`.
+- `new Aspect(String tag, int color, Aspect[] components, Identifier image, int blend)`: регистрирует аспект аддона сразу; `components` должен содержать ровно два непустых аспекта, `image` — идентификатор текстуры аддона. Дубликат тега бросает `IllegalArgumentException`. Аспекты регистрируются в common setup на клиенте и выделенном сервере в одинаковом порядке, до `AspectSync.rebuild` и декодирования payload с аспектами.
+- `Aspect.getAspect(String tag)`: основной поиск по сериализованному тегу; для неизвестного тега возвращает `null`. Перевод `tc.aspect.<tag>` и текстуру аспекта аддон добавляет сам.
+- `AspectRegistry.mergeEntity(EntityType<?>, AspectList, Object...)`: складывает количества аспектов с существующей записью при точном совпадении NBT-условий; при другом условии добавляет отдельную запись. `AspectRegistrar.entityCopy` — защищённый вариант для registrar API.
 - `WandRegistry.registerCap`/`registerRod`: явные `item` и `texture` Identifier любого namespace, дубликат тега бросает исключение. Ключи исследования `CAP_<tag>`/`ROD_<tag>`, lang `item.Wand.<tag>.cap`/`.rod` аддон добавляет сам.
 - `ArcaneCrafting.registerDynamic(DynamicArcaneRecipe)`: добавляется после рецептов жезла и скипетра.
 - `Warp.registerItem(Identifier, int)`: изменяемая карта `WARP_ITEMS`.
