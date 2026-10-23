@@ -1,6 +1,5 @@
 package thaumcraft.world.biome;
 
-import com.mojang.serialization.MapCodec;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -15,7 +14,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.ManaPodBlock;
 import thaumcraft.blockentity.ManaPodBlockEntity;
@@ -24,16 +26,14 @@ import thaumcraft.world.tree.BigMagicTreeGenerator;
 import thaumcraft.world.tree.GreatwoodTreeGenerator;
 import thaumcraft.world.tree.SilverwoodTreeGenerator;
 
-public record MagicalForestDecorationFeature() implements Feature {
-    public static final MapCodec<MagicalForestDecorationFeature> CODEC = MapCodec.unit(MagicalForestDecorationFeature::new);
+public class MagicalForestDecorationFeature extends Feature<NoneFeatureConfiguration> {
     public static final ResourceKey<Biome> BIOME = ResourceKey.create(
         Registries.BIOME,
         Identifier.fromNamespaceAndPath(Thaumcraft.MODID, "magical_forest")
     );
 
-    @Override
-    public MapCodec<MagicalForestDecorationFeature> codec() {
-        return CODEC;
+    public MagicalForestDecorationFeature() {
+        super(NoneFeatureConfiguration.CODEC);
     }
 
     private static boolean inBiome(WorldGenLevel level, BlockPos pos) {
@@ -45,7 +45,11 @@ public record MagicalForestDecorationFeature() implements Feature {
     }
 
     @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource randomSource, BlockPos origin) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        ChunkGenerator chunkGenerator = context.chunkGenerator();
+        RandomSource randomSource = context.random();
+        BlockPos origin = context.origin();
         Random random = new Random(randomSource.nextLong());
         int x = origin.getX();
         int z = origin.getZ();
@@ -127,8 +131,8 @@ public record MagicalForestDecorationFeature() implements Feature {
 
     private static void placeMushroom(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource randomSource, Random random, BlockPos pos) {
         String name = random.nextBoolean() ? "huge_red_mushroom" : "huge_brown_mushroom";
-        ResourceKey<Feature> key = ResourceKey.create(Registries.FEATURE, Identifier.withDefaultNamespace(name));
-        level.registryAccess().lookupOrThrow(Registries.FEATURE).get(key).ifPresent(reference -> reference.value().place(level, chunkGenerator, randomSource, pos));
+        ResourceKey<ConfiguredFeature<?, ?>> key = ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.withDefaultNamespace(name));
+        level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE).get(key).ifPresent(reference -> reference.value().place(level, chunkGenerator, randomSource, pos));
     }
 
     private static void placeManaPod(WorldGenLevel level, Random random, int startX, int startY, int startZ) {

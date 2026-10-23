@@ -102,8 +102,8 @@ public class ManaBeanItem extends Item {
             int slot = level.getRandom().nextInt(POTION_SLOTS);
             if (slot >= 1 && slot <= POTION_EFFECTS.size()) {
                 Holder<MobEffect> effect = POTION_EFFECTS.get(slot - 1);
-                if (effect.value().isInstantaneous()) {
-                    effect.value().applyInstantaneousEffect(serverLevel, player, player, player, 2, 3.0);
+                if (effect.value().isInstantenous()) {
+                    effect.value().applyInstantenousEffect(serverLevel, player, player, player, 2, 3.0);
                 } else {
                     player.addEffect(new MobEffectInstance(effect, 160 + level.getRandom().nextInt(80), 0));
                 }

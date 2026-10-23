@@ -96,7 +96,7 @@ public class AlchemicalFurnaceMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         ItemStack original = stack.copy();
         if (index >= FURNACE_SLOTS) {
-            if (AlchemicalFurnaceBlockEntity.isFuel(stack)) {
+            if (AlchemicalFurnaceBlockEntity.isFuel(player.level(), stack)) {
                 if (!moveItemStackTo(stack, 1, 2, false) && !moveItemStackTo(stack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }

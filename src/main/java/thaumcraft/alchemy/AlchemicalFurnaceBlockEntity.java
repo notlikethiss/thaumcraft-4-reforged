@@ -1,11 +1,9 @@
 package thaumcraft.alchemy;
 
 import java.util.List;
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
@@ -19,20 +17,13 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CookingFuel;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.loot.NeoForgeLootContextParams;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
@@ -126,25 +117,12 @@ public class AlchemicalFurnaceBlockEntity extends TcBlockEntity implements World
         bellows = -1;
     }
 
-    public static boolean isFuel(ItemStack stack) {
-        return stack.has(DataComponents.COOKING_FUEL);
+    public static boolean isFuel(Level level, ItemStack stack) {
+        return stack.getBurnTime(RecipeType.SMELTING, level.fuelValues()) > 0;
     }
 
     private int getBurnDuration(ServerLevel serverLevel, ItemStack fuel) {
-        CookingFuel fuelComponent = fuel.get(DataComponents.COOKING_FUEL);
-        if (fuelComponent == null) {
-            return 0;
-        }
-        LootContext context = new LootContext.Builder(
-            new LootParams.Builder(serverLevel)
-                .withParameter(LootContextParams.BLOCK_STATE, getBlockState())
-                .withParameter(LootContextParams.BLOCK_ENTITY, this)
-                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(worldPosition))
-                .withParameter(LootContextParams.CONTAINER, this)
-                .withOptionalParameter(NeoForgeLootContextParams.QUERIED_STACK, fuel.isEmpty() ? null : fuel)
-                .create(LootContextParamSets.CONTAINER_PROCESS)
-        ).create(Optional.empty());
-        return ResolvableInt.getFromItem(fuel, DataComponents.COOKING_FUEL, CookingFuel::burnTime, context, 0);
+        return fuel.getBurnTime(RecipeType.SMELTING, serverLevel.fuelValues());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AlchemicalFurnaceBlockEntity furnace) {
@@ -365,7 +343,7 @@ public class AlchemicalFurnaceBlockEntity extends TcBlockEntity implements World
         if (slot == INPUT_SLOT && CrucibleCrafting.hasDissolveTags(stack)) {
             return true;
         }
-        return slot == FUEL_SLOT && isFuel(stack);
+        return slot == FUEL_SLOT && level != null && isFuel(level, stack);
     }
 
     @Override

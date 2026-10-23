@@ -135,7 +135,7 @@ public class TaintedSheep extends TaintedAnimalMonster implements IShearable {
     public List<ItemStack> onSheared(Player player, ItemStack item, Level level, BlockPos pos) {
         this.setSheared(true);
         int count = 1 + this.random.nextInt(3);
-        return List.of(new ItemStack(Blocks.WOOL.pick(net.minecraft.world.item.DyeColor.BLACK), count));
+        return List.of(new ItemStack(Blocks.BLACK_WOOL, count));
     }
 
     @Override

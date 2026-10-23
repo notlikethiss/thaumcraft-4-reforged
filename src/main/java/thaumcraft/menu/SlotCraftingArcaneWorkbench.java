@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.RecipeCraftingHolder;
@@ -55,13 +54,6 @@ public class SlotCraftingArcaneWorkbench extends Slot {
     @Override
     protected void onSwapCraft(int count) {
         removeCount += count;
-    }
-
-    @Override
-    public ItemStack safeClone(Player player) {
-        ItemStack result = super.safeClone(player);
-        result.getItem().onCraftedBy(result, player);
-        return result;
     }
 
     @Override
@@ -132,7 +124,7 @@ public class SlotCraftingArcaneWorkbench extends Slot {
                         replacement.grow(current.getCount());
                         craftMatrix.setItem(slot, replacement);
                     } else if (!player.getInventory().add(replacement)) {
-                        player.drop(replacement, false, Prediction.PREDICTED);
+                        player.drop(replacement, false);
                     }
                 }
             }

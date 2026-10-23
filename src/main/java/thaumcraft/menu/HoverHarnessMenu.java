@@ -1,6 +1,5 @@
 package thaumcraft.menu;
 
-import net.minecraft.util.Prediction;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -119,7 +118,7 @@ public class HoverHarnessMenu extends AbstractContainerMenu {
         if (player.getInventory().getSelectedItem() == armor) {
             Hover.setJar(armor, jar);
         } else if (!jar.isEmpty()) {
-            player.getInventory().placeItemBackInInventory(jar, Prediction.SERVER_ONLY);
+            player.getInventory().placeItemBackInInventory(jar);
         }
     }
 }

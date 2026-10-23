@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -82,7 +81,7 @@ public final class CropUtils {
         BlockState below = level.getBlockState(pos.below());
         return block instanceof BonemealableBlock bonemealable
                 && !(block instanceof StemBlock)
-                && !bonemealable.isValidBonemealTarget(level, pos, state, BonemealSource.MOB)
+                && !bonemealable.isValidBonemealTarget(level, pos, state)
             || block instanceof CropBlock crop && crop.isMaxAge(state) && !listedByBlock(block)
             || block instanceof NetherWartBlock && state.getValue(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE
             || block instanceof CocoaBlock && state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE

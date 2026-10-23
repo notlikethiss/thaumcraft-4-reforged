@@ -151,7 +151,7 @@ public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, t
             this.entityData.set(DATA_ARM_LIFT_L, Math.max(0.0F, this.getArmLiftLeft() - 0.05F));
             this.entityData.set(DATA_ARM_LIFT_R, Math.max(0.0F, this.getArmLiftRight() - 0.05F));
         }
-        if (!this.level().isClientSide() && this.damageCooldownTime <= 0 && this.tickCount % 25 == 0 && this.getAbsorptionAmount() < this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 0.66F) {
+        if (!this.level().isClientSide() && this.invulnerableTime <= 0 && this.tickCount % 25 == 0 && this.getAbsorptionAmount() < this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 0.66F) {
             this.setAbsorptionAmount(this.getAbsorptionAmount() + 1.0F);
         }
     }

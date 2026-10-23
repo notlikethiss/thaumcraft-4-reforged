@@ -182,7 +182,7 @@ public final class ChampionModifier {
             return;
         }
         int id = get(mob);
-        if (id == 5 && mob.damageCooldownTime <= 0 && mob.tickCount % 25 == 0) {
+        if (id == 5 && mob.invulnerableTime <= 0 && mob.tickCount % 25 == 0) {
             float limit = (float) (mob.getAttributeBaseValue(Attributes.MAX_HEALTH) / 2.0);
             if (mob.getAbsorptionAmount() < limit) {
                 mob.setAbsorptionAmount(mob.getAbsorptionAmount() + 1.0F);

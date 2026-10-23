@@ -155,7 +155,7 @@ public class FrostShard extends ThrowableProjectile {
                 living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200, this.getFrosty() - 1), this);
             }
             if (this.isFragile()) {
-                target.setInvulnerableTime(0);
+                target.invulnerableTime = 0;
                 this.discard();
                 this.playBreakSound(Blocks.ICE.defaultBlockState());
                 Vec3 changed = target.getDeltaMovement();

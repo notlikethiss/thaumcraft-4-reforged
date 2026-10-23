@@ -8,7 +8,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Prediction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -402,7 +401,7 @@ public class PechTradeMenu extends AbstractContainerMenu {
             for (int index = 0; index < OUTPUT_END; index++) {
                 ItemStack stack = tradeInventory.removeItemNoUpdate(index);
                 if (!stack.isEmpty()) {
-                    player.drop(stack, false, Prediction.PREDICTED);
+                    player.drop(stack, false);
                 }
             }
             if (pech != null) {

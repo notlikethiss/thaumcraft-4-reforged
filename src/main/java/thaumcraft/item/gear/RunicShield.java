@@ -179,7 +179,7 @@ public final class RunicShield {
             return;
         }
         DamageSource source = event.getSource();
-        if (player.getInvulnerableTime() > 10 && !source.is(DamageTypeTags.BYPASSES_COOLDOWN) && event.getAmount() <= player.lastHurt) {
+        if (player.invulnerableTime > 10 && !source.is(DamageTypeTags.BYPASSES_COOLDOWN) && event.getAmount() <= player.lastHurt) {
             return;
         }
         int target = source.getEntity() != null ? source.getEntity().getId() : -1;

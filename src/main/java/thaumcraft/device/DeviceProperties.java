@@ -32,7 +32,7 @@ public final class DeviceProperties {
             .sound(airySound())
             .isValidSpawn((state, level, pos, type) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, box) -> false);
+            .isViewBlocking((state, level, pos) -> false);
     }
 
     public static BlockBehaviour.Properties nitorLight(BlockBehaviour.Properties properties) {
@@ -73,6 +73,6 @@ public final class DeviceProperties {
             .lightLevel(state -> 7)
             .noOcclusion()
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, box) -> false);
+            .isViewBlocking((state, level, pos) -> false);
     }
 }

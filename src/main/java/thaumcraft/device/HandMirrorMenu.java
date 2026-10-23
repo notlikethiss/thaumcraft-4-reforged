@@ -1,6 +1,5 @@
 package thaumcraft.device;
 
-import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -115,7 +114,7 @@ public class HandMirrorMenu extends AbstractContainerMenu {
         if (!player.level().isClientSide()) {
             ItemStack stack = input.removeItemNoUpdate(0);
             if (!stack.isEmpty()) {
-                player.drop(stack, false, Prediction.PREDICTED);
+                player.drop(stack, false);
             }
         }
     }

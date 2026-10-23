@@ -344,7 +344,7 @@ public class FireBat extends Monster {
         }
         this.attackTime = 20;
         if ((this.isExplosive() || this.random.nextInt(10) == 0) && !this.isDevil()) {
-            target.setInvulnerableTime(0);
+            target.invulnerableTime = 0;
             level.explode(this, this.getX(), this.getY(), this.getZ(), 1.5F + (this.isExplosive() ? this.damBonus * 0.33F : 0.0F), Level.ExplosionInteraction.NONE);
             this.discard();
         } else if (!this.isVampire() && !this.random.nextBoolean()) {

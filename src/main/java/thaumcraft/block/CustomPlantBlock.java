@@ -1,5 +1,8 @@
 package thaumcraft.block;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -33,12 +36,20 @@ public class CustomPlantBlock extends VegetationBlock {
         }
     }
 
+    public static final MapCodec<CustomPlantBlock> CODEC = RecordCodecBuilder.mapCodec(
+        instance -> instance.group(Codec.STRING.xmap(Kind::valueOf, Kind::name).fieldOf("kind").forGetter(CustomPlantBlock::getKind), propertiesCodec()).apply(instance, CustomPlantBlock::new)
+    );
     private static final VoxelShape SHAPE = Block.box(1.6, 0.0, 1.6, 14.4, 12.8, 14.4);
     private final Kind kind;
 
     public CustomPlantBlock(Kind kind, Properties properties) {
         super(properties);
         this.kind = kind;
+    }
+
+    @Override
+    protected MapCodec<? extends VegetationBlock> codec() {
+        return CODEC;
     }
 
     public Kind getKind() {

@@ -4,6 +4,7 @@ import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -40,7 +41,7 @@ public final class NodeHooks {
         if (level instanceof WorldGenRegion region) {
             manager = manager.forWorldGenRegion(region);
         }
-        for (StructureStart start : manager.startsForStructure(chunkX, chunkZ, NodeHooks::isTemple)) {
+        for (StructureStart start : manager.startsForStructure(new ChunkPos(chunkX, chunkZ), NodeHooks::isTemple)) {
             if (!start.isValid() || start.getChunkPos().x() != chunkX || start.getChunkPos().z() != chunkZ) {
                 continue;
             }

@@ -507,7 +507,7 @@ public final class ModBlocks {
             .lightLevel(state -> state.getValue(FluxBlock.LEVEL) * 7 / 8)
             .pushReaction(PushReaction.DESTROY)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, box) -> false)
+            .isViewBlocking((state, level, pos) -> false)
     ));
     public static final DeferredBlock<FluxGooBlock> FLUX_GOO = withItem(BLOCKS.registerBlock(
         "flux_goo",
@@ -777,7 +777,7 @@ public final class ModBlocks {
 
     private static BlockBehaviour.Properties jar(BlockBehaviour.Properties properties) {
         return properties.mapColor(MapColor.NONE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().lightLevel(state -> 9)
-            .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos, box) -> false);
+            .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false);
     }
 
     private static BlockBehaviour.Properties tableProperties(BlockBehaviour.Properties properties) {
@@ -850,7 +850,7 @@ public final class ModBlocks {
             .pushReaction(PushReaction.BLOCK)
             .isValidSpawn((state, level, pos, type) -> false)
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, box) -> false);
+            .isViewBlocking((state, level, pos) -> false);
     }
 
     private static BlockBehaviour.Properties amber(BlockBehaviour.Properties properties) {
@@ -877,7 +877,7 @@ public final class ModBlocks {
             .sound(SoundType.GRASS)
             .noOcclusion()
             .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos, box) -> false)
+            .isViewBlocking((state, level, pos) -> false)
             .pushReaction(PushReaction.DESTROY)
             .isRedstoneConductor((state, level, pos) -> false);
     }

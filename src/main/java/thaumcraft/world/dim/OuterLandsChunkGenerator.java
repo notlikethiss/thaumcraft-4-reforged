@@ -1,7 +1,6 @@
 package thaumcraft.world.dim;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Holder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -14,13 +13,10 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jspecify.annotations.Nullable;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public final class OuterLandsChunkGenerator extends ChunkGenerator {
@@ -48,16 +44,16 @@ public final class OuterLandsChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<ChunkAccess> buildTerrain(
-        ChunkAccess chunk,
-        Blender blender,
-        RandomState randomState,
-        StructureManager structureManager,
-        BiomeManager biomeManager,
-        @Nullable WorldGenRegion carverBiomeRegion,
-        Set<Holder<Biome>> possibleBiomes
-    ) {
-        return CompletableFuture.completedFuture(chunk);
+    public void applyCarvers(WorldGenRegion region, long seed, RandomState randomState, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk) {
+    }
+
+    @Override
+    public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState randomState, ChunkAccess protoChunk) {
+    }
+
+    @Override
+    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess centerChunk) {
+        return CompletableFuture.completedFuture(centerChunk);
     }
 
     @Override
@@ -83,6 +79,6 @@ public final class OuterLandsChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void addDebugScreenInfo(List<String> result, RandomState randomState, BlockPos feetPos, SamplerContext samplerContext) {
+    public void addDebugScreenInfo(List<String> result, RandomState randomState, BlockPos feetPos) {
     }
 }

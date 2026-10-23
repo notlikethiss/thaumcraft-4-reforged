@@ -6,10 +6,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
@@ -20,7 +20,7 @@ import thaumcraft.registry.ModEntities;
 
 public record HalloweenFirebatSpawnModifier(HolderSet<Biome> biomes) implements BiomeModifier {
     private static final MapCodec<HalloweenFirebatSpawnModifier> SERIALIZER = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryCodecs.holderSet(Registries.BIOME).fieldOf("biomes").forGetter(HalloweenFirebatSpawnModifier::biomes)
+        RegistryCodecs.homogeneousList(Registries.BIOME).fieldOf("biomes").forGetter(HalloweenFirebatSpawnModifier::biomes)
     ).apply(instance, HalloweenFirebatSpawnModifier::new));
     private static final DeferredRegister<MapCodec<? extends BiomeModifier>> CODECS = DeferredRegister.create(
         NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS,
@@ -46,9 +46,9 @@ public record HalloweenFirebatSpawnModifier(HolderSet<Biome> biomes) implements 
     }
 
     @Override
-    public void modify(RegistryAccess registries, Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
+    public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && isHalloween() && this.biomes.contains(biome)) {
-            builder.getMobSpawnSettings().addSpawn(ModEntities.FIREBAT.get(), 5, 1, 2);
+            builder.getMobSpawnSettings().addSpawn(ModEntities.FIREBAT.get().getCategory(), 5, new MobSpawnSettings.SpawnerData(ModEntities.FIREBAT.get(), 1, 2));
         }
     }
 

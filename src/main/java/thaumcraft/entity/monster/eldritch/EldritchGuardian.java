@@ -199,7 +199,7 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, thaumc
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide() && this.level().dimension().equals(thaumcraft.world.dim.OuterLands.OUTER_LANDS) && this.damageCooldownTime <= 0 && this.tickCount % 25 == 0 && this.getAbsorptionAmount() < 25.0F) {
+        if (!this.level().isClientSide() && this.level().dimension().equals(thaumcraft.world.dim.OuterLands.OUTER_LANDS) && this.invulnerableTime <= 0 && this.tickCount % 25 == 0 && this.getAbsorptionAmount() < 25.0F) {
             this.setAbsorptionAmount(this.getAbsorptionAmount() + 1.0F);
         }
         if (this.level().isClientSide()) {

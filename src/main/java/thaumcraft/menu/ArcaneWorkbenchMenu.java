@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -233,7 +232,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         }
         slot.onTake(player, stack);
         if (index == RESULT_SLOT) {
-            player.drop(stack, false, Prediction.PREDICTED);
+            player.drop(stack, false);
         }
         return original;
     }

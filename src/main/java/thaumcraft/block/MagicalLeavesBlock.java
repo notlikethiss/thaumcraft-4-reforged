@@ -1,6 +1,10 @@
 package thaumcraft.block;
 
 import java.util.function.Supplier;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -11,19 +15,35 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class MagicalLeavesBlock extends LeavesBlock {
+    public static final MapCodec<MagicalLeavesBlock> CODEC = RecordCodecBuilder.mapCodec(
+        instance -> instance.group(
+            BuiltInRegistries.BLOCK.byNameCodec().<Supplier<? extends Block>>xmap(block -> () -> block, Supplier::get).fieldOf("sapling").forGetter(leaves -> leaves.sapling),
+            Codec.INT.fieldOf("sapling_chance").forGetter(leaves -> leaves.saplingChance),
+            Codec.BOOL.fieldOf("sparkle").forGetter(leaves -> leaves.sparkle),
+            propertiesCodec()
+        ).apply(instance, MagicalLeavesBlock::new)
+    );
     private final Supplier<? extends Block> sapling;
     private final int saplingChance;
     private final boolean sparkle;
 
     public MagicalLeavesBlock(Supplier<? extends Block> sapling, int saplingChance, boolean sparkle, Properties properties) {
-        super(AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties);
+        super(0.0F, properties);
         this.sapling = sapling;
         this.saplingChance = saplingChance;
         this.sparkle = sparkle;
+    }
+
+    @Override
+    public MapCodec<? extends LeavesBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
     }
 
     @Override

@@ -125,7 +125,7 @@ public final class Wands {
         if (focus.isEmpty()) {
             WandKeys.FOCUS.remove(stack);
         } else {
-            WandKeys.FOCUS.set(stack, ItemStackTemplate.fromNonEmptyStack(focus, 1));
+            WandKeys.FOCUS.set(stack, ItemStackTemplate.fromNonEmptyStack(focus.copyWithCount(1)));
         }
     }
 
