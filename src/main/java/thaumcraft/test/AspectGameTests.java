@@ -11,6 +11,7 @@ import net.minecraft.gametest.framework.FunctionGameTestInstance;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityTypes;
 import net.neoforged.bus.api.IEventBus;
@@ -55,11 +56,12 @@ public final class AspectGameTests {
 
     private static void addonAspectRegistration(GameTestHelper helper) {
         Aspect[] components = {Aspect.AIR, Aspect.FIRE};
+        Identifier addonImage = Identifier.fromNamespaceAndPath("testaddon", "textures/aspects/testaspect.png");
         Aspect addon = new Aspect(
             "testaspect",
             0x123456,
             components,
-            Thaumcraft.id("textures/aspects/testaspect.png"),
+            addonImage,
             1
         );
 
@@ -73,7 +75,7 @@ public final class AspectGameTests {
         helper.assertTrue(addon.getComponents()[0] == Aspect.AIR, "add-on aspect retained a mutable component array");
         addon.getComponents()[0] = Aspect.ENTROPY;
         helper.assertTrue(addon.getComponents()[0] == Aspect.AIR, "add-on aspect exposed a mutable component array");
-        helper.assertTrue(addon.getImage().equals(Thaumcraft.id("textures/aspects/testaspect.png")), "add-on aspect image changed");
+        helper.assertTrue(addon.getImage().equals(addonImage), "add-on aspect image identifier or namespace changed");
 
         AspectList aspects = new AspectList().add(addon, 7).add(Aspect.AIR, 2);
         var encoded = AspectList.CODEC.encodeStart(JsonOps.INSTANCE, aspects).result().orElseThrow();
@@ -84,22 +86,38 @@ public final class AspectGameTests {
         helper.assertTrue(AspectList.STREAM_CODEC.decode(buffer).equals(aspects), "aspect list stream codec lost the add-on aspect");
 
         AspectRegistry registry = new AspectRegistry();
-        registry.registerEntity(EntityTypes.CREEPER, new AspectList().add(Aspect.FIRE, 2), "powered", 1);
-        registry.mergeEntity(EntityTypes.CREEPER, new AspectList().add(addon, 3).add(Aspect.FIRE, 1), "powered", 1);
+        registry.registerEntity(EntityTypes.CREEPER, new AspectList().add(Aspect.FIRE, 2),
+            "powered", 1, "variant", 1);
+        registry.mergeEntity(EntityTypes.CREEPER, new AspectList().add(addon, 3).add(Aspect.FIRE, 1),
+            "variant", 1, "powered", 1);
         List<EntityAspects> merged = registry.exportEntities().get(EntityTypes.CREEPER);
-        helper.assertValueEqual(merged.size(), 1, "matching entity tags were not merged");
+        helper.assertValueEqual(merged.size(), 1, "matching entity tags with reordered conditions were not merged");
         helper.assertValueEqual(merged.getFirst().aspects().getAmount(addon), 3, "merged entity tag lost the add-on aspect");
         helper.assertValueEqual(merged.getFirst().aspects().getAmount(Aspect.FIRE), 3, "merged entity tag did not sum aspect amounts");
+        helper.assertValueEqual(merged.getFirst().conditions().getFirst().name(), "powered",
+            "entity conditions were not stored in canonical name order");
 
-        registry.mergeEntity(EntityTypes.CREEPER, new AspectList().add(addon, 4), "powered", 0);
-        helper.assertValueEqual(registry.exportEntities().get(EntityTypes.CREEPER).size(), 2, "different entity conditions were merged");
+        registry.mergeEntity(EntityTypes.CREEPER, new AspectList().add(addon, 4), "variant", 0, "powered", 1);
+        helper.assertValueEqual(registry.exportEntities().get(EntityTypes.CREEPER).size(), 2,
+            "different entity conditions were merged");
+
+        try {
+            EntityAspects.of(new AspectList(), "powered", 1, "powered", 0);
+            helper.fail("duplicate entity condition names were accepted");
+        } catch (IllegalArgumentException expected) {
+        }
+        try {
+            EntityAspects.of(new AspectList(), "powered");
+            helper.fail("an incomplete entity condition pair was accepted");
+        } catch (IllegalArgumentException expected) {
+        }
 
         try {
             new Aspect(
                 "testaspect",
                 0x654321,
                 new Aspect[]{Aspect.AIR, Aspect.FIRE},
-                Thaumcraft.id("textures/aspects/testaspect.png"),
+                addonImage,
                 1
             );
             helper.fail("duplicate aspect tag was accepted");
@@ -111,7 +129,7 @@ public final class AspectGameTests {
                 "invalidaspect",
                 0x654321,
                 new Aspect[]{Aspect.AIR},
-                Thaumcraft.id("textures/aspects/invalidaspect.png"),
+                Identifier.fromNamespaceAndPath("testaddon", "textures/aspects/invalidaspect.png"),
                 1
             );
             helper.fail("add-on aspect with invalid components was accepted");

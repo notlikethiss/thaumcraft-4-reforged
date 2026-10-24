@@ -20,10 +20,21 @@ public record EntityAspects(AspectList aspects, List<Condition> conditions) {
     );
 
     public static EntityAspects of(AspectList aspects, Object... pairs) {
-        List<Condition> conditions = new ArrayList<>();
-        for (int index = 0; index + 1 < pairs.length; index += 2) {
-            conditions.add(new Condition((String) pairs[index], normalize(pairs[index + 1])));
+        if (pairs.length % 2 != 0) {
+            throw new IllegalArgumentException("Entity aspect conditions must be name/value pairs");
         }
+
+        List<Condition> conditions = new ArrayList<>();
+        for (int index = 0; index < pairs.length; index += 2) {
+            if (!(pairs[index] instanceof String name) || name.isBlank()) {
+                throw new IllegalArgumentException("Entity aspect condition names must be non-blank strings");
+            }
+            if (conditions.stream().anyMatch(condition -> condition.name().equals(name))) {
+                throw new IllegalArgumentException("Duplicate entity aspect condition: " + name);
+            }
+            conditions.add(new Condition(name, normalize(pairs[index + 1])));
+        }
+        conditions.sort(java.util.Comparator.comparing(Condition::name));
         return new EntityAspects(aspects, List.copyOf(conditions));
     }
 
