@@ -11,6 +11,28 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public record EntityAspects(AspectList aspects, List<Condition> conditions) {
+    public EntityAspects {
+        if (aspects == null) {
+            throw new IllegalArgumentException("Entity aspect list must not be null");
+        }
+        if (conditions == null) {
+            throw new IllegalArgumentException("Entity aspect conditions must not be null");
+        }
+
+        List<Condition> canonical = new ArrayList<>(conditions);
+        java.util.Set<String> names = new java.util.HashSet<>();
+        for (Condition condition : canonical) {
+            if (condition == null) {
+                throw new IllegalArgumentException("Entity aspect conditions must not contain null");
+            }
+            if (!names.add(condition.name())) {
+                throw new IllegalArgumentException("Duplicate entity aspect condition: " + condition.name());
+            }
+        }
+        canonical.sort(java.util.Comparator.comparing(Condition::name));
+        conditions = List.copyOf(canonical);
+    }
+
     public static final StreamCodec<ByteBuf, EntityAspects> STREAM_CODEC = StreamCodec.composite(
         AspectList.STREAM_CODEC,
         EntityAspects::aspects,
@@ -20,11 +42,18 @@ public record EntityAspects(AspectList aspects, List<Condition> conditions) {
     );
 
     public static EntityAspects of(AspectList aspects, Object... pairs) {
-        List<Condition> conditions = new ArrayList<>();
-        for (int index = 0; index + 1 < pairs.length; index += 2) {
-            conditions.add(new Condition((String) pairs[index], normalize(pairs[index + 1])));
+        if (pairs == null || pairs.length % 2 != 0) {
+            throw new IllegalArgumentException("Entity aspect conditions must be name/value pairs");
         }
-        return new EntityAspects(aspects, List.copyOf(conditions));
+
+        List<Condition> conditions = new ArrayList<>();
+        for (int index = 0; index < pairs.length; index += 2) {
+            if (!(pairs[index] instanceof String name) || name.isBlank()) {
+                throw new IllegalArgumentException("Entity aspect condition names must be non-blank strings");
+            }
+            conditions.add(new Condition(name, pairs[index + 1]));
+        }
+        return new EntityAspects(aspects, conditions);
     }
 
     public boolean matches(CompoundTag data) {
@@ -50,6 +79,16 @@ public record EntityAspects(AspectList aspects, List<Condition> conditions) {
     }
 
     public record Condition(String name, Object value) {
+        public Condition {
+            if (name == null || name.isBlank()) {
+                throw new IllegalArgumentException("Entity aspect condition names must be non-blank strings");
+            }
+            if (value == null) {
+                throw new IllegalArgumentException("Entity aspect condition values must not be null");
+            }
+            value = normalize(value);
+        }
+
         private static final StreamCodec<ByteBuf, Object> VALUE_CODEC = new StreamCodec<>() {
             @Override
             public Object decode(ByteBuf buffer) {
@@ -57,7 +96,8 @@ public record EntityAspects(AspectList aspects, List<Condition> conditions) {
                     case 0 -> ByteBufCodecs.STRING_UTF8.decode(buffer);
                     case 1 -> buffer.readLong();
                     case 2 -> buffer.readDouble();
-                    default -> buffer.readBoolean();
+                    case 3 -> buffer.readBoolean();
+                    default -> throw new IllegalArgumentException("Unknown entity aspect condition value type");
                 };
             }
 

@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import aspect_scanner
 import convert_tags as ct
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -75,9 +76,7 @@ DYNAMIC = []
 
 def aspect_names():
     text = ASPECT_SOURCE.read_text()
-    start = text.index("public enum Aspect")
-    body = text[text.index("{", start) + 1:text.index(";", start)]
-    return re.findall(r"^\s*([A-Z_]+)\(", body, re.MULTILINE)
+    return aspect_scanner.aspect_names(text)
 
 
 ASPECTS = aspect_names()

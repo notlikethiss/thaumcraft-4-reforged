@@ -63,6 +63,13 @@ public abstract class AspectRegistrar {
         );
     }
 
+    protected void entityCopy(String target, AspectList aspects, Object... nbt) {
+        BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(target)).ifPresentOrElse(
+            type -> registry.mergeEntity(type, aspects.copy(), nbt),
+            () -> Thaumcraft.LOGGER.debug("Aspect entity target {} is not registered", target)
+        );
+    }
+
     private static List<Item> resolve(String target) {
         List<Item> items = new ArrayList<>();
         if (target.startsWith("#")) {

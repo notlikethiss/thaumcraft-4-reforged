@@ -3,6 +3,7 @@ import re
 import sys
 from pathlib import Path
 
+import aspect_scanner
 import convert_tags
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -583,8 +584,7 @@ class Executor:
 
 def read_aspects():
     text = ASPECT_SOURCE.read_text()
-    names = re.findall(r"^    ([A-Z_]+)\(", text, re.M)
-    return names
+    return aspect_scanner.aspect_names(text)
 
 
 def load_lang():

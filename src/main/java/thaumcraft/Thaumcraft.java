@@ -36,6 +36,7 @@ import thaumcraft.item.armor.ArmorKeys;
 import thaumcraft.registry.ModRecipes;
 import thaumcraft.test.AlchemyGameTests;
 import thaumcraft.test.ArmorGameTests;
+import thaumcraft.test.AspectGameTests;
 import thaumcraft.test.DeviceGameTests;
 import thaumcraft.test.EldritchCrabGameTests;
 import thaumcraft.test.ArcaneGameTests;
@@ -97,6 +98,7 @@ public class Thaumcraft {
         ModPayloads.register();
         ConfigRecipes.init();
         ConfigResearch.init();
+        AspectGameTests.register(modEventBus);
         ThaumcraftGameTests.register(modEventBus);
         HexGridGameTests.register(modEventBus);
         EssentiaGameTests.register(modEventBus);
