@@ -54,10 +54,11 @@ public final class AspectGameTests {
     }
 
     private static void addonAspectRegistration(GameTestHelper helper) {
+        Aspect[] components = {Aspect.AIR, Aspect.FIRE};
         Aspect addon = new Aspect(
             "testaspect",
             0x123456,
-            new Aspect[]{Aspect.AIR, Aspect.FIRE},
+            components,
             Thaumcraft.id("textures/aspects/testaspect.png"),
             1
         );
@@ -67,6 +68,11 @@ public final class AspectGameTests {
         helper.assertValueEqual(Aspect.TRAP.ordinal(), 47, "built-in aspect ordinal changed");
         helper.assertValueEqual(addon.ordinal(), 48, "add-on aspect did not follow built-in aspects");
         helper.assertTrue(addon.getComponents() != null && addon.getComponents().length == 2, "add-on aspect is not compound");
+        helper.assertTrue(addon.getComponents()[0] == Aspect.AIR && addon.getComponents()[1] == Aspect.FIRE, "add-on aspect components changed");
+        components[0] = Aspect.ENTROPY;
+        helper.assertTrue(addon.getComponents()[0] == Aspect.AIR, "add-on aspect retained a mutable component array");
+        addon.getComponents()[0] = Aspect.ENTROPY;
+        helper.assertTrue(addon.getComponents()[0] == Aspect.AIR, "add-on aspect exposed a mutable component array");
         helper.assertTrue(addon.getImage().equals(Thaumcraft.id("textures/aspects/testaspect.png")), "add-on aspect image changed");
 
         AspectList aspects = new AspectList().add(addon, 7).add(Aspect.AIR, 2);

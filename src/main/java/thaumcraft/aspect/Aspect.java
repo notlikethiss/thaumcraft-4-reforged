@@ -99,7 +99,7 @@ public final class Aspect implements StringRepresentable {
         this.tag = tag;
         this.color = color;
         this.chatcolor = chatcolor;
-        this.components = components;
+        this.components = components == null ? null : components.clone();
         this.blend = blend;
         this.image = image == null ? Thaumcraft.id("textures/aspects/" + tag + ".png") : image;
         BY_TAG.put(tag, this);
@@ -135,7 +135,7 @@ public final class Aspect implements StringRepresentable {
     }
 
     public Aspect @Nullable [] getComponents() {
-        return components;
+        return components == null ? null : components.clone();
     }
 
     public int getBlend() {
