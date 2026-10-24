@@ -69,6 +69,11 @@ public final class AspectGameTests {
         helper.assertValueEqual(Aspect.AIR.ordinal(), 0, "built-in aspect ordinal changed");
         helper.assertValueEqual(Aspect.TRAP.ordinal(), 47, "built-in aspect ordinal changed");
         helper.assertValueEqual(addon.ordinal(), 48, "add-on aspect did not follow built-in aspects");
+        helper.assertValueEqual(Aspect.values().length, 49, "add-on aspect was not added to the registry");
+        helper.assertTrue(Aspect.values()[48] == addon, "add-on aspect did not follow built-in aspects in the registry");
+        helper.assertTrue(Aspect.getCompoundAspects().contains(addon), "add-on aspect was not classified as compound");
+        helper.assertTrue(!Aspect.getPrimalAspects().contains(addon), "add-on aspect was classified as primal");
+        helper.assertTrue(Aspect.getAspect("missing") == null, "unknown aspect tag did not return null");
         helper.assertTrue(addon.getComponents() != null && addon.getComponents().length == 2, "add-on aspect is not compound");
         helper.assertTrue(addon.getComponents()[0] == Aspect.AIR && addon.getComponents()[1] == Aspect.FIRE, "add-on aspect components changed");
         components[0] = Aspect.ENTROPY;
@@ -145,19 +150,22 @@ public final class AspectGameTests {
             helper.fail("duplicate aspect tag was accepted");
         } catch (IllegalArgumentException expected) {
         }
+        helper.assertTrue(Aspect.getAspect("testaspect") == addon, "duplicate aspect tag replaced the registered aspect");
 
-        try {
-            new Aspect(
-                "invalidaspect",
-                0x654321,
-                new Aspect[]{Aspect.AIR},
-                Identifier.fromNamespaceAndPath("testaddon", "textures/aspects/invalidaspect.png"),
-                1
-            );
-            helper.fail("add-on aspect with invalid components was accepted");
-        } catch (IllegalArgumentException expected) {
-        }
+        assertRejectedAspect(helper, "nullcomponents", null, Thaumcraft.id("textures/aspects/nullcomponents.png"), "add-on aspect with null components was accepted");
+        assertRejectedAspect(helper, "invalidaspect", new Aspect[]{Aspect.AIR}, Thaumcraft.id("textures/aspects/invalidaspect.png"), "add-on aspect with invalid components was accepted");
+        assertRejectedAspect(helper, "nullcomponent", new Aspect[]{Aspect.AIR, null}, Thaumcraft.id("textures/aspects/nullcomponent.png"), "add-on aspect with a null component was accepted");
+        assertRejectedAspect(helper, "nullimage", new Aspect[]{Aspect.AIR, Aspect.FIRE}, null, "add-on aspect with a null image was accepted");
 
         helper.succeed();
+    }
+
+    private static void assertRejectedAspect(GameTestHelper helper, String tag, Aspect[] components, Identifier image, String message) {
+        try {
+            new Aspect(tag, 0x654321, components, image, 1);
+            helper.fail(message);
+        } catch (IllegalArgumentException expected) {
+        }
+        helper.assertTrue(Aspect.getAspect(tag) == null, "rejected aspect was registered");
     }
 }
