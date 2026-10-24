@@ -63,6 +63,14 @@ echo "forceload add 0 0" >> cmds
 - `/thaumcraft outer prepare <x> <y> <z>` prepares an Outer Lands maze
 - `/thaumcraft outer info <x> <y> <z>` checks maze status
 
+## Add-on API (experimental)
+
+- Register custom aspects during common setup on both the client and dedicated server, in the same order, before aspect payloads can be decoded. Constructing an `Aspect` registers it immediately.
+- Aspect tags are global, unqualified strings. Give each add-on aspect a unique tag; a collision with any existing aspect throws `IllegalArgumentException`.
+- `Aspect` is now a registry-backed class rather than an enum so add-ons can define aspects dynamically. Built-in ordinals 0–47 are preserved, and `values()`/`ordinal()` remain available, but enum-only APIs such as `EnumMap`, `EnumSet`, `valueOf`, and enum `switch` statements are not compatible.
+- Construct an aspect with exactly two non-null components and an image identifier in your add-on's namespace, for example `new Aspect("myaddon_example", 0x123456, new Aspect[] {Aspect.AIR, Aspect.FIRE}, Identifier.fromNamespaceAndPath("myaddon", "textures/aspects/example.png"), 1)`. Add the matching texture and translation key `tc.aspect.myaddon_example` to the add-on resources.
+- `Aspect.getAspect(tag)` returns the registered aspect or `null` if it is unknown. `AspectRegistry.mergeEntity(type, aspects, name, value, ...)` merges amounts only when the full set of NBT conditions matches; condition order does not matter, and duplicate or incomplete name/value pairs are rejected.
+
 ## Project layout
 
 ```text

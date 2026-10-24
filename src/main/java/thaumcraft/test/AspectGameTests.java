@@ -96,6 +96,12 @@ public final class AspectGameTests {
         helper.assertValueEqual(merged.getFirst().aspects().getAmount(Aspect.FIRE), 3, "merged entity tag did not sum aspect amounts");
         helper.assertValueEqual(merged.getFirst().conditions().getFirst().name(), "powered",
             "entity conditions were not stored in canonical name order");
+        EntityAspects directlyConstructed = new EntityAspects(new AspectList(), List.of(
+            new EntityAspects.Condition("variant", 1),
+            new EntityAspects.Condition("powered", 1)
+        ));
+        helper.assertValueEqual(directlyConstructed.conditions().getFirst().name(), "powered",
+            "directly constructed entity aspects did not canonicalize conditions");
 
         registry.mergeEntity(EntityTypes.CREEPER, new AspectList().add(addon, 4), "variant", 0, "powered", 1);
         helper.assertValueEqual(registry.exportEntities().get(EntityTypes.CREEPER).size(), 2,
@@ -110,6 +116,22 @@ public final class AspectGameTests {
             EntityAspects.of(new AspectList(), "powered");
             helper.fail("an incomplete entity condition pair was accepted");
         } catch (IllegalArgumentException expected) {
+        }
+        try {
+            EntityAspects.of(new AspectList(), "powered", null);
+            helper.fail("a null entity condition value was accepted");
+        } catch (IllegalArgumentException expected) {
+        }
+
+        ByteBuf malformedCondition = Unpooled.buffer();
+        net.minecraft.network.codec.ByteBufCodecs.STRING_UTF8.encode(malformedCondition, "powered");
+        malformedCondition.writeByte(99);
+        try {
+            EntityAspects.Condition.STREAM_CODEC.decode(malformedCondition);
+            helper.fail("an unknown entity condition value type was accepted");
+        } catch (IllegalArgumentException expected) {
+        } finally {
+            malformedCondition.release();
         }
 
         try {
