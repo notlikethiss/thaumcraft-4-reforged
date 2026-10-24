@@ -1,6 +1,10 @@
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import aspect_scanner
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "tools" / "modern_aspects"
@@ -10,7 +14,7 @@ TARGET = re.compile(r"^#?[a-z0-9_.-]+:[a-z0-9_./-]+$")
 
 
 def aspect_names():
-    return set(re.findall(r"^    ([A-Z_]+)\(\"", ASPECT_JAVA.read_text(encoding="utf-8"), re.MULTILINE))
+    return set(aspect_scanner.aspect_names(ASPECT_JAVA.read_text(encoding="utf-8")))
 
 
 def load_entries():
