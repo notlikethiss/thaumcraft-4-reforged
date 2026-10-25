@@ -81,7 +81,10 @@ public final class TaintGameTests {
         "taint_swarmer_first_death_spawns_one_swarm",
         "taint_creeper_fuse_infects_without_block_damage",
         "taint_entity_saved_data_round_trips",
-        "tainted_villager_enters_and_restricts_inside_house"
+        "tainted_villager_enters_and_restricts_inside_house",
+        "taint_trees_reject_water_over_dirt",
+        "taint_trees_reject_water_over_stone",
+        "taint_trees_grow_on_dry_soil"
     };
 
     static {
@@ -103,6 +106,9 @@ public final class TaintGameTests {
         FUNCTIONS.register(TESTS[15], () -> TaintGameTests::creeperFuseInfectsWithoutBlockDamage);
         FUNCTIONS.register(TESTS[16], () -> TaintGameTests::entitySavedDataRoundTrips);
         FUNCTIONS.register(TESTS[17], () -> TaintGameTests::taintedVillagerEntersAndRestrictsInsideHouse);
+        FUNCTIONS.register(TESTS[18], () -> TaintGameTests::treesRejectWaterOverDirt);
+        FUNCTIONS.register(TESTS[19], () -> TaintGameTests::treesRejectWaterOverStone);
+        FUNCTIONS.register(TESTS[20], () -> TaintGameTests::treesGrowOnDrySoil);
     }
 
     private TaintGameTests() {
@@ -513,5 +519,55 @@ public final class TaintGameTests {
         helper.assertTrue(!restrictGoal.canContinueToUse(), "door restriction continued after villager crossed outside");
         restrictGoal.stop();
         helper.succeed();
+    }
+
+    private static void treesRejectWaterOverDirt(GameTestHelper helper) {
+        treesRejectWater(helper, Blocks.DIRT);
+    }
+
+    private static void treesRejectWaterOverStone(GameTestHelper helper) {
+        treesRejectWater(helper, Blocks.STONE);
+    }
+
+    private static void treesRejectWater(GameTestHelper helper, net.minecraft.world.level.block.Block ground) {
+        for (boolean big : new boolean[]{false, true}) {
+            TaintTreeTestWorld world = new TaintTreeTestWorld(helper, ground, true);
+            TreeRandom random = new TreeRandom(big);
+            thaumcraft.world.biome.TaintDecorationHook.decorate(world.level, random, BlockPos.ZERO, helper.getLevel().getChunkSource().getGenerator());
+            helper.assertValueEqual(random.treeChoices, 2, "decorator changed or retried tree attempts");
+            world.assertWaterUnchanged(helper);
+        }
+        helper.succeed();
+    }
+
+    private static void treesGrowOnDrySoil(GameTestHelper helper) {
+        for (boolean big : new boolean[]{false, true}) {
+            TaintTreeTestWorld world = new TaintTreeTestWorld(helper, Blocks.GRASS_BLOCK, false);
+            TreeRandom random = new TreeRandom(big);
+            thaumcraft.world.biome.TaintDecorationHook.decorate(world.level, random, BlockPos.ZERO, helper.getLevel().getChunkSource().getGenerator());
+            helper.assertValueEqual(random.treeChoices, 2, "decorator changed tree attempts");
+            helper.assertTrue(world.logs() > 0, (big ? "big" : "ordinary") + " tainted trees failed to grow on dry soil");
+        }
+        helper.succeed();
+    }
+
+    private static final class TreeRandom extends net.minecraft.world.level.levelgen.LegacyRandomSource {
+        private final boolean big;
+        int treeChoices;
+
+        TreeRandom(boolean big) {
+            super(37L);
+            this.big = big;
+        }
+
+        @Override
+        public int nextInt(int bound) {
+            if (bound == 10) return 1;
+            if (bound == 8) {
+                treeChoices++;
+                return big ? 0 : 1;
+            }
+            return super.nextInt(bound);
+        }
     }
 }

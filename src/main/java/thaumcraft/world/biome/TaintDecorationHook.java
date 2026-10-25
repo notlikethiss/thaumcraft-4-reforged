@@ -25,7 +25,7 @@ public final class TaintDecorationHook {
             BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), z);
             if (random.nextInt(8) == 0) {
                 new thaumcraft.world.tree.BigMagicTreeGenerator(false).generate(level, new java.util.Random(random.nextLong()), pos);
-            } else {
+            } else if (Blocks.OAK_SAPLING.defaultBlockState().canSurvive(level, pos)) {
                 level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
                     .get(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE, net.minecraft.resources.Identifier.withDefaultNamespace("oak")))
                     .ifPresent(feature -> feature.value().place(level, chunkGenerator, random, pos));
