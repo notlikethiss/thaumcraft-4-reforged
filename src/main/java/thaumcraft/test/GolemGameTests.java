@@ -57,6 +57,9 @@ public final class GolemGameTests {
     private static final Map<String, Consumer<GameTestHelper>> TESTS = Map.ofEntries(
         Map.entry("golem_material_attributes", GolemGameTests::materials),
         Map.entry("golem_place_on_chest", GolemGameTests::placeOnChest),
+        Map.entry("golem_bell_alchemy_attachments", GolemGameTests::bellAlchemyAttachments),
+        Map.entry("golem_bell_selection_codec", GolemGameTests::bellSelectionCodec),
+        Map.entry("golem_bell_alchemy_transfer", GolemGameTests::bellAlchemyTransfer),
         Map.entry("golem_bell_rebind_chest", GolemGameTests::bellRebindChest),
         Map.entry("golem_bell_place_cycle", GolemGameTests::bellCycle),
         Map.entry("golem_bell_dismantle_core", GolemGameTests::bellDismantleCore),
@@ -106,6 +109,115 @@ public final class GolemGameTests {
         golem.configure(type, state(core));
         golem.setHealth(golem.getMaxHealth());
         return golem;
+    }
+    private static GolemBase placeAlchemist(GameTestHelper helper, net.minecraft.server.level.ServerPlayer player, BlockPos furnace, Direction face, GolemType type) {
+        var level = helper.getLevel();
+        ItemStack packed = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id(type.itemId())));
+        GolemKeys.STATE.set(packed, state(6));
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, packed);
+        var result = player.gameMode.useItemOn(player, level, packed, net.minecraft.world.InteractionHand.MAIN_HAND, golemHit(furnace, face));
+        helper.assertTrue(result.consumesAction() && player.getMainHandItem().isEmpty(), "furnace intercepts alchemy golem placement");
+        helper.assertTrue(player.containerMenu == player.inventoryMenu, "golem placement opens the furnace");
+        var placed = level.getEntitiesOfClass(GolemBase.class, new net.minecraft.world.phys.AABB(furnace).inflate(2));
+        helper.assertValueEqual(placed.size(), 1, "placement must create exactly one alchemy golem");
+        GolemBase golem = placed.getFirst();
+        helper.assertTrue(golem.getCore() == 6 && golem.getGolemType() == type, "placement loses alchemy core or material");
+        return golem;
+    }
+    private static void bellAlchemyAttachments(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos furnace = helper.absolutePos(new BlockPos(2, 3, 2));
+        BlockPos jar = furnace.east(2);
+        level.setBlockAndUpdate(furnace, ModBlocks.ALCHEMICAL_FURNACE.get().defaultBlockState());
+        level.setBlockAndUpdate(jar, ModBlocks.WARDED_JAR.get().defaultBlockState());
+        var player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
+        player.setPos(furnace.getX() - 1.5, furnace.getY(), furnace.getZ() + 0.5);
+        for (GolemType type : GolemType.values()) {
+            for (Direction face : Direction.values()) {
+                GolemBase golem = placeAlchemist(helper, player, furnace, face, type);
+                ItemStack bell = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("golem_bell")));
+                player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, bell);
+                helper.assertTrue(player.interactOn(golem, net.minecraft.world.InteractionHand.MAIN_HAND, golem.position()).consumesAction(), "bell cannot select an alchemy golem");
+                var selection = GolemKeys.BELL.get(bell);
+                helper.assertTrue(selection != null && selection.entity().equals(golem.getUUID()), "bell selects the wrong alchemy golem");
+                helper.assertTrue(selection.home().pos().equals(furnace.relative(face)) && selection.homeFacing() == face, "bell loses the furnace attachment");
+                helper.assertTrue(selection.homeMarker().pos().equals(furnace) && selection.homeMarker().side() == face, "home overlay is not on the attached furnace face");
+                helper.assertTrue(selection.markers().isEmpty(), "new alchemy golem has unexpected work markers");
+                var marked = new Marker(GlobalPos.of(level.dimension(), jar), face, -1);
+                for (int click = 0; click < 3; click++) {
+                    player.gameMode.useItemOn(player, level, bell, net.minecraft.world.InteractionHand.MAIN_HAND, golemHit(jar, face));
+                    var expected = click == 1 ? List.<Marker>of() : List.of(marked);
+                    helper.assertTrue(golem.getMarkers().equals(expected) && GolemKeys.BELL.get(bell).markers().equals(expected), "jar marker is not added or removed exactly once");
+                    helper.assertTrue(GolemKeys.BELL.get(bell).homeFacing() == face, "marking a jar loses the home face");
+                }
+                GolemKeys.BELL.remove(bell);
+                player.interactOn(golem, net.minecraft.world.InteractionHand.MAIN_HAND, golem.position());
+                helper.assertTrue(GolemKeys.BELL.get(bell).markers().equals(List.of(marked)), "reselecting the golem loses its jar marker");
+                // Model an existing selection whose home has since changed on the server.
+                golem.setHome(furnace.relative(face.getOpposite()), face.getOpposite());
+                player.setShiftKeyDown(true);
+                player.setXRot(-90.0F);
+                player.gameMode.useItem(player, level, bell, net.minecraft.world.InteractionHand.MAIN_HAND);
+                player.setShiftKeyDown(false);
+                selection = GolemKeys.BELL.get(bell);
+                helper.assertTrue(golem.getMarkers().isEmpty() && selection.markers().isEmpty(), "clearing markers leaves stale jar bindings");
+                helper.assertTrue(selection.homeFacing() == face.getOpposite() && selection.homeMarker().pos().equals(furnace), "clearing markers retains a stale home attachment");
+                golem.discard();
+            }
+        }
+        helper.succeed();
+    }
+    private static void bellSelectionCodec(GameTestHelper helper) {
+        var level = helper.getLevel();
+        var ops = level.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        BlockPos furnace = helper.absolutePos(new BlockPos(2, 3, 2));
+        var markers = List.of(new Marker(GlobalPos.of(level.dimension(), furnace.east(2)), Direction.WEST, 3));
+        for (Direction face : Direction.values()) {
+            var expected = new GolemKeys.BellSelection(UUID.randomUUID(), GlobalPos.of(level.dimension(), furnace.relative(face)), face, markers);
+            ItemStack bell = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("golem_bell")));
+            GolemKeys.BELL.set(bell, expected);
+            var saved = ItemStack.CODEC.encodeStart(ops, bell).getOrThrow();
+            ItemStack loaded = ItemStack.CODEC.parse(ops, saved).getOrThrow();
+            helper.assertTrue(expected.equals(GolemKeys.BELL.get(loaded)), "bell selection does not survive item save/load");
+            var buffer = new net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(), level.registryAccess());
+            try {
+                ItemStack.STREAM_CODEC.encode(buffer, bell);
+                helper.assertTrue(expected.equals(GolemKeys.BELL.get(ItemStack.STREAM_CODEC.decode(buffer))), "bell selection does not survive network synchronization");
+            } finally {
+                buffer.release();
+            }
+            var legacy = GolemKeys.BELL_CODEC.encodeStart(ops, expected).getOrThrow();
+            ((net.minecraft.nbt.CompoundTag) legacy).remove("home_facing");
+            var restored = GolemKeys.BELL_CODEC.parse(ops, legacy).getOrThrow();
+            helper.assertTrue(restored.homeFacing() == Direction.UP && restored.entity().equals(expected.entity()) && restored.home().equals(expected.home()) && restored.markers().equals(markers), "legacy bell selection loses data or the default home face");
+        }
+        helper.succeed();
+    }
+    private static void bellAlchemyTransfer(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos furnace = helper.absolutePos(new BlockPos(2, 2, 2));
+        BlockPos jarPos = furnace.east(2);
+        level.setBlockAndUpdate(furnace, ModBlocks.ALCHEMICAL_FURNACE.get().defaultBlockState());
+        level.setBlockAndUpdate(furnace.above(), ModBlocks.ALEMBIC.get().defaultBlockState());
+        level.setBlockAndUpdate(jarPos, ModBlocks.WARDED_JAR.get().defaultBlockState());
+        var alembic = (thaumcraft.alchemy.AlembicBlockEntity) level.getBlockEntity(furnace.above());
+        var jar = (JarBlockEntity) level.getBlockEntity(jarPos);
+        helper.assertValueEqual(alembic.addToContainer(Aspect.AIR, 4), 0, "test alembic rejects essentia");
+        var player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
+        player.setPos(furnace.getX() - 1.5, furnace.getY(), furnace.getZ() + 0.5);
+        GolemBase golem = placeAlchemist(helper, player, furnace, Direction.EAST, GolemType.WOOD);
+        ItemStack bell = new ItemStack(BuiltInRegistries.ITEM.getValue(Thaumcraft.id("golem_bell")));
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, bell);
+        player.interactOn(golem, net.minecraft.world.InteractionHand.MAIN_HAND, golem.position());
+        player.gameMode.useItemOn(player, level, bell, net.minecraft.world.InteractionHand.MAIN_HAND, golemHit(jarPos, Direction.WEST));
+        GoalSelector goals = new GoalSelector();
+        LogisticsGoals.install(golem, goals);
+        goals.tick();
+        helper.assertTrue(alembic.getAmount() == 0 && golem.getEssentiaAmount() == 4 && golem.getEssentia() == Aspect.AIR, "alchemy golem cannot gather essentia from the furnace alembic");
+        for (int tick = 0; tick < 6 && jar.getAmount() == 0; tick++) goals.tick();
+        helper.assertTrue(jar.getAmount() == 4 && jar.getAspect() == Aspect.AIR && golem.getEssentiaAmount() == 0 && alembic.getAmount() == 0, "bell-bound alchemy transfer loses essentia or uses the wrong destination");
+        golem.discard();
+        helper.succeed();
     }
     private static net.minecraft.world.phys.BlockHitResult golemHit(BlockPos pos, Direction face) {
         return new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(pos).add(face.getStepX() * 0.5, face.getStepY() * 0.5, face.getStepZ() * 0.5), face, pos, false);
@@ -179,6 +291,7 @@ public final class GolemGameTests {
         }
         helper.assertTrue(golem.getMarkers().equals(markers), "rebind changes work markers");
         helper.assertTrue(GolemKeys.BELL.get(bell).home().pos().equals(newChest.west()), "bell overlay retains the old home");
+        helper.assertTrue(GolemKeys.BELL.get(bell).homeFacing() == Direction.WEST && GolemKeys.BELL.get(bell).homeMarker().pos().equals(newChest), "rebound overlay loses the new chest face");
         helper.assertTrue(golem.getCarried().getCount() == 7 && golem.inventory().getItem(0).getCount() == 1 && golem.getCore() == before.core(), "rebind loses carried items, filters or core");
         helper.assertTrue(bell.getCount() == 1, "rebind consumes the bell");
         golem.setPos(newChest.getX() - 0.5, newChest.getY(), newChest.getZ() + 0.5);

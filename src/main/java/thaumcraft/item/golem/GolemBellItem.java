@@ -27,7 +27,7 @@ public class GolemBellItem extends Item {
         if (!(target instanceof GolemBase golem)) return InteractionResult.PASS;
         if (!player.level().isClientSide()) {
             if (player.isShiftKeyDown()) GolemKeys.BELL.remove(stack);
-            else GolemKeys.BELL.set(stack, new GolemKeys.BellSelection(golem.getUUID(), GlobalPos.of(golem.level().dimension(), golem.getHomePosition()), golem.getMarkers()));
+            else GolemKeys.BELL.set(stack, selection(golem));
             ring(player.level(), golem.blockPosition());
         }
         return InteractionResult.SUCCESS;
@@ -42,11 +42,14 @@ public class GolemBellItem extends Item {
             var selection = GolemKeys.BELL.get(player.getItemInHand(hand));
             if (selection != null && level instanceof ServerLevel server && server.getEntity(selection.entity()) instanceof GolemBase golem) {
                 golem.setMarkers(java.util.List.of());
-                GolemKeys.BELL.set(player.getItemInHand(hand), new GolemKeys.BellSelection(selection.entity(), selection.home(), java.util.List.of()));
+                GolemKeys.BELL.set(player.getItemInHand(hand), selection(golem));
             }
         }
         if (!level.isClientSide()) ring(level, player.blockPosition());
         return InteractionResult.SUCCESS;
+    }
+    private static GolemKeys.BellSelection selection(GolemBase golem) {
+        return new GolemKeys.BellSelection(golem.getUUID(), GlobalPos.of(golem.level().dimension(), golem.getHomePosition()), golem.getHomeFacing(), golem.getMarkers());
     }
     private static void ring(Level level, BlockPos pos) {
         level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.7F, 1.0F + level.getRandom().nextFloat() * 0.1F);
@@ -70,7 +73,7 @@ public class GolemBellItem extends Item {
             golem.setHome(context.getClickedPos().relative(context.getClickedFace()), context.getClickedFace());
             golem.getNavigation().stop();
             golem.rebuildGoals();
-            GolemKeys.BELL.set(context.getItemInHand(), new GolemKeys.BellSelection(golem.getUUID(), GlobalPos.of(level.dimension(), golem.getHomePosition()), golem.getMarkers()));
+            GolemKeys.BELL.set(context.getItemInHand(), selection(golem));
             ring(level, context.getClickedPos());
             return InteractionResult.SUCCESS;
         }
@@ -82,7 +85,7 @@ public class GolemBellItem extends Item {
             if (golem.getUpgradeAmount(4) > 0 && !context.getPlayer().isShiftKeyDown() && marker.color() < 15) markers.add(new Marker(pos, context.getClickedFace(), marker.color() + 1));
         } else markers.add(new Marker(pos, context.getClickedFace(), -1));
         golem.setMarkers(markers);
-        GolemKeys.BELL.set(context.getItemInHand(), new GolemKeys.BellSelection(golem.getUUID(), selection.home(), markers));
+        GolemKeys.BELL.set(context.getItemInHand(), selection(golem));
         ring(level, context.getClickedPos());
         return InteractionResult.SUCCESS;
     }

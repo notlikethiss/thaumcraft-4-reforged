@@ -3,6 +3,7 @@ package thaumcraft.entity.golem;
 import com.mojang.serialization.Codec;
 import java.util.Optional;
 import java.util.UUID;
+import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +20,7 @@ public final class GolemKeys {
     public static final Codec<BellSelection> BELL_CODEC = com.mojang.serialization.codecs.RecordCodecBuilder.create(instance -> instance.group(
         net.minecraft.core.UUIDUtil.CODEC.fieldOf("entity").forGetter(BellSelection::entity),
         GlobalPos.CODEC.fieldOf("home").forGetter(BellSelection::home),
+        Direction.CODEC.optionalFieldOf("home_facing", Direction.UP).forGetter(BellSelection::homeFacing),
         Marker.CODEC.listOf().fieldOf("markers").forGetter(BellSelection::markers)
     ).apply(instance, BellSelection::new));
     public static final StackKey<BellSelection> BELL = StackKey.register("golem_bell_selection", BELL_CODEC, ByteBufCodecs.fromCodecWithRegistries(BELL_CODEC));
@@ -26,9 +28,13 @@ public final class GolemKeys {
     private GolemKeys() {
     }
 
-    public record BellSelection(UUID entity, GlobalPos home, java.util.List<Marker> markers) {
+    public record BellSelection(UUID entity, GlobalPos home, Direction homeFacing, java.util.List<Marker> markers) {
         public BellSelection {
             markers = java.util.List.copyOf(markers);
+        }
+
+        public Marker homeMarker() {
+            return new Marker(GlobalPos.of(home.dimension(), home.pos().relative(homeFacing.getOpposite())), homeFacing, -1);
         }
     }
 
