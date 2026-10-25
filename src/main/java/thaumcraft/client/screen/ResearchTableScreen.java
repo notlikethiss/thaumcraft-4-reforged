@@ -389,6 +389,21 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private boolean handleClick(double eventX, double eventY) {
         double mouseX = eventX;
         double mouseY = eventY;
+        if (hasShiftDown() && researcherTwo()) {
+            Aspect aspect = aspectAt(mouseX, mouseY, true);
+            if (aspect != null && !aspect.isPrimal() && aspect.getComponents() != null) {
+                AspectList pool = knowledge().aspects();
+                AspectList bonus = bonus();
+                Aspect first = aspect.getComponents()[0];
+                Aspect second = aspect.getComponents()[1];
+                if ((pool.getAmount(first) > 0 || bonus.getAmount(first) > 0) && (pool.getAmount(second) > 0 || bonus.getAmount(second) > 0)) {
+                    draggedAspect = null;
+                    playCombine();
+                    sendCombine(first, second);
+                    return true;
+                }
+            }
+        }
         if (inside(mouseX, mouseY, leftPos + 10, topPos + 40, 80, 80)) {
             Aspect aspect = aspectAt(mouseX, mouseY, false);
             if (aspect != null) {
@@ -441,21 +456,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 minecraft.gameMode.handleInventoryButtonClick(menu.containerId, ResearchTableMenu.BUTTON_DUPLICATE);
                 playClick();
                 return true;
-            }
-        }
-        if (hasShiftDown() && researcherTwo()) {
-            Aspect aspect = aspectAt(mouseX, mouseY, true);
-            if (aspect != null && !aspect.isPrimal() && aspect.getComponents() != null) {
-                AspectList pool = knowledge().aspects();
-                AspectList bonus = bonus();
-                Aspect first = aspect.getComponents()[0];
-                Aspect second = aspect.getComponents()[1];
-                if ((pool.getAmount(first) > 0 || bonus.getAmount(first) > 0) && (pool.getAmount(second) > 0 || bonus.getAmount(second) > 0)) {
-                    draggedAspect = null;
-                    playCombine();
-                    sendCombine(first, second);
-                    return true;
-                }
             }
         }
         return false;
