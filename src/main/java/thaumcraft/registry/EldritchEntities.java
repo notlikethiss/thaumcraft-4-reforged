@@ -31,7 +31,7 @@ public final class EldritchEntities {
 
     private static <T extends net.minecraft.world.entity.Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, float width, float height, boolean fireImmune) {
         return ENTITIES.registerEntityType(name, factory, MobCategory.MONSTER, builder -> {
-            builder.sized(width, height).clientTrackingRange(10).updateInterval(3);
+            builder.sized(width, height).clientTrackingRange(10).updateInterval(3).notInPeaceful();
             if (fireImmune) {
                 builder.fireImmune();
             }

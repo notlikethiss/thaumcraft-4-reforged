@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.FunctionGameTestInstance;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -14,12 +15,15 @@ import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +40,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.eldritch.EldritchBlockEntity;
+import thaumcraft.entity.monster.BrainyZombie;
 import thaumcraft.item.tool.FollowingItems;
 import thaumcraft.item.tool.ToolKeys;
 import thaumcraft.registry.EldritchContent;
@@ -46,7 +51,7 @@ import thaumcraft.registry.ModItems;
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class PortBugGameTests {
     private static final DeferredRegister<Consumer<GameTestHelper>> FUNCTIONS = DeferredRegister.create(Registries.TEST_FUNCTION, Thaumcraft.MODID);
-    private static final List<String> TESTS = List.of("eldritch_natural_spawn_support", "altar_guardian_population", "crusher_drops_follow_and_pickup", "following_item_releases_target", "trunk_original_dimensions", "following_item_releases_dimension", "zombie_natural_spawn_support", "crusher_floor_drops_follow_and_pickup", "following_item_tick_and_lifetime");
+    private static final List<String> TESTS = List.of("eldritch_natural_spawn_support", "altar_guardian_population", "crusher_drops_follow_and_pickup", "following_item_releases_target", "trunk_original_dimensions", "following_item_releases_dimension", "zombie_natural_spawn_support", "crusher_floor_drops_follow_and_pickup", "following_item_tick_and_lifetime", "monsters_not_in_peaceful");
 
     static {
         FUNCTIONS.register(TESTS.get(0), () -> PortBugGameTests::naturalSpawnSupport);
@@ -58,6 +63,7 @@ public final class PortBugGameTests {
         FUNCTIONS.register(TESTS.get(6), () -> PortBugGameTests::zombieSpawnSupport);
         FUNCTIONS.register(TESTS.get(7), () -> helper -> crusherDrops(helper, true));
         FUNCTIONS.register(TESTS.get(8), () -> PortBugGameTests::followingLifetime);
+        FUNCTIONS.register(TESTS.get(9), () -> PortBugGameTests::monstersNotInPeaceful);
     }
 
     public static void register(IEventBus bus) {
@@ -66,9 +72,11 @@ public final class PortBugGameTests {
 
     @SubscribeEvent
     static void registerTests(RegisterGameTestsEvent event) {
-        Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(Thaumcraft.id("port_bugs_default"), new TestEnvironmentDefinition.AllOf());
+        Holder<TestEnvironmentDefinition<?>> defaultEnvironment = event.registerEnvironment(Thaumcraft.id("port_bugs_default"), new TestEnvironmentDefinition.AllOf());
+        Holder<TestEnvironmentDefinition<?>> peaceful = event.registerEnvironment(Thaumcraft.id("port_bugs_peaceful"), new TestEnvironmentDefinition.AllOf());
         for (String name : TESTS) {
             ResourceKey<Consumer<GameTestHelper>> function = ResourceKey.create(Registries.TEST_FUNCTION, Thaumcraft.id(name));
+            Holder<TestEnvironmentDefinition<?>> environment = name.equals("monsters_not_in_peaceful") ? peaceful : defaultEnvironment;
             event.registerTest(Thaumcraft.id(name), new FunctionGameTestInstance(function, new TestData<>(environment, Thaumcraft.id((name.equals("altar_guardian_population") || name.startsWith("crusher_")) ? "test/eldritch_regression" : "test/platform"), 300, 0, true)));
         }
     }
@@ -121,6 +129,35 @@ public final class PortBugGameTests {
             level.setBlockAndUpdate(pos.above(), Blocks.AIR.defaultBlockState());
         }
         helper.succeed();
+    }
+
+    private static void monstersNotInPeaceful(GameTestHelper helper) {
+        var level = helper.getLevel();
+        Difficulty previous = level.getDifficulty();
+        level.getServer().setDifficulty(Difficulty.PEACEFUL, true);
+        try {
+            checkPeaceful(helper);
+        } finally {
+            level.getServer().setDifficulty(previous, true);
+        }
+        helper.succeed();
+    }
+
+    private static void checkPeaceful(GameTestHelper helper) {
+        var level = helper.getLevel();
+        helper.assertValueEqual(level.getDifficulty(), Difficulty.PEACEFUL, "peaceful environment");
+        for (var type : BuiltInRegistries.ENTITY_TYPE) {
+            Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+            if (id.getNamespace().equals(Thaumcraft.MODID) && type.getCategory() == MobCategory.MONSTER) {
+                helper.assertTrue(!type.isAllowedInPeaceful(), id + " is allowed in peaceful");
+                helper.assertTrue(type.create(level, EntitySpawnReason.NATURAL) == null, id + " was created in peaceful");
+            }
+        }
+        BrainyZombie zombie = new BrainyZombie(ModEntities.BRAINY_ZOMBIE.get(), level);
+        zombie.snapTo(helper.absoluteVec(new Vec3(3.5, 3.0, 3.5)), 0.0F, 0.0F);
+        level.addFreshEntity(zombie);
+        zombie.checkDespawn();
+        helper.assertTrue(zombie.isRemoved(), "angry zombie survived peaceful");
     }
 
     private static void altarPopulation(GameTestHelper helper) {

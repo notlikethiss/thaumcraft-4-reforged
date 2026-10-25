@@ -57,7 +57,7 @@ public final class ModEntities {
         "firebat",
         FireBat::new,
         MobCategory.MONSTER,
-        builder -> builder.sized(0.5F, 0.9F).eyeHeight(0.45F).fireImmune().clientTrackingRange(4).updateInterval(3)
+        builder -> builder.sized(0.5F, 0.9F).eyeHeight(0.45F).fireImmune().clientTrackingRange(4).updateInterval(3).notInPeaceful()
     );
     public static final DeferredHolder<EntityType<?>, EntityType<PrimalOrb>> PRIMAL_ORB = projectile("primal_orb", PrimalOrb::new, 0.25F);
     public static final DeferredHolder<EntityType<?>, EntityType<FrostShard>> FROST_SHARD = projectile("frost_shard", FrostShard::new, 0.25F);
@@ -104,7 +104,7 @@ public final class ModEntities {
         "eldritch_guardian",
         EldritchGuardian::new,
         MobCategory.MONSTER,
-        builder -> builder.sized(0.8F, 2.25F).eyeHeight(2.1F).clientTrackingRange(8).updateInterval(3)
+        builder -> builder.sized(0.8F, 2.25F).eyeHeight(2.1F).clientTrackingRange(8).updateInterval(3).notInPeaceful()
     );
 
     public static final DeferredHolder<EntityType<?>, EntityType<thaumcraft.entity.golem.GolemBase>> GOLEM = ENTITIES.registerEntityType("golem", thaumcraft.entity.golem.GolemBase::new, MobCategory.MISC, builder -> builder.sized(0.4F, 0.95F).clientTrackingRange(4).updateInterval(3));
@@ -124,7 +124,7 @@ public final class ModEntities {
     }
 
     private static <T extends net.minecraft.world.entity.Mob> DeferredHolder<EntityType<?>, EntityType<T>> mob(String name, EntityType.EntityFactory<T> factory, float width, float height) {
-        return ENTITIES.registerEntityType(name, factory, MobCategory.MONSTER, builder -> builder.sized(width, height).clientTrackingRange(8).updateInterval(3));
+        return ENTITIES.registerEntityType(name, factory, MobCategory.MONSTER, builder -> builder.sized(width, height).clientTrackingRange(8).updateInterval(3).notInPeaceful());
     }
 
     public static void register(IEventBus bus) {
