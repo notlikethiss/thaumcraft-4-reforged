@@ -1,12 +1,16 @@
 package thaumcraft.client.render.armor;
 
 import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,6 +26,7 @@ import thaumcraft.registry.ModItems;
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class ArmorModels {
     private static final Map<ArmorKind, Map<EquipmentSlot, TcArmorModel>> MODELS = new EnumMap<>(ArmorKind.class);
+    private static final Set<Item> MODELED = new HashSet<>();
 
     private ArmorModels() {
     }
@@ -73,9 +78,10 @@ public final class ArmorModels {
 
     @SubscribeEvent
     static void registerExtensions(RegisterClientExtensionsEvent event) {
-        event.registerItem(extensions(ArmorKind.FORTRESS), ModItems.FORTRESS_HELMET.get(), ModItems.FORTRESS_CHESTPLATE.get(), ModItems.FORTRESS_LEGGINGS.get());
-        event.registerItem(
-            extensions(ArmorKind.ROBE),
+        register(event, ArmorKind.FORTRESS, ModItems.FORTRESS_HELMET.get(), ModItems.FORTRESS_CHESTPLATE.get(), ModItems.FORTRESS_LEGGINGS.get());
+        register(
+            event,
+            ArmorKind.ROBE,
             ModItems.CRIMSON_CULT_HOOD.get(),
             ModItems.CRIMSON_CULT_ROBE.get(),
             ModItems.CRIMSON_CULT_LEGGINGS.get(),
@@ -83,12 +89,22 @@ public final class ArmorModels {
             ModItems.VOID_ROBE_CHESTPLATE.get(),
             ModItems.VOID_ROBE_LEGGINGS.get()
         );
-        event.registerItem(extensions(ArmorKind.KNIGHT), ModItems.CRIMSON_CULT_HELM.get(), ModItems.CRIMSON_CULT_CHESTPLATE.get(), ModItems.CRIMSON_CULT_GREAVES.get());
-        event.registerItem(
-            extensions(ArmorKind.LEADER),
+        register(event, ArmorKind.KNIGHT, ModItems.CRIMSON_CULT_HELM.get(), ModItems.CRIMSON_CULT_CHESTPLATE.get(), ModItems.CRIMSON_CULT_GREAVES.get());
+        register(
+            event,
+            ArmorKind.LEADER,
             ModItems.CRIMSON_PRAETOR_HELM.get(),
             ModItems.CRIMSON_PRAETOR_CHESTPLATE.get(),
             ModItems.CRIMSON_PRAETOR_GREAVES.get()
         );
+    }
+
+    private static void register(RegisterClientExtensionsEvent event, ArmorKind kind, Item... items) {
+        event.registerItem(extensions(kind), items);
+        MODELED.addAll(List.of(items));
+    }
+
+    public static boolean hasModel(ItemStack stack) {
+        return !stack.isEmpty() && MODELED.contains(stack.getItem());
     }
 }
