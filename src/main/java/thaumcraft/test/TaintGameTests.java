@@ -428,4 +428,34 @@ public final class TaintGameTests {
         restrictGoal.stop();
         helper.succeed();
     }
+    @GameTest(template = "test/platform", batch = "tainted_trees", timeoutTicks = 100)
+    public static void treesRejectWaterOverDirt(GameTestHelper helper) {
+        treesRejectWater(helper, Blocks.DIRT);
+    }
+
+    @GameTest(template = "test/platform", batch = "tainted_trees", timeoutTicks = 100)
+    public static void treesRejectWaterOverStone(GameTestHelper helper) {
+        treesRejectWater(helper, Blocks.STONE);
+    }
+
+    private static void treesRejectWater(GameTestHelper helper, net.minecraft.world.level.block.Block ground) {
+        TaintTreeTestWorld world = new TaintTreeTestWorld(helper, ground, true);
+        helper.assertFalse(placeTaintedTrees(helper, world), "tainted tree placement accepted water");
+        world.assertWaterUnchanged(helper);
+        helper.succeed();
+    }
+
+    @GameTest(template = "test/platform", batch = "tainted_trees", timeoutTicks = 100)
+    public static void treesGrowOnDrySoil(GameTestHelper helper) {
+        TaintTreeTestWorld world = new TaintTreeTestWorld(helper, Blocks.GRASS_BLOCK, false);
+        helper.assertTrue(placeTaintedTrees(helper, world), "tainted tree filters rejected dry soil");
+        helper.assertTrue(world.logs() > 0, "tainted trees failed to grow on dry soil");
+        helper.succeed();
+    }
+
+    private static boolean placeTaintedTrees(GameTestHelper helper, TaintTreeTestWorld world) {
+        var key = net.minecraft.resources.ResourceKey.create(Registries.PLACED_FEATURE, Thaumcraft.id("tainted_trees"));
+        var feature = helper.getLevel().registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).getOrThrow(key).value();
+        return feature.placeWithBiomeCheck(world.level, helper.getLevel().getChunkSource().getGenerator(), RandomSource.create(37L), BlockPos.ZERO);
+    }
 }
