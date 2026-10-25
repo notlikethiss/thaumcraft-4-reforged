@@ -181,10 +181,9 @@ public final class EldritchGameTests {
             helper.assertValueEqual(Wands.getVis(wand, aspect), Wands.getMaxVis(wand), "rejected activation consumed vis");
         }
         ResearchManager.complete(player, "OCULUS");
-        helper.startSequence().thenWaitUntil(() -> {
-            var outer = level.getServer().getLevel(thaumcraft.world.dim.OuterLands.OUTER_LANDS);
-            helper.assertTrue(thaumcraft.world.dim.MazeHandler.ensureMaze(outer, pos), "outer maze is not ready yet");
-        }).thenExecute(() -> {
+        var outer = level.getServer().getLevel(thaumcraft.world.dim.OuterLands.OUTER_LANDS);
+        helper.assertTrue(!thaumcraft.world.dim.MazeHandler.isReady(outer, pos.getX() >> 4, pos.getZ() >> 4), "maze rooms should still be generating");
+        helper.startSequence().thenExecute(() -> {
             EldritchBlockEntity currentAltar = (EldritchBlockEntity) level.getBlockEntity(pos);
             Wands.storeVis(wand, Aspect.AIR, 0);
             player.gameMode.useItemOn(player, level, wand, InteractionHand.MAIN_HAND, hit);
@@ -209,6 +208,9 @@ public final class EldritchGameTests {
             helper.assertTrue(remaining.equals(Wands.getAllVis(wand)), "repeated activation consumed vis again");
             helper.assertTrue(EldritchPortalTravel.tryTravel(helper.getLevel(), pos.above(), player), "ready portal should transfer the player");
             helper.assertTrue(player.level().dimension().equals(thaumcraft.world.dim.OuterLands.OUTER_LANDS), "portal should enter the Outer Lands");
+            BlockPos entrance = thaumcraft.world.dim.MazeHandler.entrancePos(outer, pos.above());
+            var maze = outer.getDataStorage().computeIfAbsent(thaumcraft.platform.OuterLandsData.TYPE).maze((pos.getX() >> 4) + "," + (pos.getZ() >> 4));
+            helper.assertTrue(maze.placed().contains(new thaumcraft.world.dim.CellLoc(entrance.getX() >> 4, entrance.getZ() >> 4)), "portal entry should build the entrance room");
             helper.assertTrue(ResearchManager.isComplete(player, "ENTEROUTER"), "first portal entry should complete ENTEROUTER research");
             helper.assertValueEqual(player.getPortalCooldown(), 100, "portal transfer should set its cooldown");
             helper.assertTrue(!EldritchPortalTravel.tryTravel(player.level(), player.blockPosition(), player), "portal cooldown should prevent an immediate second transfer");
