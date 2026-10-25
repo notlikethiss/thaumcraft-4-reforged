@@ -9,11 +9,11 @@
 
 ## Last synced main commit
 
-`eae7a0b`
+`e9fcba1`
 
 ## Sync procedure
 
-1. `git log --reverse eae7a0b..main` in the worktree of this branch.
+1. `git log --reverse e9fcba1..main` in the worktree of this branch.
 2. A commit touching only resources, lang or `tools/`: `git cherry-pick`, then regenerate with `python3 tools/gen_resources.py --mc 26.1.2`.
 3. A commit with Java: `git show <sha> | python3 tools/backport/rewrite.py --target 26.1.2 | git apply -3`, resolve conflicts by hand, run `compileJava`.
 4. Commit with the same message, then update the sha above.

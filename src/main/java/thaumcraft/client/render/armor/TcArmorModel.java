@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import thaumcraft.item.armor.FortressArmorItem;
 
 public class TcArmorModel extends HumanoidModel<HumanoidRenderState> {
+    private static final float SLEEVE_SCALE = 1.07F;
     private static final String[] SET_2 = {
         "book", "flap_l", "flap_r", "shoulderplate_ltop", "shoulderplate_l1", "shoulderplate_rtop", "shoulderplate_r1", "sidepanel_r2", "sidepanel_l2"
     };
@@ -62,6 +63,8 @@ public class TcArmorModel extends HumanoidModel<HumanoidRenderState> {
             head.yScale = 1.01F;
             head.zScale = 1.01F;
         }
+        rightArm.yScale = SLEEVE_SCALE;
+        leftArm.yScale = SLEEVE_SCALE;
         float swing = state.walkAnimationPos;
         float amount = state.walkAnimationSpeed;
         float a = Mth.cos(swing * 0.6662F) * 1.4F * amount;
