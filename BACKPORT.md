@@ -175,3 +175,11 @@ Vanilla report generation selects a suitable JDK from the version-specific JAVA_
 ## Release 1.1 branding
 
 The root `icon.png` and `poster.png` are packaged under `assets/thaumcraft/textures/gui/branding`. NeoForge 21.1 uses the mod-specific `logoFile` for the in-game banner and ignores the newer `bannerFile` and `iconFile` fields. Prism Launcher prefers the top-level `logoFile`, which points to the square icon; the mod-specific value points to the poster. This keeps each image's aspect ratio appropriate for its display.
+
+## Targeted fluid physics fix
+
+Backported `ae19e55` and `ead4042`: finite liquid death drain routing, fluid physics regression tests, and the version-specific `platform/FluidPhysics` factory. NeoForge 21.1 already supplies water movement for custom fluids, so this factory does not use the newer `isWaterLike` API. The 26.3-only fluid spreading tag is generated only for that profile. This targeted backport does not advance the global synchronization SHA.
+
+Before the backport, clean NeoForge 21.1.256 passed the new movement, ascent, exit, current and water-flow comparison scenarios. The reported complete freeze was not reproduced; exact user runtime versions and mod list are still needed. The new finite drain routing scenarios failed before the fix.
+
+Validation: build, all 246 required GameTests, and seam checks pass, including the stationary-item regression. Generated resources are unchanged.
