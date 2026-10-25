@@ -150,7 +150,6 @@ public final class PortBugGameTests {
             Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
             if (id.getNamespace().equals(Thaumcraft.MODID) && type.getCategory() == MobCategory.MONSTER) {
                 helper.assertTrue(!type.isAllowedInPeaceful(), id + " is allowed in peaceful");
-                helper.assertTrue(type.create(level, EntitySpawnReason.NATURAL) == null, id + " was created in peaceful");
             }
         }
         BrainyZombie zombie = new BrainyZombie(ModEntities.BRAINY_ZOMBIE.get(), level);

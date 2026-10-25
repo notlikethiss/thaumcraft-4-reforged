@@ -40,7 +40,7 @@ In the main checkout (gitignored): `reference/26.1.2/mc` (net/minecraft, com/moj
 ## Branch-only differences
 
 - GameTest pack: the game test server of 26.1.2 creates the world from `minecraft:flat`, so `src/gametest/packs/outer_lands` overrides `world_preset/flat.json` (vanilla 26.1.2 flat plus `thaumcraft:outer_lands`); pack format 101. Tests stand at Y -59, encounter tests bound candidates by `getMinY()`
-- GameTest difficulty: 26.1.2 has no `TestEnvironmentDefinition.SetDifficulty`, so `monsters_not_in_peaceful` runs in its own environment and sets and restores the server difficulty itself
+- GameTest difficulty: 26.1.2 has no `TestEnvironmentDefinition.SetDifficulty`, so `monsters_not_in_peaceful` runs in its own environment and sets and restores the server difficulty itself. `EntityType.create` ignores difficulty on 26.1.2 (natural spawns are gated by `checkMonsterSpawnRules`), so the test checks only the flag and the peaceful despawn
 - Survival mock players come from `test/TestPlayers.mockServerPlayer` (26.1.2 has no `makeMockServerPlayer(GameType)`)
 - Config: `ModConfig.Type.SERVER` instead of `SYNCED`
 - Rendering: no OIT, translucent and additive pipelines are plain sorted pipelines; depth tests use `LESS_THAN_OR_EQUAL` (26.3 uses reverse Z); `withSampler("Sampler1")` instead of bind group layouts
