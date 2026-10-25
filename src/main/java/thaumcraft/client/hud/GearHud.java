@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.client.fx.ParticleFx;
 import thaumcraft.client.platform.GuiBlit;
+import thaumcraft.client.platform.HudVisibility;
 import thaumcraft.item.armor.Hover;
 
 public final class GearHud {
@@ -26,7 +27,7 @@ public final class GearHud {
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (player == null || minecraft.level == null || minecraft.screen != null) {
+        if (player == null || minecraft.level == null || minecraft.screen != null || HudVisibility.hidden()) {
             return;
         }
         int width = graphics.guiWidth();

@@ -16,6 +16,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.client.aspect.AspectRenderer;
 import thaumcraft.client.platform.BrowserDraw;
 import thaumcraft.client.platform.GuiBlit;
+import thaumcraft.client.platform.HudVisibility;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class ResearchHud {
@@ -30,6 +31,9 @@ public final class ResearchHud {
     }
 
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+        if (HudVisibility.hidden()) {
+            return;
+        }
         long time = ResearchNotifications.now();
         if (!ResearchNotifications.getListAndUpdate(time).isEmpty()) {
             renderNotifications(graphics, time);

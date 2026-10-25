@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import thaumcraft.Thaumcraft;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.client.platform.GuiBlit;
+import thaumcraft.client.platform.HudVisibility;
 import thaumcraft.wand.WandVis;
 import thaumcraft.wand.Wands;
 
@@ -35,7 +36,7 @@ public final class WandHud {
     public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (player == null || minecraft.level == null || minecraft.screen != null) {
+        if (player == null || minecraft.level == null || minecraft.screen != null || HudVisibility.hidden()) {
             return;
         }
         ItemStack stack = player.getMainHandItem();
