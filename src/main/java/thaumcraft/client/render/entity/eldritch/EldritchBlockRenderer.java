@@ -207,7 +207,7 @@ public final class EldritchBlockRenderer implements StateBlockRenderer<EldritchB
         for (int side = 0; side < 4; side++) {
             poseStack.pushPose();
             poseStack.translate(0.5F, 0.5F, 0.5F);
-            poseStack.mulPose(Axis.YP.rotationDegrees(side * 90.0F));
+            poseStack.mulPose(Axis.of(state.facing.step()).rotationDegrees(side * 90.0F));
             for (int level = 1; level < 5 - (state.phase + side * 5) / 20; level++) {
                 float wave = Mth.sin((state.time + level * 10.0F + side * 20.0F) / 20.0F) * 0.1F;
                 if (level == 1 || level == 4) {
@@ -225,7 +225,7 @@ public final class EldritchBlockRenderer implements StateBlockRenderer<EldritchB
             Direction facing = state.facing;
             poseStack.pushPose();
             poseStack.translate(0.5F + facing.getStepX() * 0.525F, 0.285F, 0.5F + facing.getStepZ() * 0.525F);
-            poseStack.mulPose(Axis.YP.rotationDegrees(facing.toYRot()));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot()));
             state.key.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
@@ -236,8 +236,7 @@ public final class EldritchBlockRenderer implements StateBlockRenderer<EldritchB
         Direction facing = state.facing;
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.0F, 0.5F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(facing.toYRot()));
-        poseStack.translate(0.0F, 0.0F, -0.505F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot()));
         EldritchSurfaces.submitPortalRectangle(collector, poseStack, state.nearby, state.time, -2.5F, -2.0F, 0.0F, 2.5F, 3.0F, 0.0F);
         poseStack.popPose();
     }
