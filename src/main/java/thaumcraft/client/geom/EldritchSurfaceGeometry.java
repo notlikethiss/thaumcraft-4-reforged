@@ -16,13 +16,15 @@ public final class EldritchSurfaceGeometry {
 
     static {
         COLORS[0] = 0xFFFFFFFF;
-        for (int layer = 1; layer < 16; layer++) {
-            java.util.Random random = new java.util.Random(31100L + layer);
+        java.util.Random random = new java.util.Random(31100L);
+        for (int layer = 0; layer < 16; layer++) {
             float alpha = 1.0F / (17 - layer);
             int red = (int) ((random.nextFloat() * 0.5F + 0.1F) * 255 * alpha);
             int green = (int) ((random.nextFloat() * 0.5F + 0.4F) * 255 * alpha);
             int blue = (int) ((random.nextFloat() * 0.5F + 0.5F) * 255 * alpha);
-            COLORS[layer] = 0xFF000000 | red << 16 | green << 8 | blue;
+            if (layer > 0) {
+                COLORS[layer] = 0xFF000000 | red << 16 | green << 8 | blue;
+            }
             ROTATIONS[layer] = (float) Math.toRadians((layer * layer * 4321.0F + layer * 9.0F) * 2.0F);
         }
     }
@@ -63,20 +65,27 @@ public final class EldritchSurfaceGeometry {
         if (side < 0 || side >= FACES.length) {
             throw new IllegalArgumentException("Invalid cube face " + side);
         }
-        emit(sink, FACES[side], UV, uvScale, rotation, color, light);
+        emit(sink, FACES[side], UV, uvScale, uvScale, rotation, color, light);
     }
 
     public static void rectangle(QuadSink sink, float x0, float y0, float z0, float x1, float y1, float z1, float uvScale, float rotation, int color, int light) {
         float[][] positions = {{x0, y1, z0}, {x1, y1, z1}, {x1, y0, z1}, {x0, y0, z0}};
-        emit(sink, positions, UV, uvScale, rotation, color, light);
+        emit(sink, positions, UV, uvScale, uvScale, rotation, color, light);
     }
 
-    private static void emit(QuadSink sink, float[][] positions, float[][] uvs, float uvScale, float rotation, int color, int light) {
+    public static void tiledRectangle(QuadSink sink, float x0, float y0, float z0, float x1, float y1, float z1, float uvScale, float rotation, int color, int light) {
+        float[][] positions = {{x0, y1, z0}, {x1, y1, z1}, {x1, y0, z1}, {x0, y0, z0}};
+        float width = (float) Math.sqrt((x1 - x0) * (x1 - x0) + (z1 - z0) * (z1 - z0));
+        float height = Math.abs(y1 - y0);
+        emit(sink, positions, UV, uvScale * width, uvScale * height, rotation, color, light);
+    }
+
+    private static void emit(QuadSink sink, float[][] positions, float[][] uvs, float uScale, float vScale, float rotation, int color, int light) {
         float cos = (float) Math.cos(rotation);
         float sin = (float) Math.sin(rotation);
         for (int index = 0; index < 4; index++) {
-            float u = (uvs[index][0] - 0.5F) * uvScale;
-            float v = (uvs[index][1] - 0.5F) * uvScale;
+            float u = (uvs[index][0] - 0.5F) * uScale;
+            float v = (uvs[index][1] - 0.5F) * vScale;
             float rotatedU = u * cos - v * sin + 0.5F;
             float rotatedV = u * sin + v * cos + 0.5F;
             sink.vertex(positions[index][0], positions[index][1], positions[index][2], rotatedU, rotatedV, color, light);

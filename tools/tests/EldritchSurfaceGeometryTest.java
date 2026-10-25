@@ -55,6 +55,26 @@ public final class EldritchSurfaceGeometryTest {
                 }
             }
         }
-        System.out.println("Eldritch geometry passed: ten exterior faces, camera-facing portal plane, horizontal image, all 16 frames and opening sizes.");
+        final float[] span = {Float.MAX_VALUE, -Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE};
+        EldritchSurfaceGeometry.tiledRectangle((x, y, z, u, v, color, light) -> {
+            span[0] = Math.min(span[0], u);
+            span[1] = Math.max(span[1], u);
+            span[2] = Math.min(span[2], v);
+            span[3] = Math.max(span[3], v);
+        }, -2.5F, -2.0F, 0.0F, 2.5F, 3.0F, 0.0F, 0.125F, 0.0F, -1, 0xF000F0);
+        if (Math.abs(span[1] - span[0] - 0.625F) > 1.0E-5F || Math.abs(span[3] - span[2] - 0.625F) > 1.0E-5F) {
+            throw new AssertionError("Tiled portal rectangle must keep the texgen density of one block per 0.125 UV");
+        }
+        java.util.Random random = new java.util.Random(31100L);
+        for (int layer = 0; layer < 16; layer++) {
+            float alpha = 1.0F / (17 - layer);
+            int red = (int) ((random.nextFloat() * 0.5F + 0.1F) * 255 * alpha);
+            int green = (int) ((random.nextFloat() * 0.5F + 0.4F) * 255 * alpha);
+            int blue = (int) ((random.nextFloat() * 0.5F + 0.5F) * 255 * alpha);
+            if (layer > 0 && EldritchSurfaceGeometry.colorForLayer(layer) != (0xFF000000 | red << 16 | green << 8 | blue)) {
+                throw new AssertionError("Layer " + layer + " color must follow the single TC4 random sequence");
+            }
+        }
+        System.out.println("Eldritch geometry passed: ten exterior faces, camera-facing portal plane, horizontal image, all 16 frames and opening sizes, tiled portal density, TC4 layer colors.");
     }
 }
