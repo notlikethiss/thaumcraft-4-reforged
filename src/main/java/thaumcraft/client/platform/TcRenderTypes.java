@@ -24,8 +24,6 @@ public final class TcRenderTypes {
     public enum Kind {
         ADDITIVE,
         TRANSLUCENT,
-        ADDITIVE_NO_DEPTH,
-        TRANSLUCENT_NO_DEPTH,
         ENTITY_CUTOUT,
         ENTITY_CUTOUT_NO_CULL,
         ENTITY_TRANSLUCENT
@@ -35,8 +33,6 @@ public final class TcRenderTypes {
         return switch (kind) {
             case ADDITIVE -> additive(texture);
             case TRANSLUCENT -> translucent(texture);
-            case ADDITIVE_NO_DEPTH -> additiveNoDepth(texture);
-            case TRANSLUCENT_NO_DEPTH -> translucentNoDepth(texture);
             case ENTITY_CUTOUT -> entityCutout(texture);
             case ENTITY_CUTOUT_NO_CULL -> entityCutoutNoCull(texture);
             case ENTITY_TRANSLUCENT -> entityTranslucent(texture);

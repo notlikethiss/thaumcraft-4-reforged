@@ -62,9 +62,11 @@ public final class WorldFxRenderer {
         PoseStack poseStack = event.getPoseStack();
         SubmitNodeCollector collector = event.getSubmitNodeCollector();
         for (WorldFx fx : frame.effects()) {
-            collector.submitCustomGeometry(
+            SeeThroughGeometry.submit(
+                collector,
                 poseStack,
                 TcRenderTypes.byBlend(fx.texture(), fx.blendMode(), fx.depthTest()),
+                !fx.depthTest(),
                 (pose, buffer) -> fx.render(new VertexQuadSink(pose, buffer), frame.partialTick(), camera, yaw, pitch)
             );
         }

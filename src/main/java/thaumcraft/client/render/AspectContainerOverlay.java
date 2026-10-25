@@ -23,6 +23,7 @@ import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.client.platform.EntityQuadSink;
+import thaumcraft.client.platform.SeeThroughGeometry;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.item.gear.Goggles;
 import thaumcraft.node.NodeView;
@@ -87,7 +88,7 @@ public final class AspectContainerOverlay {
             poseStack.translate((index % ROW_SIZE - (count - 1) / 2.0F) * 20.0F, -row * 22.0F, 0);
             Identifier texture = Knowledge.get(player).hasDiscoveredAspect(aspect) ? aspect.getImage() : UNKNOWN;
             int color = 0xC0000000 | (aspect.getColor() & 0xFFFFFF);
-            event.getSubmitNodeCollector().submitCustomGeometry(poseStack, TcRenderTypes.entityTranslucentNoDepth(texture), (pose, buffer) -> {
+            SeeThroughGeometry.submit(event.getSubmitNodeCollector(), poseStack, TcRenderTypes.translucentNoDepth(texture), (pose, buffer) -> {
                 EntityQuadSink sink = new EntityQuadSink(pose, buffer);
                 sink.vertex(-8, 8, 0, 0, 1, color, LIGHT);
                 sink.vertex(8, 8, 0, 1, 1, color, LIGHT);
@@ -100,8 +101,7 @@ public final class AspectContainerOverlay {
                 Component label = Component.literal(Integer.toString(amount));
                 poseStack.translate(0, 0, -0.05F);
                 poseStack.scale(0.65F, 0.65F, 0.65F);
-                event.getSubmitNodeCollector().submitText(poseStack, 13 - font.width(label), 6, label.getVisualOrderText(),
-                    true, Font.DisplayMode.SEE_THROUGH, LIGHT, 0xFFFFFFFF, 0, 0);
+                SeeThroughGeometry.submitText(event.getSubmitNodeCollector(), poseStack, 13 - font.width(label), 6, label.getVisualOrderText(), true, LIGHT, 0xFFFFFFFF);
             }
             poseStack.popPose();
         }

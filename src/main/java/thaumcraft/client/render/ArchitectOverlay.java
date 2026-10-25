@@ -27,6 +27,7 @@ import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.geom.QuadSink;
+import thaumcraft.client.platform.SeeThroughGeometry;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.client.platform.VertexQuadSink;
 import thaumcraft.wand.focus.Architect;
@@ -88,7 +89,8 @@ public final class ArchitectOverlay {
         Vec3 camera = event.getLevelRenderState().cameraRenderState.pos;
         PoseStack poseStack = event.getPoseStack();
         TextureAtlas atlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS);
-        event.getSubmitNodeCollector().submitCustomGeometry(
+        SeeThroughGeometry.submit(
+            event.getSubmitNodeCollector(),
             poseStack,
             TcRenderTypes.additiveNoDepth(atlas.location()),
             (pose, buffer) -> {
@@ -99,7 +101,8 @@ public final class ArchitectOverlay {
             }
         );
         if (current.axisX() || current.axisY() || current.axisZ()) {
-            event.getSubmitNodeCollector().submitCustomGeometry(
+            SeeThroughGeometry.submit(
+                event.getSubmitNodeCollector(),
                 poseStack,
                 TcRenderTypes.additiveNoDepth(ARROWS),
                 (pose, buffer) -> axis(new VertexQuadSink(pose, buffer), current, camera)
