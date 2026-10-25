@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.platform.ClientNetwork;
 import thaumcraft.client.platform.GuiBlit;
+import thaumcraft.client.platform.HudVisibility;
 import thaumcraft.network.FocusChangePayload;
 import thaumcraft.platform.Baubles;
 import thaumcraft.wand.Wands;
@@ -70,7 +71,7 @@ public final class FocusRadial {
     public static void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (player == null || !WandKeyHandler.radialActive && hudScale <= 0.0F) {
+        if (player == null || HudVisibility.hidden() || !WandKeyHandler.radialActive && hudScale <= 0.0F) {
             return;
         }
         long time = Util.getMillis();
