@@ -23,6 +23,7 @@ import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectContainer;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.client.platform.EntityQuadSink;
+import thaumcraft.client.platform.SeeThroughGeometry;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.item.gear.Goggles;
 import thaumcraft.node.NodeView;
@@ -75,7 +76,6 @@ public final class AspectContainerOverlay {
         double z = pos.getZ() + 0.5 + side.getStepZ() * 0.6;
         float yaw = (float) Math.toDegrees(Math.atan2(camera.x - x, camera.z - z));
         PoseStack poseStack = event.getPoseStack();
-        var buffers = minecraft.renderBuffers().bufferSource();
         poseStack.pushPose();
         poseStack.translate(x - camera.x, y - camera.y, z - camera.z);
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw + 180.0F));
@@ -89,25 +89,23 @@ public final class AspectContainerOverlay {
             poseStack.translate((index % ROW_SIZE - (count - 1) / 2.0F) * 20.0F, -row * 22.0F, 0);
             ResourceLocation texture = Knowledge.get(player).hasDiscoveredAspect(aspect) ? aspect.getImage() : UNKNOWN;
             int color = 0xC0000000 | (aspect.getColor() & 0xFFFFFF);
-            var renderType = TcRenderTypes.entityTranslucentNoDepth(texture);
-            EntityQuadSink sink = new EntityQuadSink(poseStack.last(), buffers.getBuffer(renderType));
-            sink.vertex(-8, 8, 0, 0, 1, color, LIGHT);
-            sink.vertex(8, 8, 0, 1, 1, color, LIGHT);
-            sink.vertex(8, -8, 0, 1, 0, color, LIGHT);
-            sink.vertex(-8, -8, 0, 0, 0, color, LIGHT);
-            buffers.endBatch(renderType);
+            SeeThroughGeometry.submit(poseStack, TcRenderTypes.translucentNoDepth(texture), (pose, buffer) -> {
+                EntityQuadSink sink = new EntityQuadSink(pose, buffer);
+                sink.vertex(-8, 8, 0, 0, 1, color, LIGHT);
+                sink.vertex(8, 8, 0, 1, 1, color, LIGHT);
+                sink.vertex(8, -8, 0, 1, 0, color, LIGHT);
+                sink.vertex(-8, -8, 0, 0, 0, color, LIGHT);
+            });
             int amount = contents.getAmount(aspect);
             if (amount >= 0) {
                 Font font = minecraft.font;
                 Component label = Component.literal(Integer.toString(amount));
                 poseStack.translate(0, 0, -0.05F);
                 poseStack.scale(0.65F, 0.65F, 0.65F);
-                font.drawInBatch(label, 13 - font.width(label), 6, 0xFFFFFFFF, true, poseStack.last().pose(),
-                    buffers, Font.DisplayMode.SEE_THROUGH, 0, LIGHT);
+                SeeThroughGeometry.submitText(poseStack, 13 - font.width(label), 6, label, true, LIGHT, 0xFFFFFFFF);
             }
             poseStack.popPose();
         }
-        buffers.endBatch();
         poseStack.popPose();
     }
 }

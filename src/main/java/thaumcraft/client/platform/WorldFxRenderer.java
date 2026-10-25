@@ -59,6 +59,10 @@ public final class WorldFxRenderer {
         Set<RenderType> used = new LinkedHashSet<>();
         for (WorldFx fx : List.copyOf(EFFECTS)) {
             RenderType renderType = TcRenderTypes.byBlend(fx.texture(), fx.blendMode(), fx.depthTest());
+            if (!fx.depthTest()) {
+                SeeThroughGeometry.submit(event.getPoseStack(), renderType, (seeThroughPose, buffer) -> fx.render(new VertexQuadSink(seeThroughPose, buffer), partialTick, camera, yaw, pitch));
+                continue;
+            }
             used.add(renderType);
             fx.render(new VertexQuadSink(pose, bufferSource.getBuffer(renderType)), partialTick, camera, yaw, pitch);
         }
