@@ -38,6 +38,7 @@ public final class EldritchPortalTravel {
             if (entrance == null) {
                 return false;
             }
+            MazeHandler.placeAround(destination, entrance, 1);
             target = arrival(destination, entrance);
         } else {
             destination = source.getServer().overworld();

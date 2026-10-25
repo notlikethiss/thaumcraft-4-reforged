@@ -96,8 +96,37 @@ public final class MazeHandler {
                 data.updateMaze(id, state);
             }
             publishSnapshot(level);
-            return isReady(state);
+            return state.generationStarted();
         }
+    }
+
+    public static void placeAround(ServerLevel level, BlockPos center, int radius) {
+        OuterLandsData data = data(level);
+        int chunkX = center.getX() >> 4;
+        int chunkZ = center.getZ() >> 4;
+        for (Map.Entry<String, OuterLandsData.MazeState> entry : data.mazes().entrySet()) {
+            if (!entry.getValue().generationStarted()) {
+                continue;
+            }
+            for (OuterLandsData.CellData cell : entry.getValue().cells()) {
+                CellLoc location = cell.location();
+                if (Math.abs(location.x() - chunkX) > radius || Math.abs(location.z() - chunkZ) > radius) {
+                    continue;
+                }
+                OuterLandsData.MazeState current = data.maze(entry.getKey());
+                if (!current.placed().contains(location)) {
+                    placeCell(level, data, entry.getKey(), current, cell);
+                }
+            }
+        }
+    }
+
+    private static void placeCell(ServerLevel level, OuterLandsData data, String id, OuterLandsData.MazeState maze, OuterLandsData.CellData cell) {
+        CellLoc location = cell.location();
+        level.getChunk(location.x(), location.z());
+        RandomSource random = RandomSource.create(maze.seed() ^ ((long) location.x() * 341873128712L) ^ ((long) location.z() * 132897987541L));
+        MazeRooms.generateCell(level, random, location.x(), location.z(), new Cell(cell.value()));
+        data.updateMaze(id, data.maze(id).withPlaced(location));
     }
 
     public static Cell getCell(ServerLevel level, int chunkX, int chunkZ) {
@@ -460,27 +489,48 @@ public final class MazeHandler {
             if (data == null) {
                 continue;
             }
+            List<CellLoc> players = level.players().stream()
+                .map(player -> new CellLoc(player.getBlockX() >> 4, player.getBlockZ() >> 4))
+                .toList();
+            String pendingId = null;
+            OuterLandsData.CellData pending = null;
+            long pendingDistance = Long.MAX_VALUE;
             for (Map.Entry<String, OuterLandsData.MazeState> entry : data.mazes().entrySet()) {
                 OuterLandsData.MazeState maze = entry.getValue();
                 if (!maze.generationStarted()) {
                     continue;
                 }
                 Set<CellLoc> completed = new HashSet<>(maze.placed());
-                OuterLandsData.CellData pending = maze.cells().stream()
-                    .filter(cell -> !completed.contains(cell.location()))
-                    .min(Comparator.comparing((OuterLandsData.CellData cell) -> cell.location().z())
-                        .thenComparing(cell -> cell.location().x()))
-                    .orElse(null);
-                if (pending != null) {
-                    CellLoc loc = pending.location();
-                    level.getChunk(loc.x(), loc.z());
-                    RandomSource random = RandomSource.create(maze.seed() ^ ((long) loc.x() * 341873128712L) ^ ((long) loc.z() * 132897987541L));
-                    MazeRooms.generateCell(level, random, loc.x(), loc.z(), new Cell(pending.value()));
-                    data.updateMaze(entry.getKey(), maze.withPlaced(loc));
-                    return;
+                for (OuterLandsData.CellData cell : maze.cells()) {
+                    if (completed.contains(cell.location())) {
+                        continue;
+                    }
+                    long distance = distanceToPlayers(cell.location(), players);
+                    if (distance < pendingDistance) {
+                        pendingId = entry.getKey();
+                        pending = cell;
+                        pendingDistance = distance;
+                    }
+                }
+                if (pending != null && players.isEmpty()) {
+                    break;
                 }
             }
+            if (pending != null) {
+                placeCell(level, data, pendingId, data.maze(pendingId), pending);
+                return;
+            }
         }
+    }
+
+    private static long distanceToPlayers(CellLoc cell, List<CellLoc> players) {
+        long nearest = players.isEmpty() ? 0L : Long.MAX_VALUE - 1;
+        for (CellLoc player : players) {
+            long dx = cell.x() - (long) player.x();
+            long dz = cell.z() - (long) player.z();
+            nearest = Math.min(nearest, dx * dx + dz * dz);
+        }
+        return nearest;
     }
 
     @SubscribeEvent
