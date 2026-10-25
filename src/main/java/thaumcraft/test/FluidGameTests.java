@@ -16,6 +16,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.pig.Pig;
@@ -58,7 +61,15 @@ public final class FluidGameTests {
         "liquid_death_bucket_round_trip",
         "liquid_death_yields_essence",
         "sanitizing_soap_full_use_once",
-        "sanitizing_soap_full_lifecycle_once"
+        "sanitizing_soap_full_lifecycle_once",
+        "fluid_physics_movement",
+        "fluid_physics_currents",
+        "purifying_fluid_water_paths",
+        "liquid_death_drain_paths",
+        "liquid_death_single_quantum_drain",
+        "liquid_death_blocked_drain",
+        "liquid_death_damage_motion",
+        "liquid_death_drain_capacity"
     };
 
     static {
@@ -73,6 +84,14 @@ public final class FluidGameTests {
         FUNCTIONS.register(TESTS[8], () -> FluidGameTests::liquidDeathYieldsEssence);
         FUNCTIONS.register(TESTS[9], () -> FluidGameTests::sanitizingSoapFullUseOnce);
         FUNCTIONS.register(TESTS[10], () -> FluidGameTests::sanitizingSoapFullLifecycleOnce);
+        FUNCTIONS.register(TESTS[11], () -> FluidGameTests::fluidPhysicsMovement);
+        FUNCTIONS.register(TESTS[12], () -> FluidGameTests::fluidPhysicsCurrents);
+        FUNCTIONS.register(TESTS[13], () -> FluidGameTests::purifyingFluidWaterPaths);
+        FUNCTIONS.register(TESTS[14], () -> FluidGameTests::liquidDeathDrainPaths);
+        FUNCTIONS.register(TESTS[15], () -> FluidGameTests::liquidDeathSingleQuantumDrain);
+        FUNCTIONS.register(TESTS[16], () -> FluidGameTests::liquidDeathBlockedDrain);
+        FUNCTIONS.register(TESTS[17], () -> FluidGameTests::liquidDeathDamageMotion);
+        FUNCTIONS.register(TESTS[18], () -> FluidGameTests::liquidDeathDrainCapacity);
     }
 
     private FluidGameTests() {
@@ -89,9 +108,278 @@ public final class FluidGameTests {
             ResourceKey<Consumer<GameTestHelper>> function = ResourceKey.create(Registries.TEST_FUNCTION, Thaumcraft.id(name));
             event.registerTest(Thaumcraft.id(name), new FunctionGameTestInstance(
                 function,
-                new TestData<>(environment, Thaumcraft.id("test/platform"), 240, 0, true)
+                new TestData<>(environment, Thaumcraft.id(usesLargePlatform(name) ? "test/eldritch_regression" : "test/platform"), 400, 0, true)
             ));
         }
+    }
+
+    private static boolean usesLargePlatform(String name) {
+        return name.startsWith("fluid_physics_") || name.equals("purifying_fluid_water_paths")
+            || name.startsWith("liquid_death_drain_") || name.equals("liquid_death_single_quantum_drain")
+            || name.equals("liquid_death_blocked_drain") || name.equals("liquid_death_damage_motion");
+    }
+
+    private static BlockState fluidState(int kind, boolean partial) {
+        if (kind == 0) {
+            return Blocks.WATER.defaultBlockState().setValue(LiquidBlock.LEVEL, partial ? 4 : 0);
+        }
+        if (kind == 1) {
+            return ModBlocks.PURIFYING_FLUID.get().defaultBlockState().setValue(LiquidBlock.LEVEL, partial ? 4 : 0);
+        }
+        return ModBlocks.LIQUID_DEATH.get().defaultBlockState().setValue(LiquidBlock.LEVEL, partial ? 2 : 0);
+    }
+
+    private static void motionPool(GameTestHelper helper, int kind, boolean partial) {
+        for (int x = 3; x <= 11; x++) {
+            for (int z = 3; z <= 11; z++) {
+                helper.setBlock(new BlockPos(x, 2, z), Blocks.STONE);
+                helper.setBlock(new BlockPos(x, 3, z), fluidState(kind, partial));
+            }
+        }
+    }
+
+    private static LivingEntity swimmer(GameTestHelper helper, boolean player) {
+        LivingEntity entity;
+        if (player) {
+            entity = mockServerPlayer(helper);
+            entity.addEffect(new MobEffectInstance(ModEffects.WARP_WARD, 10000));
+        } else {
+            Pig pig = new Pig(EntityType.PIG, helper.getLevel());
+            entity = pig;
+        }
+        entity.setInvulnerable(true);
+        entity.snapTo(Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(7, 3, 7))).add(0, 0.05, 0), 0, 0);
+        return entity;
+    }
+
+    private static void fluidPhysicsMovement(GameTestHelper helper) {
+        for (boolean player : new boolean[]{false, true}) {
+            for (boolean partial : new boolean[]{false, true}) {
+                double reference = 0;
+                for (int kind = 0; kind < 3; kind++) {
+                    motionPool(helper, kind, partial);
+                    LivingEntity entity = swimmer(helper, player);
+                    Vec3 resting = entity.position();
+                    for (int tick = 0; tick < 5; tick++) {
+                        entity.baseTick();
+                        entity.travel(Vec3.ZERO);
+                    }
+                    helper.assertTrue(entity.position().subtract(resting).horizontalDistance() < 0.001, "still fluid pushed swimmer, kind=" + kind);
+                    double startZ = entity.getZ();
+                    for (int tick = 0; tick < 12; tick++) {
+                        entity.baseTick();
+                        entity.travel(new Vec3(0, 0, 1));
+                    }
+                    double moved = entity.getZ() - startZ;
+                    String label = "kind=" + kind + ", player=" + player + ", partial=" + partial;
+                    helper.assertTrue(moved > 0.2, "swimmer stuck: " + label + ", moved=" + moved);
+                    if (kind == 0) {
+                        reference = moved;
+                    } else {
+                        helper.assertTrue(Math.abs(moved - reference) < 0.05, "movement differs from water: " + label + ", moved=" + moved + ", water=" + reference + ", velocity=" + entity.getDeltaMovement());
+                    }
+                    entity.setDeltaMovement(Vec3.ZERO);
+                    entity.jumpInFluid(fluidState(kind, partial).getFluidState().getFluidType());
+                    double startY = entity.getY();
+                    entity.travel(Vec3.ZERO);
+                    helper.assertTrue(entity.getY() > startY, "swimmer cannot rise: " + label);
+                    for (int tick = 0; tick < 100; tick++) {
+                        entity.baseTick();
+                        entity.travel(new Vec3(0, 0, 1));
+                    }
+                    helper.assertTrue(entity.getZ() > helper.absolutePos(new BlockPos(7, 3, 12)).getZ(), "swimmer cannot leave pool: " + label);
+                    entity.discard();
+                }
+            }
+        }
+        helper.succeed();
+    }
+
+    private static void fluidPhysicsCurrents(GameTestHelper helper) {
+        for (int kind = 0; kind < 3; kind++) {
+            for (boolean partial : new boolean[]{false, true}) {
+                motionPool(helper, kind, partial);
+                Vec3 start = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(7, 3, 7))).add(0, 0.05, 0);
+                ItemEntity item = new ItemEntity(helper.getLevel(), start.x, start.y, start.z, new ItemStack(Items.STONE));
+                item.setDeltaMovement(Vec3.ZERO);
+                for (int tick = 0; tick < 12; tick++) {
+                    item.tick();
+                }
+                helper.assertTrue(item.position().subtract(start).horizontalDistance() < 0.001, "still fluid pushed item, kind=" + kind);
+                helper.assertTrue(item.getDeltaMovement().length() < 0.5, "still fluid launched item");
+                item.discard();
+            }
+            for (boolean falling : new boolean[]{false, true}) {
+                motionPool(helper, kind, false);
+                for (int z = 3; z <= 11; z++) {
+                    helper.setBlock(new BlockPos(8, 3, z), fluidState(kind, true));
+                    if (falling) {
+                        helper.setBlock(new BlockPos(8, 2, z), fluidState(kind, true));
+                        helper.setBlock(new BlockPos(8, 3, z), Blocks.AIR);
+                    }
+                }
+                for (int type = 0; type < 3; type++) {
+                    Entity entity = type < 2 ? swimmer(helper, type == 1)
+                        : new ItemEntity(helper.getLevel(), 0, 0, 0, new ItemStack(Items.STONE));
+                    entity.snapTo(Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(7, 3, 7))).add(0.45, 0.05, 0), 0, 0);
+                    entity.setDeltaMovement(Vec3.ZERO);
+                    double startX = entity.getX();
+                    double startZ = entity.getZ();
+                    for (int tick = 0; tick < 12; tick++) {
+                        if (entity instanceof LivingEntity living) {
+                            living.baseTick();
+                            living.travel(Vec3.ZERO);
+                        } else {
+                            entity.tick();
+                        }
+                        helper.assertTrue(entity.getDeltaMovement().length() < 0.5, "fluid current accumulated excessive speed, kind=" + kind + ", entity=" + type);
+                    }
+                    helper.assertTrue(entity.getX() > startX, "fluid current points away from descent, kind=" + kind + ", entity=" + type + ", dx=" + (entity.getX() - startX) + ", velocity=" + entity.getDeltaMovement());
+                    helper.assertTrue(Math.abs(entity.getZ() - startZ) < 0.01, "fluid current pushed sideways, kind=" + kind + ", entity=" + type + ", falling=" + falling + ", dz=" + (entity.getZ() - startZ));
+                    entity.discard();
+                }
+            }
+        }
+        helper.succeed();
+    }
+
+    private static void drainBasin(GameTestHelper helper, BlockPos center) {
+        for (int x = -6; x <= 6; x++) {
+            for (int z = -6; z <= 6; z++) {
+                helper.setBlock(center.offset(x, -2, z), Blocks.STONE);
+                helper.setBlock(center.offset(x, -1, z), Blocks.STONE);
+                helper.setBlock(center.offset(x, 0, z), Math.abs(x) == 6 || Math.abs(z) == 6 ? Blocks.STONE : Blocks.AIR);
+                helper.setBlock(center.offset(x, 1, z), Blocks.AIR);
+            }
+        }
+    }
+
+    private static void purifyingFluidWaterPaths(GameTestHelper helper) {
+        purifyingFluidWaterPaths(helper, 0);
+    }
+
+    private static void purifyingFluidWaterPaths(GameTestHelper helper, int scenario) {
+        BlockPos water = new BlockPos(8, 3, 8);
+        BlockPos purifying = new BlockPos(23, 3, 8);
+        for (BlockPos center : new BlockPos[]{water, purifying}) {
+            drainBasin(helper, center);
+            int distance = scenario == 0 ? 1 : 3;
+            helper.setBlock(center.offset(distance, -1, 0), Blocks.AIR);
+            if (scenario == 2) {
+                helper.setBlock(center.offset(1, 0, 0), Blocks.STONE);
+            }
+            if (scenario == 3) {
+                helper.setBlock(center.offset(-distance, -1, 0), Blocks.AIR);
+            }
+        }
+        helper.setBlock(water, Blocks.WATER);
+        helper.setBlock(purifying, ModBlocks.PURIFYING_FLUID.get());
+        helper.runAfterDelay(45, () -> {
+            for (int x = -6; x <= 6; x++) {
+                for (int z = -6; z <= 6; z++) {
+                    for (int y = -1; y <= 0; y++) {
+                        var expected = helper.getBlockState(water.offset(x, y, z)).getFluidState();
+                        var actual = helper.getBlockState(purifying.offset(x, y, z)).getFluidState();
+                        helper.assertTrue(expected.isEmpty() == actual.isEmpty() && expected.getAmount() == actual.getAmount()
+                            && expected.isSource() == actual.isSource(), "purifying flow differs from water, scenario=" + scenario + ", offset=" + x + "," + y + "," + z);
+                    }
+                }
+            }
+            if (scenario < 3) {
+                purifyingFluidWaterPaths(helper, scenario + 1);
+            } else {
+                helper.succeed();
+            }
+        });
+    }
+
+    private static void liquidDeathDrainPaths(GameTestHelper helper) {
+        liquidDeathDrainPaths(helper, 0, 4);
+    }
+
+    private static void liquidDeathSingleQuantumDrain(GameTestHelper helper) {
+        liquidDeathDrainPaths(helper, 1, 1);
+    }
+
+    private static void liquidDeathDrainPaths(GameTestHelper helper, int scenario, int amount) {
+        BlockPos center = new BlockPos(8, 3, 8);
+        drainBasin(helper, center);
+        int distance = scenario == 0 ? 1 : scenario == 1 ? 4 : 2;
+        BlockPos hole = center.offset(distance, -1, 0);
+        helper.setBlock(hole, Blocks.AIR);
+        if (scenario == 2) {
+            helper.setBlock(center.offset(1, 0, 0), Blocks.STONE);
+        }
+        if (scenario == 3) {
+            helper.setBlock(center.offset(-distance, -1, 0), Blocks.AIR);
+        }
+        helper.setBlock(center, ModBlocks.LIQUID_DEATH.get().defaultBlockState().setValue(LiquidBlock.LEVEL, amount == 4 ? 0 : 4 - amount));
+        helper.runAfterDelay(70, () -> {
+            helper.assertValueEqual(totalQuanta(helper, center, -6, 6, -1, 0, -6, 6), amount, "drain routing duplicated or lost liquid death");
+            int drained = quanta(helper.getBlockState(hole));
+            if (scenario == 3) {
+                int other = quanta(helper.getBlockState(center.offset(-distance, -1, 0)));
+                helper.assertTrue(Math.abs(drained - other) <= 1, "equidistant drains received unequal volumes");
+                drained += other;
+            }
+            helper.assertValueEqual(drained, amount, "liquid death did not reach drain, scenario=" + scenario);
+            helper.runAfterDelay(14, () -> {
+                helper.assertValueEqual(totalQuanta(helper, center, -6, 6, -1, 0, -6, 6), amount, "settled liquid death changed volume");
+                if (amount == 4 && scenario < 3) {
+                    liquidDeathDrainPaths(helper, scenario + 1, amount);
+                } else {
+                    helper.succeed();
+                }
+            });
+        });
+    }
+
+    private static void liquidDeathBlockedDrain(GameTestHelper helper) {
+        BlockPos center = new BlockPos(8, 3, 8);
+        drainBasin(helper, center);
+        helper.setBlock(center.offset(2, -1, 0), Blocks.AIR);
+        for (int z = -5; z <= 5; z++) {
+            helper.setBlock(center.offset(1, 0, z), Blocks.STONE);
+        }
+        helper.setBlock(center.offset(-1, -1, 0), Blocks.DIRT);
+        helper.setBlock(center.offset(-1, 0, 0), Blocks.SHORT_GRASS);
+        helper.setBlock(center, ModBlocks.LIQUID_DEATH.get().defaultBlockState().setValue(LiquidBlock.LEVEL, 3));
+        helper.runAfterDelay(35, () -> {
+            helper.assertTrue(helper.getBlockState(center.offset(-1, 0, 0)).is(Blocks.SHORT_GRASS), "route search destroyed a block without transferring fluid");
+            helper.assertValueEqual(quanta(helper.getBlockState(center.offset(2, -1, 0))), 0, "liquid death crossed a solid wall");
+            helper.assertValueEqual(totalQuanta(helper, center, -6, 6, -1, 0, -6, 6), 1, "blocked liquid death changed volume");
+            helper.succeed();
+        });
+    }
+
+    private static void liquidDeathDamageMotion(GameTestHelper helper) {
+        BlockPos pos = helper.absolutePos(new BlockPos(8, 3, 8));
+        ServerPlayer player = mockServerPlayer(helper);
+        player.connection.markClientLoaded();
+        player.snapTo(Vec3.atBottomCenterOf(pos), 0, 0);
+        player.setDeltaMovement(Vec3.ZERO);
+        helper.assertTrue(player.hurtServer(helper.getLevel(), helper.getLevel().damageSources().source(ModDamageTypes.DISSOLVE), 4), "liquid death damage did not apply");
+        helper.assertValueEqual(player.getHealth(), 16.0F, "liquid death damage changed");
+        helper.assertTrue(player.getDeltaMovement().length() < 0.5, "dissolve damage launched player");
+        player.discard();
+        helper.succeed();
+    }
+
+    private static void liquidDeathDrainCapacity(GameTestHelper helper) {
+        BlockPos center = new BlockPos(8, 3, 8);
+        drainBasin(helper, center);
+        BlockState partial = ModBlocks.LIQUID_DEATH.get().defaultBlockState().setValue(LiquidBlock.LEVEL, 1);
+        helper.setBlock(center.offset(1, -1, 0), partial);
+        helper.setBlock(center.offset(1, 0, 0), partial);
+        helper.setBlock(center, ModBlocks.LIQUID_DEATH.get());
+        helper.runAfterDelay(70, () -> {
+            helper.assertValueEqual(totalQuanta(helper, center, -6, 6, -1, 0, -6, 6), 10, "partially filled drain duplicated or lost liquid death");
+            helper.assertValueEqual(quanta(helper.getBlockState(center.offset(1, -1, 0))), 4, "drain capacity was not filled");
+            helper.runAfterDelay(35, () -> {
+                helper.assertValueEqual(totalQuanta(helper, center, -6, 6, -1, 0, -6, 6), 10, "repeated partial drain ticks changed volume");
+                helper.succeed();
+            });
+        });
     }
 
     private static void liquidDeathHorizontalQuanta(GameTestHelper helper) {
@@ -310,7 +598,7 @@ public final class FluidGameTests {
     }
 
     private static ServerPlayer mockServerPlayer(GameTestHelper helper) {
-        ServerPlayer player = TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
+        ServerPlayer player = (ServerPlayer) TestPlayers.mockServerPlayer(helper, GameType.SURVIVAL);
         CommonListenerCookie cookie = CommonListenerCookie.createInitial(player.getGameProfile(), false);
         Connection connection = new Connection(PacketFlow.SERVERBOUND);
         new EmbeddedChannel(connection);

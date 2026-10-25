@@ -82,3 +82,9 @@ In the main checkout (gitignored): `reference/26.1.2/mc` (net/minecraft, com/moj
 - Dedicated server: new TerraBlender world (magical forest located), Outer Lands loaded, `/reload` and `save-all` without errors; after a restart the hungry chest inventory, crucible and Outer Lands block remain.
 - `runClient` finishes resource loading without errors; the remaining model warnings (field blocks, eldritch portal blocks) and the firebat/wisp spawn placement warning also occur on `main`.
 - Visual checks (OIT replacement, post effects, thaumometer lens, node shader) and two-client play remain manual.
+
+## Targeted fluid physics fix
+
+Backported `ae19e55` and `ead4042`: water-like movement through `platform/FluidPhysics`, finite liquid death drain routing, and fluid physics regression tests. The 26.3-only fluid spreading tag is generated only for that resource profile. This targeted backport does not advance the global synchronization SHA.
+
+Validation: build, all 271 required GameTests, seam checks, and unchanged regenerated resources pass. The seven selected fluid tests also pass with the stationary-item regression.

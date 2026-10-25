@@ -655,6 +655,8 @@ def tag_entries(values):
 
 
 def write_tags():
+    if profile.name == "26.3":
+        block_tags["minecraft:washed_away_by_fluids"].update({f"{NS}:purifying_fluid", f"{NS}:liquid_death"})
     for tag, values in block_tags.items():
         namespace, path = profile.tag_name(tag)
         write(DATA / namespace / profile.block_tag_folder / f"{path}.json", {"replace": False, "values": tag_entries(values)})

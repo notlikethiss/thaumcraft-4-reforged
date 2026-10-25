@@ -19,6 +19,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.LiquidDeathBlock;
 import thaumcraft.block.PurifyingFluidBlock;
+import thaumcraft.platform.FluidPhysics;
 
 public final class ModFluids {
     private static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, Thaumcraft.MODID);
@@ -26,11 +27,11 @@ public final class ModFluids {
 
     public static final DeferredHolder<FluidType, FluidType> PURIFYING_FLUID_TYPE = FLUID_TYPES.register(
         "purifying_fluid",
-        () -> new FluidType(FluidType.Properties.create().density(1000).viscosity(1000).lightLevel(10).rarity(net.minecraft.world.item.Rarity.RARE))
+        () -> FluidPhysics.create(FluidType.Properties.create().density(1000).viscosity(1000).lightLevel(10).rarity(net.minecraft.world.item.Rarity.RARE))
     );
     public static final DeferredHolder<FluidType, FluidType> LIQUID_DEATH_TYPE = FLUID_TYPES.register(
         "liquid_death",
-        () -> new FluidType(FluidType.Properties.create().density(1000).viscosity(1500).lightLevel(8).rarity(net.minecraft.world.item.Rarity.RARE))
+        () -> FluidPhysics.create(FluidType.Properties.create().density(1000).viscosity(1500).lightLevel(8).rarity(net.minecraft.world.item.Rarity.RARE))
     );
 
     public static final DeferredHolder<Fluid, PurifyingSource> PURIFYING_FLUID = FLUIDS.register(
