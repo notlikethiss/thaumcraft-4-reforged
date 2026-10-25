@@ -53,7 +53,8 @@ public final class GolemMarkerOverlay {
         Vec3 camera = event.getCamera().getPosition();
         List<Overlay> overlays = new ArrayList<>();
         if (selection.home().dimension().equals(minecraft.level.dimension()) && camera.distanceToSqr(Vec3.atCenterOf(selection.home().pos())) < 4096.0) {
-            overlays.add(new Overlay(selection.home().pos(), Direction.UP, -1, true));
+            Marker home = selection.homeMarker();
+            overlays.add(new Overlay(home.pos(), home.side(), home.color(), true));
         }
         for (Marker marker : selection.markers()) {
             if (marker.inLevel(minecraft.level) && camera.distanceToSqr(Vec3.atCenterOf(marker.pos())) < 4096.0) {
@@ -65,8 +66,11 @@ public final class GolemMarkerOverlay {
         }
         PoseStack poseStack = event.getPoseStack();
         long ticks = System.nanoTime() / 30_000_000L;
+        var buffers = minecraft.renderBuffers().bufferSource();
+        var geometry = new thaumcraft.client.platform.ImmediateGeometry(buffers);
         if (overlays.stream().anyMatch(overlay -> !overlay.home())) {
-            new thaumcraft.client.platform.ImmediateGeometry(minecraft.renderBuffers().bufferSource()).submitCustomGeometry(poseStack, TcRenderTypes.additive(MARKER), (pose, buffer) -> {
+            var renderType = TcRenderTypes.additive(MARKER);
+            geometry.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> {
                 QuadSink sink = new VertexQuadSink(pose, buffer);
                 for (Overlay overlay : overlays) {
                     if (!overlay.home()) {
@@ -74,9 +78,11 @@ public final class GolemMarkerOverlay {
                     }
                 }
             });
+            buffers.endBatch(renderType);
         }
         if (overlays.stream().anyMatch(Overlay::home)) {
-            new thaumcraft.client.platform.ImmediateGeometry(minecraft.renderBuffers().bufferSource()).submitCustomGeometry(poseStack, TcRenderTypes.additive(HOME), (pose, buffer) -> {
+            var renderType = TcRenderTypes.additive(HOME);
+            geometry.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> {
                 QuadSink sink = new VertexQuadSink(pose, buffer);
                 for (Overlay overlay : overlays) {
                     if (overlay.home()) {
@@ -84,6 +90,7 @@ public final class GolemMarkerOverlay {
                     }
                 }
             });
+            buffers.endBatch(renderType);
         }
     }
 
