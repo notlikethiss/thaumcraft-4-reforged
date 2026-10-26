@@ -80,7 +80,8 @@ public final class ParityRegressionGameTests {
     @SubscribeEvent
     static void registerTests(RegisterGameTestsEvent event) {
         var environment = event.registerEnvironment(Thaumcraft.id("parity_regressions"), new TestEnvironmentDefinition.AllOf());
-        for (String name : TESTS.keySet()) event.registerTest(Thaumcraft.id(name), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, Thaumcraft.id(name)), new TestData<>(environment, Thaumcraft.id("test/platform"), 300, 0, true)));
+        var isolated = event.registerEnvironment(Thaumcraft.id("parity_hungry_node"), new TestEnvironmentDefinition.AllOf());
+        for (String name : TESTS.keySet()) event.registerTest(Thaumcraft.id(name), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, Thaumcraft.id(name)), new TestData<>(name.equals("parity_hungry_node_eats_items") ? isolated : environment, Thaumcraft.id("test/platform"), 300, 0, true)));
     }
 
     private static ServerPlayer player(GameTestHelper helper) {
@@ -372,6 +373,7 @@ public final class ParityRegressionGameTests {
         helper.succeedWhen(() -> {
             helper.assertTrue(item.isRemoved(), "item not eaten yet");
             helper.assertTrue(node.getAspects().visSize() > before, "hungry node gained nothing from the item");
+            level.removeBlock(pos, false);
         });
     }
 }
