@@ -436,6 +436,7 @@
   "item.thaumcraft.gold_coin": "Goldmünze",
   "item.thaumcraft.gold_wand_cap": "Goldkappe",
   "item.thaumcraft.golem_bell": "Glocke des Golemanten",
+  "item.thaumcraft.golem_core": "Golemanimationskern",
   "item.thaumcraft.golem_core_alchemy": "Alchemie",
   "item.thaumcraft.golem_core_blank": "Leer",
   "item.thaumcraft.golem_core_butcher": "Schlachten",
@@ -1527,11 +1528,5 @@
   "warp.text.8": "Es muss doch irgendeinen Weg geben, diese Kopfschmerzen zu loszuwerden... Oder?",
   "warp.text.9": "Du fühlst dich plötzlich schlecht dabei, Dinge abzubauen.",
   "warp.text.hunger.1": "Dein Hunger kann mit gewöhnlicher Nahrung nicht gestillt werden.",
-  "warp.text.hunger.2": "Dein Hunger scheint zu verschwinden.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Golemanimationskern"
+  "warp.text.hunger.2": "Dein Hunger scheint zu verschwinden."
 }

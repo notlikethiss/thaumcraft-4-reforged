@@ -260,6 +260,7 @@
   "item.thaumcraft.gold_arcane_key": "Mystinen kultaavain",
   "item.thaumcraft.gold_wand_cap": "Kultakorkki",
   "item.thaumcraft.golem_bell": "Golemancerin Kulkunen",
+  "item.thaumcraft.golem_core": "Golemin animointiydin",
   "item.thaumcraft.golem_core_alchemy": "Alkeminen",
   "item.thaumcraft.golem_core_blank": "Tyhjä",
   "item.thaumcraft.golem_core_butcher": "Teurastaja",
@@ -1044,11 +1045,5 @@
   "tile.alembic.msg.4": "Tislausastia on melkein täynnä",
   "tile.alembic.msg.5": "Tislausastia on taynnä",
   "tile.researchtable.noink": "Sinulta loppui muste!",
-  "tile.researchtable.nomove": "Aktiivisia riimuja ei voi siirrellä!",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Golemin animointiydin"
+  "tile.researchtable.nomove": "Aktiivisia riimuja ei voi siirrellä!"
 }

@@ -271,6 +271,7 @@
   "item.thaumcraft.gold_arcane_key": "Clau d'Oro Arcana",
   "item.thaumcraft.gold_wand_cap": "Cuberta de Or",
   "item.thaumcraft.golem_bell": "Campana del Golemant",
+  "item.thaumcraft.golem_core": "Nucli de Animació per a Golem",
   "item.thaumcraft.golem_core_alchemy": "Alquímia",
   "item.thaumcraft.golem_core_blank": "Blanc",
   "item.thaumcraft.golem_core_butcher": "Preparar Carn",
@@ -1175,11 +1176,5 @@
   "tile.blockMarker.9.name": "Marcador Cyan",
   "tile.researchtable.noink.0": "T'has quedat sense tinta!",
   "tile.researchtable.noink.1": "Omple les teves eines d'escritura.",
-  "tile.researchtable.nomove": "Les Runes Actives no es poden moure!",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Nucli de Animació per a Golem"
+  "tile.researchtable.nomove": "Les Runes Actives no es poden moure!"
 }

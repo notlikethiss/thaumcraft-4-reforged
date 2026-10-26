@@ -436,6 +436,7 @@
   "item.thaumcraft.gold_coin": "金幣",
   "item.thaumcraft.gold_wand_cap": "金杖端",
   "item.thaumcraft.golem_bell": "傀儡使之鈴",
+  "item.thaumcraft.golem_core": "傀儡運轉核心",
   "item.thaumcraft.golem_core_alchemy": "煉金",
   "item.thaumcraft.golem_core_blank": "空白",
   "item.thaumcraft.golem_core_butcher": "屠宰",
@@ -1527,11 +1528,5 @@
   "warp.text.8": "肯定有什麼辦法能夠抑制這些痛苦！",
   "warp.text.9": "你忽然對破壞感到了厭倦。 ",
   "warp.text.hunger.1": "你再也無法滿足於平常的食物。",
-  "warp.text.hunger.2": "你的飢餓感開始消退。",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "傀儡運轉核心"
+  "warp.text.hunger.2": "你的飢餓感開始消退。"
 }

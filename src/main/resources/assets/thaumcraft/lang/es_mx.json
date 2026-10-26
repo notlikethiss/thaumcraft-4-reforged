@@ -435,6 +435,7 @@
   "item.thaumcraft.gold_coin": "Moneda de Oro",
   "item.thaumcraft.gold_wand_cap": "Cubierta de Oro",
   "item.thaumcraft.golem_bell": "Campana del Golemante",
+  "item.thaumcraft.golem_core": "Núcleo de Animación para Golem",
   "item.thaumcraft.golem_core_alchemy": "Alquimia",
   "item.thaumcraft.golem_core_blank": "Blanco",
   "item.thaumcraft.golem_core_butcher": "Carnicero",
@@ -1526,11 +1527,5 @@
   "warp.text.8": "¿Seguramente debe haber una manera de parar estos dolores de cabeza?",
   "warp.text.9": "Inesperadamente te sientes reacio a romper cosas.",
   "warp.text.hunger.1": "Tu hambre no se puede satisfacer con alimentos comunes.",
-  "warp.text.hunger.2": "Tu hambre comienza a desaparecer.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Núcleo de Animación para Golem"
+  "warp.text.hunger.2": "Tu hambre comienza a desaparecer."
 }

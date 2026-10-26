@@ -267,6 +267,7 @@
   "item.thaumcraft.gold_arcane_key": "Gouden Occulte Sleutel",
   "item.thaumcraft.gold_wand_cap": "Gouden Kap",
   "item.thaumcraft.golem_bell": "Golemmeesterbel",
+  "item.thaumcraft.golem_core": "Golemanimatiekern",
   "item.thaumcraft.golem_core_alchemy": "Alchemie",
   "item.thaumcraft.golem_core_blank": "Leeg",
   "item.thaumcraft.golem_core_butcher": "Slachten",
@@ -1093,11 +1094,5 @@
   "tile.alembic.msg.4": "De Distilleerkolf is bijna vol",
   "tile.alembic.msg.5": "De Distilleerkolf is vol",
   "tile.researchtable.noink.0": "Je hebt geen inkt meer!",
-  "tile.researchtable.noink.1": "Refill your scribing tools.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Golemanimatiekern"
+  "tile.researchtable.noink.1": "Refill your scribing tools."
 }

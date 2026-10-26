@@ -427,6 +427,7 @@
   "item.thaumcraft.gold_coin": "金貨",
   "item.thaumcraft.gold_wand_cap": "金の石突",
   "item.thaumcraft.golem_bell": "ゴーレム術師の鐘",
+  "item.thaumcraft.golem_core": "ゴーレムコア",
   "item.thaumcraft.golem_core_alchemy": "錬金",
   "item.thaumcraft.golem_core_blank": "空白",
   "item.thaumcraft.golem_core_butcher": "屠殺",
@@ -1174,11 +1175,5 @@
   "warp.text.8": "Surely there must be a way to stop these headaches?",
   "warp.text.9": "You suddenly feel reluctant to break things. ",
   "warp.text.hunger.1": "あなたの空腹は通常の食べ物では満たされない。",
-  "warp.text.hunger.2": "あなたの空腹は薄れはじめた。",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "ゴーレムコア"
+  "warp.text.hunger.2": "あなたの空腹は薄れはじめた。"
 }

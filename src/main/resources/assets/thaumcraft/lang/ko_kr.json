@@ -309,6 +309,7 @@
   "item.thaumcraft.gold_arcane_key": "아케인 금 열쇠",
   "item.thaumcraft.gold_wand_cap": "금 캡",
   "item.thaumcraft.golem_bell": "골레맨서의 종",
+  "item.thaumcraft.golem_core": "골렘 코어",
   "item.thaumcraft.golem_core_alchemy": "연금술",
   "item.thaumcraft.golem_core_blank": "비어있음",
   "item.thaumcraft.golem_core_butcher": "도살",
@@ -1335,11 +1336,5 @@
   "warp.text.8": "머리가 너무 아파... 이 두통을 없앨순 없을까?",
   "warp.text.9": "당신은 일을 하는 것에 피로감을 느꼈습니다.",
   "warp.text.hunger.1": "이 허기짐은 일반적인 음식으로는 채워지지 않을 것입니다.",
-  "warp.text.hunger.2": "배고픔이 서서히 사라져갑니다.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "골렘 코어"
+  "warp.text.hunger.2": "배고픔이 서서히 사라져갑니다."
 }

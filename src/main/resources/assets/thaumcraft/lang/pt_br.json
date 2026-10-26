@@ -230,6 +230,7 @@
   "item.thaumcraft.gold_arcane_key": "Chave Arcana de Ouro",
   "item.thaumcraft.gold_wand_cap": "Ponta de Ouro",
   "item.thaumcraft.golem_bell": "Sino dos Golem",
+  "item.thaumcraft.golem_core": "Núcleo de Animação de Golem",
   "item.thaumcraft.golem_core_alchemy": "Alquimia",
   "item.thaumcraft.golem_core_blank": "Vazio",
   "item.thaumcraft.golem_core_chop": "Cortar",
@@ -882,11 +883,5 @@
   "tile.alembic.msg.4": "O Alambique está quase cheio",
   "tile.alembic.msg.5": "O Alambique está cheio",
   "tile.researchtable.noink": "Acabou a sua tinta!",
-  "tile.researchtable.nomove": "Runas ativas não podem ser movidas!",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Núcleo de Animação de Golem"
+  "tile.researchtable.nomove": "Runas ativas não podem ser movidas!"
 }

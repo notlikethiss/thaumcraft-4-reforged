@@ -436,6 +436,7 @@
   "item.thaumcraft.gold_coin": "Zlatá mince",
   "item.thaumcraft.gold_wand_cap": "Zlatá čepička",
   "item.thaumcraft.golem_bell": "Golemancerův zvonek",
+  "item.thaumcraft.golem_core": "Oživovací jádro Golema",
   "item.thaumcraft.golem_core_alchemy": "Alchemie",
   "item.thaumcraft.golem_core_blank": "-Prazdné-",
   "item.thaumcraft.golem_core_butcher": "Řezník",
@@ -1527,11 +1528,5 @@
   "warp.text.8": "Zajisté tam musí být způsob jak zastavit tu bolest hlavy?",
   "warp.text.9": "Cítíš se náhle neochotný k rozbíjení věcí. ",
   "warp.text.hunger.1": "Tvůj hlad nemůže být uspokojen normálním jídlem.",
-  "warp.text.hunger.2": "Hlady začínáš upadat.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg",
-  "item.thaumcraft.golem_core": "Oživovací jádro Golema"
+  "warp.text.hunger.2": "Hlady začínáš upadat."
 }
