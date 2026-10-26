@@ -5,7 +5,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
+import thaumcraft.aspect.AddonAspects;
 import thaumcraft.aspect.AspectKeys;
 import thaumcraft.crafting.ConfigRecipes;
 import thaumcraft.device.WardedKeys;
@@ -42,6 +44,7 @@ public class Thaumcraft {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
+        modEventBus.addListener(this::commonSetup);
         thaumcraft.entity.golem.GolemKeys.init();
         AspectKeys.init();
         WandKeys.init();
@@ -77,6 +80,10 @@ public class Thaumcraft {
         ModPayloads.register();
         ConfigRecipes.init();
         ConfigResearch.init();
+    }
+
+    private void commonSetup(FMLCommonSetupEvent event) {
+        AddonAspects.init();
     }
 
     public static ResourceLocation id(String path) {

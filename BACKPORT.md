@@ -183,3 +183,9 @@ Backported `ae19e55` and `ead4042`: finite liquid death drain routing, fluid phy
 Before the backport, clean NeoForge 21.1.256 passed the new movement, ascent, exit, current and water-flow comparison scenarios. The reported complete freeze was not reproduced; exact user runtime versions and mod list are still needed. The new finite drain routing scenarios failed before the fix.
 
 Validation: build, all 246 required GameTests, and seam checks pass, including the stationary-item regression. Generated resources are unchanged.
+
+## Targeted add-on aspect API
+
+Backported PR #37 with the follow-up fix (`6989c6a..7df0506` on `main`): `Aspect` as a registry-backed class, `AddonAspects`, `AspectRegistry.mergeEntity`, tag-based `AspectOrb` sync and the add-on aspect GameTest. `Aspect.java` keeps the 1.21.1 `@Nullable Aspect[]` annotation placement, `Thaumcraft.java` gets the common setup listener by hand, and the test uses `@GameTestHolder`. The branch CLAUDE.md and README point to `main` for the add-on API. This targeted backport does not advance the global synchronization SHA.
+
+Validation: build, all 247 required GameTests and seam checks pass.

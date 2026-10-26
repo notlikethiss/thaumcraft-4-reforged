@@ -29,27 +29,47 @@ public record WandVis(int air, int earth, int fire, int water, int order, int en
     );
 
     public int get(Aspect aspect) {
-        return switch (aspect) {
-            case AIR -> air;
-            case EARTH -> earth;
-            case FIRE -> fire;
-            case WATER -> water;
-            case ORDER -> order;
-            case ENTROPY -> entropy;
-            default -> 0;
-        };
+        if (aspect == Aspect.AIR) {
+            return air;
+        }
+        if (aspect == Aspect.EARTH) {
+            return earth;
+        }
+        if (aspect == Aspect.FIRE) {
+            return fire;
+        }
+        if (aspect == Aspect.WATER) {
+            return water;
+        }
+        if (aspect == Aspect.ORDER) {
+            return order;
+        }
+        if (aspect == Aspect.ENTROPY) {
+            return entropy;
+        }
+        return 0;
     }
 
     public WandVis with(Aspect aspect, int amount) {
-        return switch (aspect) {
-            case AIR -> new WandVis(amount, earth, fire, water, order, entropy);
-            case EARTH -> new WandVis(air, amount, fire, water, order, entropy);
-            case FIRE -> new WandVis(air, earth, amount, water, order, entropy);
-            case WATER -> new WandVis(air, earth, fire, amount, order, entropy);
-            case ORDER -> new WandVis(air, earth, fire, water, amount, entropy);
-            case ENTROPY -> new WandVis(air, earth, fire, water, order, amount);
-            default -> this;
-        };
+        if (aspect == Aspect.AIR) {
+            return new WandVis(amount, earth, fire, water, order, entropy);
+        }
+        if (aspect == Aspect.EARTH) {
+            return new WandVis(air, amount, fire, water, order, entropy);
+        }
+        if (aspect == Aspect.FIRE) {
+            return new WandVis(air, earth, amount, water, order, entropy);
+        }
+        if (aspect == Aspect.WATER) {
+            return new WandVis(air, earth, fire, amount, order, entropy);
+        }
+        if (aspect == Aspect.ORDER) {
+            return new WandVis(air, earth, fire, water, amount, entropy);
+        }
+        if (aspect == Aspect.ENTROPY) {
+            return new WandVis(air, earth, fire, water, order, amount);
+        }
+        return this;
     }
 
     public AspectList toAspectList() {
