@@ -130,7 +130,7 @@ Fixes from `6651f14`: localized names for itemless fluid targets, continuous hel
 
 - Applied parity corrections for phases 1–11 only. The eight production-file changes cover primal-orb taint spread, uncommon/rare loot tier stack preservation and replacement, focal-manipulator canceled-upgrade drain behavior, excavation focus cost caching, Brain Jar research bonus, and the champion whitelist clamp. Backport-specific API adapters are recorded alongside the code changes.
 - Added regression GameTests for the fixes, including deterministic primal-orb taint spread, focus loot tier pick/save/load and replacement, excavation shared lazy pricing, canceled focal manipulation, Brain Jar, champion clamping, and warp encounter/effect behavior. The test suite passed as part of the 122/122 run above.
-- Removed only the byte-identical duplicate `vignette.png` and `vignette.png.mcmeta` resource sources; generator-owned copies remain. Resource collision validation found no remaining duplicate paths.
+- `vignette.png` and its `.mcmeta` come from `convert_assets.py` in `src/main/resources`, as on `main`; `gen_warp_shaders.py` no longer copies them into `src/generated`.
 - The synced base remains `f0c40ed`. No phase 12 or 13 content was backported. Automated checks do not replace visual or user gameplay validation.
 
 ## Phases 12–13 and reported port bugs (2026-10-16)

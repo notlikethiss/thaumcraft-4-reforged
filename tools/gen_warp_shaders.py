@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate TC4 warp post-effects. Use --mc 26.3|1.21.1|1.19.2 [--out RESOURCE_ROOT]."""
-import argparse, json, shutil
+import argparse, json
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PENDING = ROOT / "tools/warp_shader_sources"
@@ -102,11 +102,6 @@ void main(){ vec4 c=texture(DiffuseSampler,texCoord); vec3 s=c.rgb*ColorScale; f
     program("warp_color_convolve","sobel","warp_color_convolve",[
         {"name":"ColorScale","type":"float","count":3,"values":[1.0,0.8,0.8]}, {"name":"Saturation","type":"float","count":1,"values":[1.1]}])
     program("warp_bloom_color","warp_bloom_vertex","warp_bloom_color",[]); program("warp_bloom_add","warp_bloom_vertex","warp_bloom_add",[])
-    texture_source = PENDING / "textures"
-    texture_target = root / "assets/thaumcraft/textures/misc"
-    texture_target.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(texture_source / "vignette.png", texture_target / "vignette.png")
-    shutil.copyfile(texture_source / "vignette.png.mcmeta", texture_target / "vignette.png.mcmeta")
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mc",required=True,choices=("26.3","1.21.1","1.19.2"))
