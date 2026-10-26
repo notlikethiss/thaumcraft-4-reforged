@@ -1527,10 +1527,5 @@
   "warp.text.8": "Seguramente debe haber una manera de detener estos dolores de cabeza.",
   "warp.text.9": "De repente te sientes reacio a romper cosas. ",
   "warp.text.hunger.1": "Tu hambre no puede saciarse con comida normal.",
-  "warp.text.hunger.2": "Tu hambre comienza a desvanecerse.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "el Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Construct Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Pretor  el Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Portal Carmesí Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Tentáculo Gigante Spawn Egg"
+  "warp.text.hunger.2": "Tu hambre comienza a desvanecerse."
 }

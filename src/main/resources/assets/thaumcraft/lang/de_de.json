@@ -1528,10 +1528,5 @@
   "warp.text.8": "Es muss doch irgendeinen Weg geben, diese Kopfschmerzen zu loszuwerden... Oder?",
   "warp.text.9": "Du fühlst dich plötzlich schlecht dabei, Dinge abzubauen.",
   "warp.text.hunger.1": "Dein Hunger kann mit gewöhnlicher Nahrung nicht gestillt werden.",
-  "warp.text.hunger.2": "Dein Hunger scheint zu verschwinden.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "der Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Unheimliches Konstrukt Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Prätor  der Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Karmesinportal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Riesige Schmutzranke Spawn Egg"
+  "warp.text.hunger.2": "Dein Hunger scheint zu verschwinden."
 }

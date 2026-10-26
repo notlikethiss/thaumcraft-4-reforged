@@ -1527,10 +1527,5 @@
   "warp.text.8": "Il existe surement un moyen de stopper ces migraines ?",
   "warp.text.9": "Vous vous entez soudainement réticent à casser des choses. ",
   "warp.text.hunger.1": "Votre faim ne peut être satisfaite avec de la nourriture normale.",
-  "warp.text.hunger.2": "Votre faim commence à disparaître.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Gardien surnaturel Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Construction surnaturelle Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Praetor  Le Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Portail cramoisi Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Tentacule corrompu géant Spawn Egg"
+  "warp.text.hunger.2": "Votre faim commence à disparaître."
 }

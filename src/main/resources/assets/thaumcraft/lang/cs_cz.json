@@ -1528,10 +1528,5 @@
   "warp.text.8": "Zajisté tam musí být způsob jak zastavit tu bolest hlavy?",
   "warp.text.9": "Cítíš se náhle neochotný k rozbíjení věcí. ",
   "warp.text.hunger.1": "Tvůj hlad nemůže být uspokojen normálním jídlem.",
-  "warp.text.hunger.2": "Hlady začínáš upadat.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "the Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Konstruktér Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Praetor  the Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Crimson Portál Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Obří Zhoubadla Spawn Egg"
+  "warp.text.hunger.2": "Hlady začínáš upadat."
 }

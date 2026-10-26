@@ -29,19 +29,11 @@ ITEMS = {
 }
 
 SPAWN_EGGS = {
-    "eldritch_warden_spawn_egg": ("EldritchWarden", 0x552222, 0x404040, "Eldritch Warden Spawn Egg"),
-    "eldritch_golem_spawn_egg": ("EldritchGolem", 0x555555, 0x404040, "Eldritch Golem Spawn Egg"),
-    "cultist_leader_spawn_egg": ("CultistLeader", 0xFF5055, 0x505050, "Cultist Leader Spawn Egg"),
-    "cultist_portal_spawn_egg": ("CultistPortal", 0xFF5055, 0xFF50FF, "Cultist Portal Spawn Egg"),
-    "taintacle_giant_spawn_egg": ("TaintacleGiant", 0xFFC0FF, 0x808080, "Giant Taintacle Spawn Egg"),
-}
-
-RUSSIAN_SPAWN_EGGS = {
-    "eldritch_warden_spawn_egg": "Яйцо призыва эльдрич-стража",
-    "eldritch_golem_spawn_egg": "Яйцо призыва древнего голема",
-    "cultist_leader_spawn_egg": "Яйцо призыва претора",
-    "cultist_portal_spawn_egg": "Яйцо призыва багрового портала",
-    "taintacle_giant_spawn_egg": "Яйцо призыва гигантского заражённого щупальца",
+    "eldritch_warden_spawn_egg": (0x552222, 0x404040),
+    "eldritch_golem_spawn_egg": (0x555555, 0x404040),
+    "cultist_leader_spawn_egg": (0xFF5055, 0x505050),
+    "cultist_portal_spawn_egg": (0xFF5055, 0xFF50FF),
+    "taintacle_giant_spawn_egg": (0xFFC0FF, 0x808080),
 }
 
 
@@ -155,7 +147,7 @@ def generate(ctx):
         "eldritch_obelisk_placer": "ob_placer",
     }.items():
         ctx.generated_item(name, texture)
-    for name, (_, base_color, spot_color, _) in SPAWN_EGGS.items():
+    for name, (base_color, spot_color) in SPAWN_EGGS.items():
         gen_phase10_11.write_spawn_egg(ctx, name, base_color, spot_color)
 
     dimension_type = {
@@ -226,15 +218,4 @@ def generate(ctx):
         for name, (_, old_key) in ITEMS.items():
             if old_key in legacy:
                 translations[modern_key("item", name)] = legacy[old_key]
-        for name, (entity_name, _, _, english) in SPAWN_EGGS.items():
-            if locale == "en_us":
-                translations[modern_key("item", name)] = english
-            elif locale == "ru_ru":
-                translations[modern_key("item", name)] = RUSSIAN_SPAWN_EGGS[name]
-            else:
-                entity_text = legacy.get(f"entity.Thaumcraft.{entity_name}.name", "")
-                entity_text = entity_text.replace("%s", "").replace("%d", "").strip(" .,-_:")
-                if not entity_text:
-                    entity_text = legacy.get("entity.Thaumcraft.EldritchGuardian.name", "").strip()
-                translations[modern_key("item", name)] = f"{entity_text} Spawn Egg" if entity_text else english
         locale_path.write_text(json.dumps(translations, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

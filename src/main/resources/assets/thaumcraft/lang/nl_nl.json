@@ -1094,10 +1094,5 @@
   "tile.alembic.msg.4": "De Distilleerkolf is bijna vol",
   "tile.alembic.msg.5": "De Distilleerkolf is vol",
   "tile.researchtable.noink.0": "Je hebt geen inkt meer!",
-  "tile.researchtable.noink.1": "Refill your scribing tools.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg"
+  "tile.researchtable.noink.1": "Refill your scribing tools."
 }

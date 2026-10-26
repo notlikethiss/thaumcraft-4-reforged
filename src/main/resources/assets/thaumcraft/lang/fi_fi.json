@@ -1045,10 +1045,5 @@
   "tile.alembic.msg.4": "Tislausastia on melkein täynnä",
   "tile.alembic.msg.5": "Tislausastia on taynnä",
   "tile.researchtable.noink": "Sinulta loppui muste!",
-  "tile.researchtable.nomove": "Aktiivisia riimuja ei voi siirrellä!",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg"
+  "tile.researchtable.nomove": "Aktiivisia riimuja ei voi siirrellä!"
 }

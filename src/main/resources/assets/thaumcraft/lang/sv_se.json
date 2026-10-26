@@ -1060,10 +1060,5 @@
   "tile.alembic.msg.4": "Destillatorn är nästan full",
   "tile.alembic.msg.5": "Destillatorn är helt full",
   "tile.researchtable.noink.0": "Du har fått slut på bläck!",
-  "tile.researchtable.noink.1": "Fyll på dina skrivdon.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg"
+  "tile.researchtable.noink.1": "Fyll på dina skrivdon."
 }

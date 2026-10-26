@@ -1060,10 +1060,5 @@
   "tile.alembic.msg.4": "The alembic is almost full",
   "tile.alembic.msg.5": "The alembic is full",
   "tile.researchtable.noink.0": "Teil on tint otsa saanud!",
-  "tile.researchtable.noink.1": "Täida uuesti oma kirjutamis vahendid.",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "Eldritch Warden Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Golem Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Cultist Leader Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "Cultist Portal Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "Giant Taintacle Spawn Egg"
+  "tile.researchtable.noink.1": "Täida uuesti oma kirjutamis vahendid."
 }

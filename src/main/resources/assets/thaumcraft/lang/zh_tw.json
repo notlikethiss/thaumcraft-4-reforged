@@ -1528,10 +1528,5 @@
   "warp.text.8": "肯定有什麼辦法能夠抑制這些痛苦！",
   "warp.text.9": "你忽然對破壞感到了厭倦。 ",
   "warp.text.hunger.1": "你再也無法滿足於平常的食物。",
-  "warp.text.hunger.2": "你的飢餓感開始消退。",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "[] Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "之異象機關 Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "審判者[] Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "緋色傳送門 Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "巨型污染觸手怪 Spawn Egg"
+  "warp.text.hunger.2": "你的飢餓感開始消退。"
 }

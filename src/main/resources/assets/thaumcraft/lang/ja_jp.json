@@ -1175,10 +1175,5 @@
   "warp.text.8": "Surely there must be a way to stop these headaches?",
   "warp.text.9": "You suddenly feel reluctant to break things. ",
   "warp.text.hunger.1": "あなたの空腹は通常の食べ物では満たされない。",
-  "warp.text.hunger.2": "あなたの空腹は薄れはじめた。",
-  "item.thaumcraft.eldritch_warden_spawn_egg": "the Spawn Egg",
-  "item.thaumcraft.eldritch_golem_spawn_egg": "Eldritch Construct Spawn Egg",
-  "item.thaumcraft.cultist_leader_spawn_egg": "Praetor  the Spawn Egg",
-  "item.thaumcraft.cultist_portal_spawn_egg": "紅の教団のポータル Spawn Egg",
-  "item.thaumcraft.taintacle_giant_spawn_egg": "エルドリッチの守護者 Spawn Egg"
+  "warp.text.hunger.2": "あなたの空腹は薄れはじめた。"
 }
