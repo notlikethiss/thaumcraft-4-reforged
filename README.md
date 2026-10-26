@@ -17,7 +17,7 @@ The `mc/26.1.2` and `mc/1.21.1` branches contain backports; Minecraft 1.19.2 is 
 
 Versions used by the main branch:
 
-- Mod `1.1.1`
+- Mod `1.1.2`
 - Minecraft `26.3`
 - NeoForge `26.3.0.57-beta`
 - ModDevGradle `2.0.148`
@@ -28,7 +28,7 @@ Versions used by the main branch:
 
 Every push to `main` or `mc/*` that passes the workflow's path filters builds the mod on GitHub Actions and publishes it on the [Releases](https://github.com/notlikethiss/thaumcraft-4-reforged/releases) page. The mod version comes from `mod_version` in `gradle.properties`, independently of the original Thaumcraft version.
 
-For Minecraft 26.3, version `1.1.1` is published as a release named `26.3` with the tag `26.3` and the file `thaumcraft-4-reforged-1.1.1-26.3.jar`. Tags contain only the Minecraft version. Each build replaces the release for that Minecraft version. Releases from `main` are marked as latest.
+For Minecraft 26.3, version `1.1.2` is published as a release named `26.3` with the tag `26.3` and the file `thaumcraft-4-reforged-1.1.2-26.3.jar`. Tags contain only the Minecraft version. Each build replaces the release for that Minecraft version. Releases from `main` are marked as latest.
 
 The root `icon.png` and `poster.png` are packaged into the JAR as the mod list icon and banner. The icon is also declared through `logoFile` for Prism Launcher compatibility.
 
