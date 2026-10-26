@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,6 +46,11 @@ public class ElementalAxeItem extends Item implements Repairable {
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity user) {
         return USE_DURATION;
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        return InteractionResult.PASS;
     }
 
     @Override

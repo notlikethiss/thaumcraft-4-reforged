@@ -47,6 +47,7 @@ import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModSounds;
 import thaumcraft.research.ResearchGate;
+import thaumcraft.research.ScanManager;
 import thaumcraft.wand.WandInteractable;
 import thaumcraft.wand.WandKeys;
 import thaumcraft.wand.Wands;
@@ -415,7 +416,8 @@ public class NodeBlockEntity extends TcBlockEntity implements Node, WandInteract
     }
 
     private boolean feedOnKill(ServerLevel serverLevel, Entity entity, boolean change) {
-        AspectList scanned = AspectHelper.getEntityTags(entity);
+        ScanManager.Target target = ScanManager.resolveEntity(entity);
+        AspectList scanned = target == null ? null : target.aspects();
         if (scanned == null || scanned.size() <= 0) {
             return change;
         }

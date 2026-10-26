@@ -65,7 +65,9 @@ public final class ParityRegressionGameTests {
         Map.entry("parity_golem_ranged_stage", ParityRegressionGameTests::golemRangedStage),
         Map.entry("parity_original_tool_damage", ParityRegressionGameTests::toolDamage),
         Map.entry("parity_biome_spawn_lists", ParityRegressionGameTests::biomeSpawns),
-        Map.entry("parity_silverwood_knot_scan", ParityRegressionGameTests::silverwoodKnot)
+        Map.entry("parity_silverwood_knot_scan", ParityRegressionGameTests::silverwoodKnot),
+        Map.entry("parity_elemental_axe_does_not_strip", ParityRegressionGameTests::elementalAxeUse),
+        Map.entry("parity_hungry_node_eats_items", ParityRegressionGameTests::hungryNodeItems)
     );
 
     static { TESTS.forEach((name, test) -> FUNCTIONS.register(name, () -> test)); }
@@ -336,4 +338,40 @@ public final class ParityRegressionGameTests {
         helper.succeed();
     }
 
+    private static void elementalAxeUse(GameTestHelper helper) {
+        var player = player(helper);
+        var pos = new BlockPos(2, 2, 2);
+        helper.setBlock(pos, Blocks.OAK_LOG);
+        ItemStack axe = new ItemStack(ModItems.ELEMENTAL_AXE.get());
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, axe);
+        var hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(helper.absolutePos(pos)), Direction.UP, helper.absolutePos(pos), false);
+        var result = axe.useOn(new net.minecraft.world.item.context.UseOnContext(player, net.minecraft.world.InteractionHand.MAIN_HAND, hit));
+        helper.assertTrue(result == net.minecraft.world.InteractionResult.PASS, "elemental axe consumed the block click");
+        helper.assertBlockPresent(Blocks.OAK_LOG, pos);
+        helper.succeed();
+    }
+
+    private static void hungryNodeItems(GameTestHelper helper) {
+        helper.assertTrue(thaumcraft.Config.hardNode(), "hard nodes are disabled");
+        var level = helper.getLevel();
+        var pos = helper.absolutePos(new BlockPos(2, 3, 2));
+        helper.setBlock(new BlockPos(2, 2, 2), Blocks.OBSIDIAN);
+        thaumcraft.node.NodeGenerator.createNodeAt(level, pos, thaumcraft.node.NodeType.HUNGRY, null, new AspectList().add(Aspect.AIR, 20).add(Aspect.EARTH, 20).add(Aspect.FIRE, 20).add(Aspect.WATER, 20).add(Aspect.ORDER, 20).add(Aspect.ENTROPY, 20));
+        var node = (thaumcraft.node.NodeBlockEntity) level.getBlockEntity(pos);
+        for (Aspect aspect : node.getAspects().getAspects()) {
+            node.takeFromContainer(aspect, 10);
+        }
+        int before = node.getAspects().visSize();
+        ItemStack table = new ItemStack(Items.CRAFTING_TABLE);
+        var tags = thaumcraft.research.ScanManager.resolveStack(table).aspects();
+        helper.assertTrue(tags != null && tags.size() > 0, "crafting table has no aspects");
+        var item = new net.minecraft.world.entity.item.ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, table);
+        item.setNoGravity(true);
+        item.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        level.addFreshEntity(item);
+        helper.succeedWhen(() -> {
+            helper.assertTrue(item.isRemoved(), "item not eaten yet");
+            helper.assertTrue(node.getAspects().visSize() > before, "hungry node gained nothing from the item");
+        });
+    }
 }
