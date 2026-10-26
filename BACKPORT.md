@@ -88,3 +88,9 @@ In the main checkout (gitignored): `reference/26.1.2/mc` (net/minecraft, com/moj
 Backported `ae19e55` and `ead4042`: water-like movement through `platform/FluidPhysics`, finite liquid death drain routing, and fluid physics regression tests. The 26.3-only fluid spreading tag is generated only for that resource profile. This targeted backport does not advance the global synchronization SHA.
 
 Validation: build, all 271 required GameTests, seam checks, and unchanged regenerated resources pass. The seven selected fluid tests also pass with the stationary-item regression.
+
+## Targeted add-on aspect API
+
+Backported PR #37 with the follow-up fix (`6989c6a..7df0506` on `main`): `Aspect` as a registry-backed class, `AddonAspects`, `AspectRegistry.mergeEntity`, tag-based `AspectOrb` sync and the add-on aspect GameTest. Applied through `rewrite.py` without manual changes. This targeted backport does not advance the global synchronization SHA.
+
+Validation: build, all 274 required GameTests, seam checks, and unchanged regenerated resources pass.

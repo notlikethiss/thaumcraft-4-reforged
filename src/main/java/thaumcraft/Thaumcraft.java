@@ -6,7 +6,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
+import thaumcraft.aspect.AddonAspects;
 import thaumcraft.aspect.AspectKeys;
 import thaumcraft.crafting.ConfigRecipes;
 import thaumcraft.device.WardedKeys;
@@ -36,6 +38,7 @@ import thaumcraft.item.armor.ArmorKeys;
 import thaumcraft.registry.ModRecipes;
 import thaumcraft.test.AlchemyGameTests;
 import thaumcraft.test.ArmorGameTests;
+import thaumcraft.test.AspectGameTests;
 import thaumcraft.test.DeviceGameTests;
 import thaumcraft.test.EldritchCrabGameTests;
 import thaumcraft.test.ArcaneGameTests;
@@ -60,6 +63,7 @@ public class Thaumcraft {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
+        modEventBus.addListener(this::commonSetup);
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         modContainer.registerConfig(ModConfig.Type.STARTUP, StartupConfig.SPEC);
         thaumcraft.entity.golem.GolemKeys.init();
@@ -97,6 +101,7 @@ public class Thaumcraft {
         ModPayloads.register();
         ConfigRecipes.init();
         ConfigResearch.init();
+        AspectGameTests.register(modEventBus);
         ThaumcraftGameTests.register(modEventBus);
         HexGridGameTests.register(modEventBus);
         EssentiaGameTests.register(modEventBus);
@@ -130,6 +135,10 @@ public class Thaumcraft {
         thaumcraft.entity.projectile.ProjectileGameTests.register(modEventBus);
         thaumcraft.test.ConfigGameTests.register(modEventBus);
         thaumcraft.test.OreGenerationGameTests.register(modEventBus);
+    }
+
+    private void commonSetup(FMLCommonSetupEvent event) {
+        AddonAspects.init();
     }
 
     public static Identifier id(String path) {

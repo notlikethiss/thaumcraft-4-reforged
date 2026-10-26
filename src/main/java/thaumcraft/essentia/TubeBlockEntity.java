@@ -296,7 +296,7 @@ public class TubeBlockEntity extends TcBlockEntity implements EssentiaTransport,
                 }
                 venting = 50;
                 Aspect[] aspects = Aspect.values();
-                ventColor = param != -1 && param < aspects.length ? aspects[param].getColor() : 0xAAAAAA;
+                ventColor = param >= 0 && param < aspects.length ? aspects[param].getColor() : 0xAAAAAA;
             }
             return true;
         }

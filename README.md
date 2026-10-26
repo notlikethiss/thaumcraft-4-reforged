@@ -123,6 +123,12 @@ The conversion scripts read from `reference/` (git ignored), which holds the ori
 
 All 22 original language files are converted, including the research texts. Manual additions and corrections are maintained for English and Russian in `tools/lang/` and merged by `tools/convert_assets.py`.
 
+## Add-on API (experimental)
+
+- Custom aspects: call `AddonAspects.addRegistrar(api -> api.register(tag, color, components, blend, texture))` from the add-on constructor. Callbacks run during `FMLCommonSetupEvent` on both sides, so the client and the server must load the same add-ons. Tags are global and must not contain `:`, each aspect needs exactly two components, and the add-on provides the `tc.aspect.<tag>` translation and the texture.
+- `Aspect` is a registry-backed class. Built-in ordinals 0-47 are stable, add-on aspects follow in tag order. Saves and packets store tags.
+- Item and entity aspects: register them through `AspectSync.addRegistrar(registry -> ...)`, which runs on every rebuild including `/reload`. `AspectRegistry.mergeEntity` adds amounts to an entity entry with the same NBT conditions.
+
 ## Credits
 
 - **Azanor** for the original Thaumcraft

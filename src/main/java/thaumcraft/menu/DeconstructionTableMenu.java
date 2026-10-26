@@ -84,7 +84,11 @@ public class DeconstructionTableMenu extends AbstractContainerMenu {
 
     public @Nullable Aspect getAspect() {
         int value = data.get(DATA_ASPECT);
-        return value <= 0 ? null : Aspect.values()[value - 1];
+        if (value <= 0) {
+            return null;
+        }
+        Aspect[] aspects = Aspect.values();
+        return value <= aspects.length ? aspects[value - 1] : null;
     }
 
     @Override

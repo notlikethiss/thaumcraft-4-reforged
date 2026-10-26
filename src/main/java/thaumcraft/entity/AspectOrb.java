@@ -23,7 +23,7 @@ import thaumcraft.registry.ModEntities;
 import thaumcraft.wand.Wands;
 
 public final class AspectOrb extends Entity {
-    private static final EntityDataAccessor<Integer> DATA_ASPECT = SynchedEntityData.defineId(AspectOrb.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> DATA_ASPECT = SynchedEntityData.defineId(AspectOrb.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_VALUE = SynchedEntityData.defineId(AspectOrb.class, EntityDataSerializers.INT);
     private int age;
     private int cooldown;
@@ -38,7 +38,7 @@ public final class AspectOrb extends Entity {
     public static @Nullable AspectOrb create(Level level, double x, double y, double z, Aspect aspect, int amount) {
         AspectOrb orb = ModEntities.ASPECT_ORB.get().create(level, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
         if (orb == null || aspect == null || amount <= 0) return null;
-        orb.entityData.set(DATA_ASPECT, aspect.ordinal());
+        orb.entityData.set(DATA_ASPECT, aspect.getTag());
         orb.entityData.set(DATA_VALUE, amount);
         orb.setPos(x, y, z);
         orb.setDeltaMovement((orb.random.nextDouble() - 0.5) * 0.4, orb.random.nextDouble() * 0.4, (orb.random.nextDouble() - 0.5) * 0.4);
@@ -51,13 +51,13 @@ public final class AspectOrb extends Entity {
     }
 
     @Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        builder.define(DATA_ASPECT, Aspect.AIR.ordinal());
+        builder.define(DATA_ASPECT, Aspect.AIR.getTag());
         builder.define(DATA_VALUE, 1);
     }
 
     public Aspect getAspect() {
-        int id = entityData.get(DATA_ASPECT);
-        return id >= 0 && id < Aspect.values().length ? Aspect.values()[id] : Aspect.AIR;
+        Aspect aspect = Aspect.getAspect(entityData.get(DATA_ASPECT));
+        return aspect == null ? Aspect.AIR : aspect;
     }
 
     public int getAspectValue() { return entityData.get(DATA_VALUE); }
@@ -128,8 +128,8 @@ public final class AspectOrb extends Entity {
         health = input.getIntOr("Health", 5);
         age = input.getIntOr("Age", 0);
         entityData.set(DATA_VALUE, Math.max(1, input.getIntOr("Value", 1)));
-        Aspect loaded = Aspect.getAspect(input.getStringOr("Aspect", "aer"));
-        entityData.set(DATA_ASPECT, loaded == null ? Aspect.AIR.ordinal() : loaded.ordinal());
+        Aspect loaded = Aspect.getAspect(input.getStringOr("Aspect", Aspect.AIR.getTag()));
+        entityData.set(DATA_ASPECT, loaded == null ? Aspect.AIR.getTag() : loaded.getTag());
     }
 
     @Override public boolean hurtServer(ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {

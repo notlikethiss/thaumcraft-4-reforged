@@ -125,7 +125,10 @@ python3 tools/gen_resources.py && git status --short src/generated
 
 ## API для аддонов
 
-- `AspectSync.addRegistrar(Consumer<AspectRegistry>)`: вызывается в `rebuild` после `ConfigAspects`, до `registerDerived`.
+- `AspectSync.addRegistrar(Consumer<AspectRegistry>)`: вызывается в `rebuild` после `ConfigAspects`, до `registerDerived`. Прямые правки `AspectRegistry.active()` теряются при `/reload`.
+- `AddonAspects.addRegistrar(Consumer<Addon>)`: аддон вызывает из своего конструктора, применяется в `FMLCommonSetupEvent` на обеих сторонах, после инициализации срабатывает сразу. `new Aspect(tag, color, components, image, blend)` регистрирует аспект немедленно: тег без `:`, ровно два компонента, дубликат бросает исключение. Lang `tc.aspect.<tag>` и текстуру аддон добавляет сам.
+- `Aspect` реализован классом с реестром: встроенные ordinal 0–47 неизменны, аддонные идут после них по тегу. В сохранениях и пакетах аспект пишется тегом, ordinal годится только внутри сессии.
+- `AspectRegistry.mergeEntity(type, aspects, nbt...)` (и `AspectRegistrar.entityCopy`): складывает аспекты с записью сущности, у которой совпадает набор NBT-условий, иначе добавляет новую.
 - `WandRegistry.registerCap`/`registerRod`: явные `item` и `texture` Identifier любого namespace, дубликат тега бросает исключение. Ключи исследования `CAP_<tag>`/`ROD_<tag>`, lang `item.Wand.<tag>.cap`/`.rod` аддон добавляет сам.
 - `ArcaneCrafting.registerDynamic(DynamicArcaneRecipe)`: добавляется после рецептов жезла и скипетра.
 - `Warp.registerItem(Identifier, int)`: изменяемая карта `WARP_ITEMS`.
