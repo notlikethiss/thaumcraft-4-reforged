@@ -179,7 +179,7 @@ public final class ModEntities {
         event.register(GIANT_BRAINY_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             BrainyZombie::checkBrainyZombieSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ELDRITCH_GUARDIAN.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            thaumcraft.entity.monster.EldritchSpawnRules::check, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+            thaumcraft.entity.monster.EldritchSpawnRules::checkGuardian, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(INHABITED_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             thaumcraft.entity.monster.EldritchSpawnRules::check, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(

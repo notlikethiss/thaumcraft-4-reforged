@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.registry.EldritchContent;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.world.dim.MazeHandler;
+import thaumcraft.world.gen.LegacyGen;
 
 public final class EldritchRingGenerator {
     private EldritchRingGenerator() {
@@ -144,7 +145,7 @@ public final class EldritchRingGenerator {
         if (isValidGround(ground)) {
             return true;
         }
-        return (ground.is(Blocks.SNOW) || ground.is(Blocks.TALL_GRASS)) && isValidGround(level.getBlockState(top.below()));
+        return LegacyGen.isSnowOrGrass(ground) && isValidGround(level.getBlockState(top.below()));
     }
 
     private static boolean isValidGround(BlockState state) {

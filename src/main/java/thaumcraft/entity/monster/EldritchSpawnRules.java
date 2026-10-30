@@ -23,4 +23,10 @@ public final class EldritchSpawnRules {
         int brightness = level.getLevel().isThundering() ? level.getMaxLocalRawBrightness(pos, 10) : level.getMaxLocalRawBrightness(pos);
         return brightness <= random.nextInt(8);
     }
+
+    public static boolean checkGuardian(EntityType<? extends Mob> type, ServerLevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return level.getDifficulty() != Difficulty.PEACEFUL
+            && Mob.checkMobSpawnRules(type, level, reason, pos, random)
+            && level.getMaxLocalRawBrightness(pos) <= 12;
+    }
 }
