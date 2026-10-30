@@ -111,6 +111,7 @@ public class Thaumcraft {
         ArcaneGameTests.register(modEventBus);
         InfusionGameTests.register(modEventBus);
         thaumcraft.test.PortBugGameTests.register(modEventBus);
+        thaumcraft.test.ReportedBugGameTests.register(modEventBus);
         thaumcraft.test.GolemGameTests.register(modEventBus);
         thaumcraft.test.GolemCoreGameTests.register(modEventBus);
         thaumcraft.test.MazeGameTests.register(modEventBus);

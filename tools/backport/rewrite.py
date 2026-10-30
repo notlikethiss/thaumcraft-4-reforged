@@ -263,6 +263,7 @@ def rules_26_1_2():
             (r"\.gui\.setScreen\(", ".setScreen("),
             (r"\.gui\.screen\(\)", ".screen"),
             (r"\.gui\.toastManager\(\)", ".getToastManager()"),
+            (r"\(ServerPlayer\)\s*helper\.makeMockServerPlayer\(", "TestPlayers.mockServerPlayer(helper, "),
         ]),
         calls(r"(?<![\w$.])(\w+(?:\(\))?)\s*\.rotateDegrees\(", rotate_degrees_call),
         regex_rules([(r"(?<![\w$.])poseStack\.rotate\(", "poseStack.mulPose(")]),
