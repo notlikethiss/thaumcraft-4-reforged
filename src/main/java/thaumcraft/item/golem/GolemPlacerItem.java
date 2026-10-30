@@ -3,9 +3,11 @@ package thaumcraft.item.golem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.LevelReader;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.entity.golem.GolemKeys;
 import thaumcraft.entity.golem.GolemType;
@@ -14,6 +16,10 @@ import thaumcraft.registry.ModEntities;
 public class GolemPlacerItem extends Item {
     private final GolemType type;
     public GolemPlacerItem(Properties properties, GolemType type) { super(properties.stacksTo(1)); this.type = type; }
+    @Override
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
+        return true;
+    }
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         return useOn(context);
