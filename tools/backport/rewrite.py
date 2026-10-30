@@ -157,6 +157,7 @@ PACKAGE_MOVES_1_21_1 = {
     "net.minecraft.world.level.block.VegetationBlock": "net.minecraft.world.level.block.BushBlock",
     "net.minecraft.util.ARGB": "net.minecraft.util.FastColor",
     "org.jspecify.annotations.Nullable": "javax.annotation.Nullable",
+    "net.minecraft.client.gui.GuiGraphicsExtractor": "net.minecraft.client.gui.GuiGraphics",
 }
 
 
@@ -200,6 +201,7 @@ def rules_1_21_1():
             "EntityTypes": "EntityType",
             "ItemUseAnimation": "UseAnim",
             "VegetationBlock": "BushBlock",
+            "GuiGraphicsExtractor": "GuiGraphics",
         }),
         rename_members("MobSpawnType", {"SPAWN_ITEM_USE": "SPAWN_EGG"}),
         rename_members("EntitySpawnReason", {"SPAWN_ITEM_USE": "SPAWN_EGG"}),
@@ -222,6 +224,7 @@ def rules_1_21_1():
             (r"\.getMinY\(\)", ".getMinBuildHeight()"),
             (r"\.getSelectedSlot\(\)", ".selected"),
             (r"\.getNonEquipmentItems\(\)", ".items"),
+            (r"\.gui\.screen\(\)", ".screen"),
         ]),
         calls(r"((?:\bsuper|\bthis|[\w)\]])\s*\.\s*)hurtServer\(", drop_first_argument),
         hurt_declaration,

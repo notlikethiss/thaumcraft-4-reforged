@@ -151,6 +151,7 @@ public final class ModItems {
     public static final DeferredItem<BucketItem> LIQUID_DEATH_BUCKET = RegistryHelper.registerItem(ITEMS, "liquid_death_bucket", properties -> new BucketItem(ModFluids.LIQUID_DEATH.get(), properties.stacksTo(1)));
     public static final DeferredItem<BathSaltsItem> BATH_SALTS = RegistryHelper.registerItem(ITEMS, "bath_salts", BathSaltsItem::new);
     public static final DeferredItem<SanitizingSoapItem> SANITIZING_SOAP = RegistryHelper.registerItem(ITEMS, "sanitizing_soap", SanitizingSoapItem::new);
+    public static final DeferredItem<Item> SANITY_CHECKER = RegistryHelper.registerItem(ITEMS, "sanity_checker", Item::new, properties -> properties.stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<BottledTaintItem> BOTTLED_TAINT = RegistryHelper.registerItem(ITEMS, "bottled_taint", BottledTaintItem::new);
 
     public static final DeferredItem<thaumcraft.eldritch.EldritchObjectItem> CRIMSON_RITES = thaumcraft.registry.EldritchContent.CRIMSON_RITES;
