@@ -33,6 +33,7 @@ public final class ModPayloads {
         ModNetwork.toClient(ShieldFxPayload.TYPE, ShieldFxPayload.STREAM_CODEC);
         ModNetwork.toServer(FocusChangePayload.TYPE, FocusChangePayload.STREAM_CODEC, FocusChangePayload::handle);
         ModNetwork.toServer(MiscTogglePayload.TYPE, MiscTogglePayload.STREAM_CODEC, MiscTogglePayload::handle);
+        ModNetwork.toServer(BellResetPayload.TYPE, BellResetPayload.STREAM_CODEC, BellResetPayload::handle);
         ModNetwork.toClient(BlockBubbleFxPayload.TYPE, BlockBubbleFxPayload.STREAM_CODEC);
     }
 }

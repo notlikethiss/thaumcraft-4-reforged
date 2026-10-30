@@ -13,6 +13,8 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.platform.ClientNetwork;
 import thaumcraft.item.armor.Hover;
+import thaumcraft.item.golem.GolemBellItem;
+import thaumcraft.network.BellResetPayload;
 import thaumcraft.network.FocusChangePayload;
 import thaumcraft.network.HoverTogglePayload;
 import thaumcraft.network.MiscTogglePayload;
@@ -55,10 +57,14 @@ public final class WandKeyHandler {
         }
         ItemStack held = player.getMainHandItem();
         boolean canChangeFocus = Wands.isWand(held) && !Wands.isSceptre(held);
-        if (inGame && canChangeFocus && (CHANGE_FOCUS.isDown() || focusClicked)
+        boolean holdingBell = held.getItem() instanceof GolemBellItem;
+        if (inGame && (canChangeFocus || holdingBell) && (CHANGE_FOCUS.isDown() || focusClicked)
             && minecraft.options.keySwapOffhand.isActiveAndMatches(CHANGE_FOCUS.getKey())) {
             while (minecraft.options.keySwapOffhand.consumeClick()) {
             }
+        }
+        if (inGame && holdingBell && focusClicked) {
+            ClientNetwork.sendToServer(new BellResetPayload());
         }
         if (CHANGE_FOCUS.isDown()) {
             if (inGame || radialActive) {
