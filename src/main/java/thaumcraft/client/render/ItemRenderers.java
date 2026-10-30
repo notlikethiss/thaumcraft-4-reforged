@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.hud.GearHud;
+import thaumcraft.client.hud.SanityHud;
 import thaumcraft.client.hud.WandHud;
 import thaumcraft.client.wand.FocusRadial;
 
@@ -41,6 +42,7 @@ public final class ItemRenderers {
     @SubscribeEvent
     static void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("wand_hud"), WandHud::render);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("sanity_hud"), SanityHud::render);
         event.registerAbove(VanillaGuiLayers.PLAYER_HEALTH, Thaumcraft.id("gear_hud"), GearHud::render);
         event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("focus_radial"), FocusRadial::render);
     }

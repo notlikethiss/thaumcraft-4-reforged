@@ -245,6 +245,7 @@ def generate(ctx):
         ("liquid_death_bucket", "bucket_death"),
         ("bath_salts", "bath_salts"),
         ("sanitizing_soap", "soap"),
+        ("sanity_checker", "sanitychecker"),
         ("bottled_taint", "bottle_taint"),
     ]:
         fluid_item(ctx, name, texture)

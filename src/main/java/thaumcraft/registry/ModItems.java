@@ -113,6 +113,7 @@ public final class ModItems {
     public static final DeferredItem<BucketItem> LIQUID_DEATH_BUCKET = ITEMS.registerItem("liquid_death_bucket", properties -> new BucketItem(ModFluids.LIQUID_DEATH.get(), properties.stacksTo(1)));
     public static final DeferredItem<BathSaltsItem> BATH_SALTS = ITEMS.registerItem("bath_salts", BathSaltsItem::new);
     public static final DeferredItem<SanitizingSoapItem> SANITIZING_SOAP = ITEMS.registerItem("sanitizing_soap", SanitizingSoapItem::new);
+    public static final DeferredItem<Item> SANITY_CHECKER = ITEMS.registerItem("sanity_checker", Item::new, properties -> properties.stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<BottledTaintItem> BOTTLED_TAINT = ITEMS.registerItem("bottled_taint", BottledTaintItem::new);
 
     public static final DeferredItem<Item> ALUMENTUM = ITEMS.registerItem("alumentum", properties -> new AlumentumItem(Registration.fuel(properties, 6400)));
