@@ -12,10 +12,12 @@ import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.recipeview.AspectGrid;
+import thaumcraft.recipeview.ArcaneView;
 import thaumcraft.registry.ModBlocks;
 
-final class ArcaneCategory implements IRecipeCategory<ArcaneDisplay> {
-    static final IRecipeType<ArcaneDisplay> TYPE = IRecipeType.create(Thaumcraft.id("arcane"), ArcaneDisplay.class);
+final class ArcaneCategory implements IRecipeCategory<ArcaneView> {
+    static final IRecipeType<ArcaneView> TYPE = IRecipeType.create(Thaumcraft.id("arcane"), ArcaneView.class);
     private static final int WIDTH = 130;
     private static final int PER_ROW = 7;
     private static final int COST_Y = 60;
@@ -29,7 +31,7 @@ final class ArcaneCategory implements IRecipeCategory<ArcaneDisplay> {
     }
 
     @Override
-    public IRecipeType<ArcaneDisplay> getRecipeType() {
+    public IRecipeType<ArcaneView> getRecipeType() {
         return TYPE;
     }
 
@@ -54,7 +56,7 @@ final class ArcaneCategory implements IRecipeCategory<ArcaneDisplay> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, ArcaneDisplay recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, ArcaneView recipe, IFocusGroup focuses) {
         for (int index = 0; index < recipe.ingredients().size() && index < 9; index++) {
             TcJei.accept(builder.addInputSlot(index % recipe.width() * 18, index / recipe.width() * 18).setStandardSlotBackground(), recipe.ingredients().get(index));
         }
@@ -66,13 +68,13 @@ final class ArcaneCategory implements IRecipeCategory<ArcaneDisplay> {
     }
 
     @Override
-    public void draw(ArcaneDisplay recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+    public void draw(ArcaneView recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         helper.getRecipeArrow().draw(graphics, 70, 19);
-        AspectStrip.draw(graphics, recipe.aspects(), PER_ROW, WIDTH, COST_Y, 1);
+        AspectGrid.draw(graphics, recipe.aspects(), PER_ROW, WIDTH, 0, COST_Y);
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, ArcaneDisplay recipe, IRecipeSlotsView slots, double mouseX, double mouseY) {
-        AspectStrip.tooltip(tooltip, recipe.aspects(), PER_ROW, WIDTH, COST_Y, mouseX, mouseY);
+    public void getTooltip(ITooltipBuilder tooltip, ArcaneView recipe, IRecipeSlotsView slots, double mouseX, double mouseY) {
+        TcJei.aspectTooltip(tooltip, recipe.aspects(), PER_ROW, WIDTH, COST_Y, mouseX, mouseY);
     }
 }

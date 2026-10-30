@@ -1,6 +1,5 @@
 package thaumcraft.client.jei;
 
-import java.util.List;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -15,14 +14,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import thaumcraft.Thaumcraft;
-import thaumcraft.crafting.InfusionEnchantmentRecipe;
+import thaumcraft.client.recipeview.AspectGrid;
+import thaumcraft.client.recipeview.InfusionLayout;
+import thaumcraft.recipeview.EnchantmentView;
 import thaumcraft.registry.ModBlocks;
 
-final class EnchantmentCategory implements IRecipeCategory<EnchantmentCategory.Entry> {
-    static final IRecipeType<Entry> TYPE = IRecipeType.create(Thaumcraft.id("infusion_enchantment"), Entry.class);
-
-    record Entry(InfusionEnchantmentRecipe recipe, List<ItemStack> books) {
-    }
+final class EnchantmentCategory implements IRecipeCategory<EnchantmentView> {
+    static final IRecipeType<EnchantmentView> TYPE = IRecipeType.create(Thaumcraft.id("infusion_enchantment"), EnchantmentView.class);
 
     private final IDrawable icon;
 
@@ -31,7 +29,7 @@ final class EnchantmentCategory implements IRecipeCategory<EnchantmentCategory.E
     }
 
     @Override
-    public IRecipeType<Entry> getRecipeType() {
+    public IRecipeType<EnchantmentView> getRecipeType() {
         return TYPE;
     }
 
@@ -56,21 +54,21 @@ final class EnchantmentCategory implements IRecipeCategory<EnchantmentCategory.E
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, Entry entry, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, EnchantmentView entry, IFocusGroup focuses) {
         builder.addInputSlot(InfusionLayout.CENTER_X - 8, InfusionLayout.CENTER_Y - 8).setStandardSlotBackground().add(new ItemStack(Items.BOOK));
-        InfusionLayout.components(builder, entry.recipe().components());
-        builder.addOutputSlot(InfusionLayout.WIDTH - 20, 0).setOutputSlotBackground().addItemStacks(entry.books());
+        TcJei.components(builder, entry.recipe().components());
+        builder.addOutputSlot(InfusionLayout.OUTPUT_X, InfusionLayout.OUTPUT_Y).setOutputSlotBackground().addItemStacks(entry.books());
         builder.addInvisibleIngredients(RecipeIngredientRole.CRAFTING_STATION).add(ModBlocks.RUNIC_MATRIX.get());
     }
 
     @Override
-    public void draw(Entry entry, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
-        AspectStrip.draw(graphics, entry.recipe().aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, InfusionLayout.ASPECTS_Y, 1);
-        InfusionLayout.instability(graphics, entry.recipe().instability());
+    public void draw(EnchantmentView entry, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+        AspectGrid.draw(graphics, entry.recipe().aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, 0, InfusionLayout.ASPECTS_Y);
+        InfusionLayout.instability(graphics, entry.recipe().instability(), 0, 0);
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, Entry entry, IRecipeSlotsView slots, double mouseX, double mouseY) {
-        AspectStrip.tooltip(tooltip, entry.recipe().aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, InfusionLayout.ASPECTS_Y, mouseX, mouseY);
+    public void getTooltip(ITooltipBuilder tooltip, EnchantmentView entry, IRecipeSlotsView slots, double mouseX, double mouseY) {
+        TcJei.aspectTooltip(tooltip, entry.recipe().aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, InfusionLayout.ASPECTS_Y, mouseX, mouseY);
     }
 }

@@ -15,7 +15,7 @@
 
 | Ветка | MC | Загрузчик | Java | Прочее |
 |---|---|---|---|---|
-| `main` | 26.3 | NeoForge 26.3.0.57-beta | 25 | JEI 31.9.0.58, TerraBlender 26.3-26.3.0.0.9, свои слоты бижутерии |
+| `main` | 26.3 | NeoForge 26.3.0.57-beta | 25 | JEI 31.9.0.58, REI 26.3.824 (architectury 22.0.5), TerraBlender 26.3-26.3.0.0.9, свои слоты бижутерии |
 | `mc/26.1.2` | 26.1.2 | NeoForge 26.1.2.122 | 25 | JEI 29.47.0.111, TerraBlender 26.1.2-26.1.2.0.3, свои слоты бижутерии |
 | `mc/1.21.1` | 1.21.1 | NeoForge 21.1.256 | 21 | Parchment 2024.11.17, JEI 19.57.0.451, TerraBlender 1.21.1-4.1.0.1, Curios 9.5.1 |
 | `mc/1.19.2` | 1.19.2 | Forge 43.x (legacyforge) | 17 | планируется, Parchment 2022.11.27 |
@@ -41,6 +41,7 @@
 - `platform/` и `client/platform/` содержат всё, где API версий расходится: сеть (`ModNetwork`, `ClientNetwork`), данные стаков (`StackData`/`StackKey`), attachments (`DataAttachments`/`DataKey`), `Transfer`, `Teleport`, `BiomeEdit`, `Registration` (инструменты, броня, еда, топливо), `Baubles`, `Menus`, `GolemActions`, `OuterLandsData`, рендер-типы и пайплайны. Игровая логика ходит только через них. `tools/check_seams.py` (в CI) падает на запрещённых импортах вне швов.
 - Рендер: `client/geom` считает вершины и пишет в `QuadSink` без классов Minecraft (только JOML), `client/platform` реализует sink-и под версию. BER, рендереры и частицы тонкие.
 - Виньетка варпа — непрозрачная RGB-маска: смешивание `ZERO / ONE_MINUS_SRC_COLOR`, сила эффекта задаётся RGB, не альфой. На 26.3 использовать `RenderPipelines.VIGNETTE`; обычный alpha-blit закрывает обзор чёрным центром текстуры.
+- JEI (`client/jei`) и REI (`compat/rei` common, `client/rei` клиент) берут рецепты, доп. стаки и скрытые стаки только из `recipeview/RecipeCatalog`, разметку из `client/recipeview`. Дисплеи REI сериализуются ключом рецепта TC4 (жезлы `wand:<cap>:<rod>`, скипетры `sceptre:<cap>:<rod>`), сериализаторы в common-плагине. В dev-ранах по умолчанию JEI, REI через `-Precipe_viewer=rei`.
 - Регистрация: `registry/` (`DeferredRegister`), пакеты в `network/ModPayloads`, клиентские хендлеры в `client/ClientPayloadHandlers`, capabilities в `registry/ModCapabilities`.
 - Meta TC4 раскладывается в отдельные id или свойства blockstate по `tools/id_map.json` (уникальна пара id + state).
 
@@ -99,6 +100,7 @@ python3 tools/gen_resources.py && git status --short src/generated
 
 - Блоки модовых жидкостей добавляются генератором в `minecraft:washed_away_by_fluids`: иначе ванильный `FlowingFluid` не может обновлять уже существующий поток.
 - Curios под 26.3 падает на NeoForge 26.3.0.37+ (`ModConfig.Type.COMMON` удалён в FML 12), поэтому на `main` свои слоты за `platform/Baubles`. Конфиги только SYNCED, STARTUP, CLIENT.
+- Architectury 22.0.3 (транзитивно от REI) валит dev-раны миксином `MixinBlockTransformer` («No refMap loaded») на bootstrap ванильных блоков; в `localRuntime` явно подтянут 22.0.5 (`architectury_version`), пин убирать нельзя.
 - SDL3: левая кнопка мыши `1`, проверять `InputConstants.MOUSE_BUTTON_LEFT`.
 - Data components неизменяемые: стеки хранить как `ItemStackTemplate`, наборы как `ItemContainerContents`.
 - Цвета в `items/*.json` ARGB: `default` у `minecraft:dye` без альфы делает некрашеный слой прозрачным.

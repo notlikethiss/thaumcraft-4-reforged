@@ -46,3 +46,10 @@ Adding a touch of magic to Minecraft. Unofficial port of Thaumcraft 4.2.3.5.
     versionRange="*"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="roughlyenoughitems"
+    type="optional"
+    versionRange="*"
+    ordering="AFTER"
+    side="BOTH"
