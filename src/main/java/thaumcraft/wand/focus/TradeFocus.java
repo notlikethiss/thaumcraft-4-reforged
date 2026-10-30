@@ -13,10 +13,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jspecify.annotations.Nullable;
@@ -80,12 +82,15 @@ public class TradeFocus extends FocusItem implements Architect {
     public InteractionResult onFocusRightClick(ItemStack wand, Level level, Player player, @Nullable HitResult hit) {
         BlockHitResult target = target(level, player);
         if (target == null) {
+            if (player.isShiftKeyDown() && level instanceof ServerLevel) {
+                storePickedBlock(wand, ItemStack.EMPTY);
+            }
             return InteractionResult.SUCCESS;
         }
         BlockPos pos = target.getBlockPos();
         BlockState state = level.getBlockState(pos);
         if (player.isShiftKeyDown()) {
-            if (level instanceof ServerLevel && level.getBlockEntity(pos) == null) {
+            if (level instanceof ServerLevel && level.getBlockEntity(pos) == null && canPick(state)) {
                 storePickedBlock(wand, LootBlock.stackForState(state));
             }
             return InteractionResult.SUCCESS;
@@ -126,6 +131,12 @@ public class TradeFocus extends FocusItem implements Architect {
             }
         }
         return false;
+    }
+
+    public static boolean canPick(BlockState state) {
+        return state.getBlock().asItem() instanceof BlockItem
+            && !state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)
+            && !state.hasProperty(BlockStateProperties.BED_PART);
     }
 
     public static void storePickedBlock(ItemStack wand, ItemStack picked) {
