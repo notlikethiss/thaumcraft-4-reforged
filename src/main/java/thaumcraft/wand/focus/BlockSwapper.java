@@ -90,6 +90,9 @@ public final class BlockSwapper {
         if (!level.mayInteract(player, pos) || samePlacement(state, swap.target())) {
             return false;
         }
+        if (!LootBlock.stateForStack(swap.target()).canSurvive(level, pos)) {
+            return false;
+        }
         BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
         if (CommonHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos, hit).isCanceled()) {
             return false;
