@@ -47,20 +47,21 @@ public class EldritchOrb extends ThrowableProjectile {
 
     @Override
     protected void onHit(HitResult hit) {
-        if (!(this.level() instanceof ServerLevel level) || !(this.getOwner() instanceof LivingEntity owner)) {
-            this.discard();
+        if (!(this.level() instanceof ServerLevel level)) {
             return;
         }
-        DamageSource source = level.damageSources().indirectMagic(this, owner);
-        for (Entity entity : level.getEntities(owner, this.getBoundingBox().inflate(2.0))) {
-            if (entity instanceof LivingEntity living && entity.getType().getTags().noneMatch(EntityTypeTags.UNDEAD::equals)) {
-                living.hurtServer(level, source, (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.666F);
-                living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 160), owner);
+        if (this.getOwner() instanceof LivingEntity owner) {
+            DamageSource source = level.damageSources().indirectMagic(this, owner);
+            for (Entity entity : level.getEntities(owner, this.getBoundingBox().inflate(2.0))) {
+                if (entity instanceof LivingEntity living && entity.getType().getTags().noneMatch(EntityTypeTags.UNDEAD::equals)) {
+                    living.hurtServer(level, source, (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.666F);
+                    living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 160), owner);
+                }
             }
+            level.playSound(null, this.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.HOSTILE, 0.5F, 2.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.8F);
+            level.broadcastEntityEvent(this, (byte) 16);
         }
-        level.playSound(null, this.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.HOSTILE, 0.5F, 2.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.8F);
-        level.broadcastEntityEvent(this, (byte) 16);
-        this.tickCount = 100;
+        this.discard();
     }
 
     @Override
