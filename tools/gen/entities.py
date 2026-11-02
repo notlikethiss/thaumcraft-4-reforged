@@ -115,9 +115,13 @@ def spawn_modifiers(ctx):
         ctx.DATA / NS / "tags" / "worldgen" / "biome" / "brainy_zombie_biomes.json",
         {"replace": False, "values": brainy_biomes},
     )
+    ctx.write(
+        ctx.DATA / NS / "tags" / "worldgen" / "biome" / "nether_mob_biomes.json",
+        {"replace": False, "values": ["minecraft:nether_wastes", "minecraft:basalt_deltas", "minecraft:soul_sand_valley"]},
+    )
     modifiers = {
-        "firebat": ("#minecraft:is_nether", 10, 1, 2),
-        "wisp": ("#minecraft:is_nether", 5),
+        "firebat": (f"#{NS}:nether_mob_biomes", 10, 1, 2),
+        "wisp": (f"#{NS}:nether_mob_biomes", 5),
         "taintacle": (f"{NS}:tainted_land", 1),
     }
     for name, settings in modifiers.items():

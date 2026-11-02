@@ -174,6 +174,10 @@ public final class ModEntities {
     }
 
     private static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(FIREBAT.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            FireBat::checkFireBatSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(WISP.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            Wisp::checkWispSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(BRAINY_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             BrainyZombie::checkBrainyZombieSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(GIANT_BRAINY_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
