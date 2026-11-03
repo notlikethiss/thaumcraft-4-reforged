@@ -158,8 +158,6 @@ public final class ThaumometerHandRenderer {
         poseStack.mulPose(Axis.YN.rotationDegrees(135.0F));
         poseStack.mulPose(Axis.XP.rotationDegrees(pitchBob * 0.1F));
         poseStack.mulPose(Axis.YP.rotationDegrees(yawBob * 0.1F));
-        // The outer transform already lowers the instrument during a slot change.
-        // An equip offset here used to cancel that movement after the 0.4 scale.
         poseStack.translate(-0.7F * 0.8F, 0.65F * 0.8F, 0.9F * 0.8F);
         poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         poseStack.translate(0.0F, 0.0F, -0.9F * 0.8F);

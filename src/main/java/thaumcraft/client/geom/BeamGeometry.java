@@ -60,7 +60,7 @@ public final class BeamGeometry {
         float far = 0.15F * size;
         float nearEnd = -0.15F * size * params.endMod();
         float farEnd = 0.15F * size * params.endMod();
-        int argb = packColor(params.red(), params.green(), params.blue(), opacity);
+        int argb = Colors.argb(params.red(), params.green(), params.blue(), opacity);
         Vector3f position = new Vector3f();
         for (int strip = 0; strip < 3; strip++) {
             float top = params.length() * size / params.width();
@@ -78,13 +78,5 @@ public final class BeamGeometry {
     private static void emit(Matrix4f matrix, Vector3f position, QuadSink sink, float x, float y, float u, float v, int argb) {
         matrix.transformPosition(x, y, 0.0F, position);
         sink.vertex(position.x, position.y, position.z, u, v, argb, LIGHT);
-    }
-
-    private static int packColor(float red, float green, float blue, float alpha) {
-        return channel(alpha) << 24 | channel(red) << 16 | channel(green) << 8 | channel(blue);
-    }
-
-    private static int channel(float value) {
-        return Math.clamp(Math.round(value * 255.0F), 0, 255);
     }
 }

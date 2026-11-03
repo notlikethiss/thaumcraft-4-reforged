@@ -13,9 +13,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import thaumcraft.client.geom.ProjectedWindow;
 
-/** The scanner's glass projected into the same clip space as the world. */
 final class ThaumometerLens {
-    // Inside the opaque frame of scanscreen.png, in its local [-0.5, 0.5] coordinates.
     private static final float[][] GLASS = {
         {-0.22F, 0.38F}, {0.22F, 0.38F}, {0.44F, 0.0F},
         {0.22F, -0.38F}, {-0.22F, -0.38F}, {-0.44F, 0.0F}
@@ -36,7 +34,6 @@ final class ThaumometerLens {
 
         PoseStack bob = new PoseStack();
         applyCameraEffects(bob, camera, game.optionsRenderState);
-        // Hand rendering starts at inverse(view), so modelView * pose is bob * hand.
         PoseStack lens = new PoseStack();
         lens.mulPose(bob.last().pose());
         float pitchBob = hand.pitchBob();

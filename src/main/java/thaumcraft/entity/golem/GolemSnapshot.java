@@ -3,7 +3,6 @@ package thaumcraft.entity.golem;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 
 public record GolemSnapshot(int core, boolean advanced, List<Integer> upgrades, String decoration, List<Marker> markers, ItemContainerContents filters, List<Integer> colors, int toggles) {

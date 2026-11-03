@@ -10,6 +10,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.client.platform.TcRenderTypes.Kind;
 import thaumcraft.client.render.model.ObjModel;
+import thaumcraft.client.geom.Colors;
 
 public final class NodeDeviceRendering {
     private static final Identifier DEVICE_MODEL = Thaumcraft.id("models/obj/node_stabilizer.obj");
@@ -25,13 +26,6 @@ public final class NodeDeviceRendering {
     }
 
     private NodeDeviceRendering() {
-    }
-
-    public static int color(float red, float green, float blue) {
-        return 0xFF000000
-            | Math.clamp(Math.round(red * 255.0F), 0, 255) << 16
-            | Math.clamp(Math.round(green * 255.0F), 0, 255) << 8
-            | Math.clamp(Math.round(blue * 255.0F), 0, 255);
     }
 
     private static void part(SubmitNodeCollector collector, PoseStack poseStack, Part texture, ObjModel model, String name, int argb, int light) {
@@ -52,7 +46,7 @@ public final class NodeDeviceRendering {
             poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
             poseStack.translate(0.0F, 0.0F, count / 100.0F);
             part(collector, poseStack, base, model, "piston", WHITE, light);
-            int tint = lock == 2 ? color(1.0F, 0.2F, 0.2F) : WHITE;
+            int tint = lock == 2 ? Colors.rgb(1.0F, 0.2F, 0.2F) : WHITE;
             int overLight = light;
             if (animated) {
                 float scale = Mth.sin((viewerTicks + index * 5) / 3.0F) * 0.1F + 0.9F;
@@ -68,7 +62,7 @@ public final class NodeDeviceRendering {
         ObjModel model = ObjModel.get(DEVICE_MODEL);
         Part base = new Part(Kind.ENTITY_CUTOUT, CONVERTER);
         Part over = new Part(Kind.ENTITY_CUTOUT, CONVERTER_OVER);
-        int tint = status == 2 ? color(1.0F, 0.0F, 0.3F) : status == 1 ? color(1.0F, 0.6F, 0.1F) : color(0.5F, 1.0F, 0.5F);
+        int tint = status == 2 ? Colors.rgb(1.0F, 0.0F, 0.3F) : status == 1 ? Colors.rgb(1.0F, 0.6F, 0.1F) : Colors.rgb(0.5F, 1.0F, 0.5F);
         float travel = Math.min(50, count) / 137.0F;
         poseStack.pushPose();
         poseStack.translate(0.5F, 1.0F, 0.5F);
@@ -117,7 +111,7 @@ public final class NodeDeviceRendering {
         poseStack.popPose();
         int tint = WHITE;
         if (crystalColor >= 0) {
-            tint = color((crystalColor >> 16 & 255) / 200.0F, (crystalColor >> 8 & 255) / 200.0F, (crystalColor & 255) / 200.0F);
+            tint = Colors.rgb((crystalColor >> 16 & 255) / 200.0F, (crystalColor >> 8 & 255) / 200.0F, (crystalColor & 255) / 200.0F);
         }
         float scale = Mth.sin(ticks / 2.0F) * 0.05F + 0.95F;
         int crystalLight = WorldRendering.emissiveLight((connected ? 50 : 0) + (int) (150.0F * scale));
@@ -150,7 +144,7 @@ public final class NodeDeviceRendering {
         part(collector, poseStack, solid, model, "RingFloat", WHITE, light);
         int tint = WHITE;
         if (crystalColor >= 0) {
-            tint = color((crystalColor >> 16 & 255) / 200.0F, (crystalColor >> 8 & 255) / 200.0F, (crystalColor & 255) / 200.0F);
+            tint = Colors.rgb((crystalColor >> 16 & 255) / 200.0F, (crystalColor >> 8 & 255) / 200.0F, (crystalColor & 255) / 200.0F);
         }
         float scale = Mth.sin(ticks / 2.0F) * 0.05F + 0.95F;
         int crystalLight = WorldRendering.emissiveLight((connected ? 50 : 0) + (int) (150.0F * scale));

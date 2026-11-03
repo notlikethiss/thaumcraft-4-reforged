@@ -17,16 +17,6 @@ import thaumcraft.node.NodeGenerator;
 import thaumcraft.registry.ModBlocks;
 
 public class SilverwoodTreeGenerator {
-    @FunctionalInterface
-    public interface KnotPlacer {
-        void place(LevelAccessor level, BlockPos pos, Random random);
-    }
-
-    private static KnotPlacer knotPlacer = (level, pos, random) -> {
-        level.setBlock(pos, ModBlocks.SILVERWOOD_KNOT.get().defaultBlockState(), Block.UPDATE_CLIENTS);
-        NodeGenerator.createRandomNodeAt(level, pos, random, true, false, false);
-    };
-
     private final boolean notify;
     private final int minTreeHeight;
     private final int randomTreeHeight;
@@ -37,10 +27,6 @@ public class SilverwoodTreeGenerator {
         this.worldgen = !notify;
         this.minTreeHeight = minTreeHeight;
         this.randomTreeHeight = randomTreeHeight;
-    }
-
-    public static void setKnotPlacer(KnotPlacer placer) {
-        knotPlacer = placer;
     }
 
     public boolean isWorldgen() {
@@ -125,7 +111,7 @@ public class SilverwoodTreeGenerator {
             BlockPos trunkPos = new BlockPos(x, y + offset, z);
             if (isFree(level.getBlockState(trunkPos))) {
                 if (offset > 0 && !lastBlock && random.nextInt(chance) == 0) {
-                    knotPlacer.place(level, trunkPos, random);
+                    placeKnot(level, trunkPos, random);
                     chance += height;
                     lastBlock = true;
                 } else {
@@ -198,5 +184,10 @@ public class SilverwoodTreeGenerator {
             }
         }
         return true;
+    }
+
+    private static void placeKnot(LevelAccessor level, BlockPos pos, Random random) {
+        level.setBlock(pos, ModBlocks.SILVERWOOD_KNOT.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+        NodeGenerator.createRandomNodeAt(level, pos, random, true, false, false);
     }
 }

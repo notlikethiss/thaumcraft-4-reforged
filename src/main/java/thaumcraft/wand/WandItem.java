@@ -318,8 +318,6 @@ public class WandItem extends Item implements Architect {
 
     @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        // WandSpecialRenderer supplies the casting pose. Vanilla's bow pose would
-        // transform the same model a second time and move it out of the hand.
         return ItemUseAnimation.NONE;
     }
 
@@ -331,8 +329,6 @@ public class WandItem extends Item implements Architect {
         if (oldStack == newStack) {
             return false;
         }
-        // Server updates replace the stack while vis is spent or a node is tapped.
-        // Those updates must not repeatedly lower the held wand.
         ItemStack oldAppearance = oldStack.copy();
         ItemStack newAppearance = newStack.copy();
         WandKeys.VIS.remove(oldAppearance);

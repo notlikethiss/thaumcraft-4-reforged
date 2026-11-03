@@ -88,7 +88,6 @@ public class Pech extends Monster implements RangedAttackMob, net.minecraft.worl
     private final ItemStack[] loot = new ItemStack[9];
     private boolean trading;
     private boolean updateCombatGoal;
-    private int chargeCount;
     private float mumble;
     private @Nullable Goal combatGoal;
 
