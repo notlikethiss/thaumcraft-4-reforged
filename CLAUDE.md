@@ -10,6 +10,7 @@
 - Баги TC4 чиним только если они ломают игру (дюп, потеря предметов, NPE, рассинхрон, краш сервера). Игровые особенности оставляем.
 - Сервер проверяет то, чему TC4 верил с клиента. Клиентские классы на сервер не протекают, всё должно работать на выделенном сервере.
 - Ресурсы делают Python-генераторы в `tools/`, datagen не используется.
+- GameTest-ы не пишутся ни в одной ветке (решение пользователя). Логику проверяет пользователь в `runClient` и `runServer`.
 
 ## Ветки и версии
 
@@ -69,14 +70,12 @@
 2. Id и состояния взять из `tools/id_map.json`, ванильные id из `tools/vanilla_ids.json`.
 3. Версионно-зависимые вызовы спрятать в шов, геометрию вынести в `client/geom`.
 4. Ресурсы через генератор, тексты по ключам lang (строки, захардкоженные в TC4, выносить в `tools/lang/ui`).
-5. GameTest на ключевую логику в `test/`.
 
 ## Проверки
 
 ```sh
 export JAVA_HOME=/opt/homebrew/opt/openjdk@25
 ./gradlew build
-./gradlew runGameTestServer
 python3 tools/check_seams.py
 python3 tools/validate_ids.py --mc 26.3 --reports-dir <dir> --server-jar <jar> --client-jar <jar>
 python3 tools/inventory.py --check
@@ -104,7 +103,6 @@ python3 tools/gen_resources.py && git status --short src/generated
 - Data components неизменяемые: стеки хранить как `ItemStackTemplate`, наборы как `ItemContainerContents`.
 - Цвета в `items/*.json` ARGB: `default` у `minecraft:dye` без альфы делает некрашеный слой прозрачным.
 - Еда только через `Registration.food` (Consumable вне `platform/` запрещён). BE сохраняются через ванильные `ValueInput`/`ValueOutput`.
-- GameTest: мок-игроку нужен `connection.markClientLoaded()`, иначе он неуязвим. Сервер тестов тикает без пауз, кулдауны по реальному времени ждать в тесте. Outer Lands в тестах подключается датапаком `src/gametest/packs/outer_lands`.
 - `onEquipped`/`onUnequipped` бижутерии вызываются только на сервере.
 
 ## Намеренные отступления от TC4
