@@ -25,7 +25,7 @@ import thaumcraft.wand.Wands;
 public final class ModCreativeTabs {
     private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Thaumcraft.MODID);
 
-    private static final Set<String> HIDDEN = Set.of("ancient_stone_no_spawn", "thaumonomicon_cheat", "strange_crystals", "node_jar");
+    private static final Set<String> HIDDEN = Set.of("ancient_stone_no_spawn", "strange_crystals", "node_jar");
 
     private static final Map<String, String> REQUIRES_METAL = Map.of(
         "tin_nugget", "tin",

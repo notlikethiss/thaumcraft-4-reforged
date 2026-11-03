@@ -263,7 +263,7 @@ public final class ModItems {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = RegistryHelper.registerItem(ITEMS, "research_notes", properties -> new ResearchNotesItem(properties, false), properties -> properties.rarity(Rarity.RARE));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = RegistryHelper.registerItem(ITEMS, "discovery", properties -> new ResearchNotesItem(properties, true), properties -> properties.rarity(Rarity.EPIC).stacksTo(64));
     public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON = RegistryHelper.registerItem(ITEMS, "thaumonomicon", properties -> new ThaumonomiconItem(properties, false), ThaumonomiconItem::properties);
-    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON_CHEAT = RegistryHelper.registerItem(ITEMS, "thaumonomicon_cheat", properties -> new ThaumonomiconItem(properties, true), ThaumonomiconItem::properties);
+    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON_CHEAT = RegistryHelper.registerItem(ITEMS, "thaumonomicon_cheat", properties -> new ThaumonomiconItem(properties, true), ThaumonomiconItem::cheatProperties);
 
     public static final DeferredItem<FocusPouchItem> FOCUS_POUCH = RegistryHelper.registerItem(ITEMS, "focus_pouch", FocusPouchItem::new, properties -> properties.stacksTo(1).rarity(Rarity.RARE));
     public static final DeferredItem<FireFocus> FOCUS_FIRE = RegistryHelper.registerItem(ITEMS, "focus_fire", FireFocus::new, FocusItem::properties);
