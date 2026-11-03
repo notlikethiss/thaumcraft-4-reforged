@@ -181,7 +181,7 @@ def recipes(ctx):
             continue
         if duplicates:
             if entry["key"]:
-                problems.append(f"{entry['key']} duplicates {duplicates}; add an alias in convert_recipes.py")
+                problems.append(f"{entry['key']} duplicates {duplicates}; add an alias in tools/tc_recipes.json")
             continue
         name = entry["id"]
         if (ctx.DATA / NS / ctx.profile.recipe_folder / f"{name}.json").exists():
