@@ -17,7 +17,7 @@
 
 ## Синхронизация с main
 
-Последний синхронизированный коммит `main`: `9f0b9da`.
+Последний синхронизированный коммит `main`: `d72680e`.
 
 1. `git log --reverse <sha>..main`.
 2. Коммит только с ресурсами, lang или `tools/`: `git cherry-pick`, затем `python3 tools/gen_resources.py --mc 1.21.1`.
