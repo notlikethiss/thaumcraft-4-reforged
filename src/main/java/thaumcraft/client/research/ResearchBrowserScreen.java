@@ -261,7 +261,7 @@ public class ResearchBrowserScreen extends Screen {
         graphics.enableScissor(mapLeft, mapTop, mapLeft + VIEW_WIDTH, mapTop + VIEW_HEIGHT);
         int backgroundU = (int) ((float) (offsetX - guiMapTop) / Math.abs(guiMapTop - guiMapBottom) * 288.0F) / 2 * 2;
         int backgroundV = (int) ((float) (offsetY - guiMapLeft) / Math.abs(guiMapLeft - guiMapRight) * 316.0F) / 2 * 2;
-        GuiBlit.blit(graphics, category.background(), mapLeft, mapTop, VIEW_WIDTH, VIEW_HEIGHT, backgroundU, backgroundV, VIEW_WIDTH, VIEW_HEIGHT, 512, 512, 0xFFFFFFFF);
+        GuiBlit.blit(graphics, category.background(), mapLeft, mapTop, VIEW_WIDTH, VIEW_HEIGHT, backgroundU / 2, backgroundV / 2, VIEW_WIDTH / 2, VIEW_HEIGHT / 2, 512, 512, 0xFFFFFFFF);
 
         for (ResearchItem item : research) {
             for (String parentKey : item.parents()) {
