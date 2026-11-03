@@ -4,6 +4,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +17,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import thaumcraft.client.platform.ClientNetwork;
+import thaumcraft.fx.Fx;
 import thaumcraft.network.ScanPayload;
 import thaumcraft.registry.ModSounds;
 import thaumcraft.research.ScanClientHooks;
@@ -52,6 +54,9 @@ public final class ThaumometerClient implements ScanClientHooks.Scanner {
             scanTicks = 0;
             attempted = false;
         }
+        if (scan != null) {
+            runes(level, scan);
+        }
         if (scan == null || attempted) {
             return;
         }
@@ -84,6 +89,22 @@ public final class ThaumometerClient implements ScanClientHooks.Scanner {
         startScan = null;
         scanTicks = 0;
         attempted = false;
+    }
+
+    private static void runes(Level level, Hit scan) {
+        RandomSource random = level.getRandom();
+        float red = 0.3F + random.nextFloat() * 0.7F;
+        float blue = 0.3F + random.nextFloat() * 0.7F;
+        if (scan.kind() == ScanManager.KIND_ENTITY) {
+            Entity entity = level.getEntity(scan.entityId());
+            if (entity != null) {
+                Fx.get().blockRunes(level, entity.getX() - 0.5, entity.getY() + entity.getEyeHeight() / 2.0F, entity.getZ() - 0.5,
+                    red, 0.0F, blue, (int) (entity.getBbHeight() * 15.0F), 0.03F);
+            }
+            return;
+        }
+        BlockPos pos = scan.pos();
+        Fx.get().blockRunes(level, pos.getX(), pos.getY() + 0.25, pos.getZ(), red, 0.0F, blue, 15, 0.03F);
     }
 
     private @Nullable Hit doScan(Level level, Player player) {

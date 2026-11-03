@@ -58,7 +58,7 @@ public final class ThaumometerHandRenderer {
         int light = event.getPackedLight();
         float partialTick = event.getPartialTick();
         float swing = event.getSwingProgress();
-        float hidden = event.getEquipProgress();
+        float hidden = ThaumometerEquip.hidden(event.getEquipProgress());
 
         poseStack.pushPose();
         float swingSqrt = Mth.sin(Mth.sqrt(swing) * Mth.PI);
