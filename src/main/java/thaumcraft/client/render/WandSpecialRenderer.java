@@ -52,8 +52,8 @@ public final class WandSpecialRenderer {
     private WandSpecialRenderer() {
     }
 
-    private static void transform(PoseStack poseStack, LegacyItemView view, boolean staff) {
-        view.apply(poseStack);
+    private static void transform(PoseStack poseStack, LegacyItemView view, boolean staff, float useTicks) {
+        view.apply(poseStack, useTicks);
         if (staff) {
             poseStack.translate(0.0F, 0.5F, 0.0F);
         }
@@ -148,7 +148,7 @@ public final class WandSpecialRenderer {
         WandRod rod = resolved.getRod();
         boolean staff = rod.staff();
         boolean sceptre = resolved.sceptre();
-        transform(poseStack, view, staff);
+        transform(poseStack, view, staff, state.useTicks());
         animate(poseStack, state, view);
         float ticks = Util.getMillis() / 50.0F;
         int rodLight = lightCoords;

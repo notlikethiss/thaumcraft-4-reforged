@@ -17,7 +17,7 @@
 
 ## Синхронизация с main
 
-Последний синхронизированный коммит `main`: `d7993ed`.
+Последний синхронизированный коммит `main`: `03e4be5`.
 
 Ветка отстаёт от `main` по содержанию: коммит `95dcec5` (parity fixes 2026-10-15) не перенесён, на ветке нет `StartupConfig`/`allow_cheat_sheet`, `SpawnToggles`, `LegacyDrops`, `MonsterBiomeSpawnModifier`, `WardedPearlEvents` и `world_generation_nether`. Sha выше отражает только порядок синхронизации, а пропущенное переносится отдельно.
 

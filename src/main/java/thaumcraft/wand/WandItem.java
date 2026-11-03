@@ -319,7 +319,7 @@ public class WandItem extends Item implements Architect {
 
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
+        return UseAnim.NONE;
     }
 
     @Override
