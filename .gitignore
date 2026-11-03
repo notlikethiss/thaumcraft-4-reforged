@@ -8,16 +8,11 @@ out/
 *.iml
 /reference
 /tools/cache
-tools/assets_pending/
 __pycache__/
-CONTINUE.md
 crash-report.md
 Thaumcraft-1.7.10-4.2.3.5.jar
 .claude/worktrees/
 .worktrees/
 .claude/*.lock
 cmds
-CHECKLIST.md
-INVENTORY.md
-PARITY_FIXES.md
-PLAN.md
+logs/
