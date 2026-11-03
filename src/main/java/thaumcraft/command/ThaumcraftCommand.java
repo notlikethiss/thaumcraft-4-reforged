@@ -73,7 +73,6 @@ import thaumcraft.research.WarpType;
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class ThaumcraftCommand {
     private static final int DEFAULT_BEAM_COLOR = 0xFF00FF;
-    private static final List<String> ALIASES = List.of("thaum", "tc");
     private static final List<String> WARP_TYPES = List.of("PERM", "TEMP", "STICKY");
     private static final List<String> HELP = List.of(
         "aliases",
@@ -263,9 +262,7 @@ public final class ThaumcraftCommand {
                         )
                 )
         );
-        for (String alias : ALIASES) {
-            dispatcher.register(Commands.literal(alias).requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).redirect(root));
-        }
+        dispatcher.register(Commands.literal("tc").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).redirect(root));
     }
 
     private static int researchList(CommandContext<CommandSourceStack> context) {

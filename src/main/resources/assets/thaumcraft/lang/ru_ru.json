@@ -199,7 +199,7 @@
   "champion.mod.warded": "Защищённый",
   "champion.mod.warp": "Искажённый",
   "champion.spine": "Колючий",
-  "commands.thaumcraft.help.aliases": "Вместо /thaumcraft можно писать /thaum или /tc.",
+  "commands.thaumcraft.help.aliases": "Вместо /thaumcraft можно писать /tc.",
   "commands.thaumcraft.help.aspect": "Выдать игроку очки исследования аспектов.",
   "commands.thaumcraft.help.aspect.usage": "  /thaumcraft aspect <игрок> <аспект|all> <количество>",
   "commands.thaumcraft.help.research": "Выдать игроку исследования.",
