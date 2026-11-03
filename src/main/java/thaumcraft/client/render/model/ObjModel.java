@@ -29,10 +29,6 @@ public final class ObjModel {
         return CACHE.computeIfAbsent(location, ObjModel::load);
     }
 
-    public static void clearCache() {
-        CACHE.clear();
-    }
-
     public static ObjModel load(Identifier location) {
         List<float[]> positions = new ArrayList<>();
         List<float[]> uvs = new ArrayList<>();

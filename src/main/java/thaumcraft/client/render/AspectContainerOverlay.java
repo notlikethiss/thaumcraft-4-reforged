@@ -29,7 +29,6 @@ import thaumcraft.item.gear.Goggles;
 import thaumcraft.node.NodeView;
 import thaumcraft.research.Knowledge;
 
-/** Contents of the targeted essentia container, revealed by goggles. */
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class AspectContainerOverlay {
     private static final Identifier UNKNOWN = Thaumcraft.id("textures/aspects/_unknown.png");

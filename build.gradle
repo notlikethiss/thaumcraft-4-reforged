@@ -72,18 +72,10 @@ neoForge {
     runs {
         client {
             client()
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         server {
             server()
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-        gameTestServer {
-            type = "gameTestServer"
-            programArgument '--packs'
-            programArgument file('src/gametest/packs').absolutePath
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'

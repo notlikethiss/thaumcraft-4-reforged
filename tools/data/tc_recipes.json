@@ -1,0 +1,829 @@
+[
+  {
+    "key": "MundaneAmulet",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:mundane_amulet",
+      "count": 1
+    },
+    "pattern": [
+      " S ",
+      "S S",
+      " I "
+    ],
+    "ingredients": {
+      "S": "minecraft:string",
+      "I": "minecraft:gold_ingot"
+    },
+    "id": "mundane_amulet"
+  },
+  {
+    "key": "MundaneRing",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:mundane_ring",
+      "count": 1
+    },
+    "pattern": [
+      " N ",
+      "N N",
+      " N "
+    ],
+    "ingredients": {
+      "N": "minecraft:gold_nugget"
+    },
+    "id": "mundane_ring"
+  },
+  {
+    "key": "MundaneBelt",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:mundane_belt",
+      "count": 1
+    },
+    "pattern": [
+      " L ",
+      "L L",
+      " I "
+    ],
+    "ingredients": {
+      "L": "minecraft:leather",
+      "I": "minecraft:gold_ingot"
+    },
+    "id": "mundane_belt"
+  },
+  {
+    "key": "JarLabel",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:jar_label",
+      "count": 4
+    },
+    "ingredients": [
+      "#c:dyes/black",
+      "minecraft:slime_ball",
+      "minecraft:paper",
+      "minecraft:paper",
+      "minecraft:paper",
+      "minecraft:paper"
+    ],
+    "id": "jar_label"
+  },
+  {
+    "key": "WandBasic",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:wand",
+      "count": 1,
+      "data": {
+        "cap": "iron",
+        "rod": "wood"
+      }
+    },
+    "pattern": [
+      "  I",
+      " S ",
+      "I  "
+    ],
+    "ingredients": {
+      "I": "thaumcraft:iron_wand_cap",
+      "S": "#c:rods/wooden"
+    },
+    "components": true,
+    "id": "wand_iron_wood",
+    "alias": true
+  },
+  {
+    "key": "WandCapIron",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:iron_wand_cap",
+      "count": 1
+    },
+    "pattern": [
+      "NNN",
+      "N N"
+    ],
+    "ingredients": {
+      "N": "#c:nuggets/iron"
+    },
+    "id": "iron_wand_cap",
+    "alias": true
+  },
+  {
+    "key": "KnowFrag",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:research_notes",
+      "count": 1
+    },
+    "pattern": [
+      "KKK",
+      "KKK",
+      "KKK"
+    ],
+    "ingredients": {
+      "K": "thaumcraft:knowledge_fragment"
+    },
+    "id": "know_frag"
+  },
+  {
+    "key": "PlankGreatwood",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:greatwood_planks",
+      "count": 4
+    },
+    "pattern": [
+      "W"
+    ],
+    "ingredients": {
+      "W": "thaumcraft:greatwood_log"
+    },
+    "id": "greatwood_planks",
+    "alias": true
+  },
+  {
+    "key": "PlankSilverwood",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:silverwood_planks",
+      "count": 4
+    },
+    "pattern": [
+      "W"
+    ],
+    "ingredients": {
+      "W": "thaumcraft:silverwood_log"
+    },
+    "id": "silverwood_planks",
+    "alias": true
+  },
+  {
+    "key": "BlockFlesh",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:flesh_block",
+      "count": 1
+    },
+    "pattern": [
+      "KKK",
+      "KKK",
+      "KKK"
+    ],
+    "ingredients": {
+      "K": "minecraft:rotten_flesh"
+    },
+    "id": "block_flesh"
+  },
+  {
+    "key": "BlockThaumium",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_block",
+      "count": 1
+    },
+    "pattern": [
+      "KKK",
+      "KKK",
+      "KKK"
+    ],
+    "ingredients": {
+      "K": "#c:ingots/thaumium"
+    },
+    "id": "thaumium_block",
+    "alias": true
+  },
+  {
+    "key": "BlockTallow",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:tallow_block",
+      "count": 1
+    },
+    "pattern": [
+      "KKK",
+      "KKK",
+      "KKK"
+    ],
+    "ingredients": {
+      "K": "thaumcraft:magic_tallow"
+    },
+    "id": "tallow_block",
+    "alias": true
+  },
+  {
+    "key": "Clusters0",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:air_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:air_shard",
+      "thaumcraft:air_shard",
+      "thaumcraft:air_shard",
+      "thaumcraft:air_shard",
+      "thaumcraft:air_shard",
+      "thaumcraft:air_shard"
+    ],
+    "id": "clusters0"
+  },
+  {
+    "key": "Clusters1",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:fire_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:fire_shard",
+      "thaumcraft:fire_shard",
+      "thaumcraft:fire_shard",
+      "thaumcraft:fire_shard",
+      "thaumcraft:fire_shard",
+      "thaumcraft:fire_shard"
+    ],
+    "id": "clusters1"
+  },
+  {
+    "key": "Clusters2",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:water_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:water_shard",
+      "thaumcraft:water_shard",
+      "thaumcraft:water_shard",
+      "thaumcraft:water_shard",
+      "thaumcraft:water_shard",
+      "thaumcraft:water_shard"
+    ],
+    "id": "clusters2"
+  },
+  {
+    "key": "Clusters3",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:earth_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:earth_shard",
+      "thaumcraft:earth_shard",
+      "thaumcraft:earth_shard",
+      "thaumcraft:earth_shard",
+      "thaumcraft:earth_shard",
+      "thaumcraft:earth_shard"
+    ],
+    "id": "clusters3"
+  },
+  {
+    "key": "Clusters4",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:order_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:order_shard",
+      "thaumcraft:order_shard",
+      "thaumcraft:order_shard",
+      "thaumcraft:order_shard",
+      "thaumcraft:order_shard",
+      "thaumcraft:order_shard"
+    ],
+    "id": "clusters4"
+  },
+  {
+    "key": "Clusters5",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:entropy_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:entropy_shard",
+      "thaumcraft:entropy_shard",
+      "thaumcraft:entropy_shard",
+      "thaumcraft:entropy_shard",
+      "thaumcraft:entropy_shard",
+      "thaumcraft:entropy_shard"
+    ],
+    "id": "clusters5"
+  },
+  {
+    "key": "Clusters6",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:mixed_crystal_cluster",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:air_shard",
+      "thaumcraft:fire_shard",
+      "thaumcraft:water_shard",
+      "thaumcraft:earth_shard",
+      "thaumcraft:order_shard",
+      "thaumcraft:entropy_shard"
+    ],
+    "id": "clusters6"
+  },
+  {
+    "key": "Grate",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:item_grate",
+      "count": 1
+    },
+    "pattern": [
+      "#",
+      "T"
+    ],
+    "ingredients": {
+      "#": "minecraft:iron_bars",
+      "T": "minecraft:oak_trapdoor"
+    },
+    "id": "grate"
+  },
+  {
+    "key": "Phial",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:glass_phial",
+      "count": 8
+    },
+    "pattern": [
+      " C ",
+      "G G",
+      " G "
+    ],
+    "ingredients": {
+      "G": "minecraft:glass",
+      "C": "minecraft:clay_ball"
+    },
+    "id": "glass_phial",
+    "alias": true
+  },
+  {
+    "key": "Table",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:table",
+      "count": 1
+    },
+    "pattern": [
+      "SSS",
+      "W W"
+    ],
+    "ingredients": {
+      "S": "#minecraft:wooden_slabs",
+      "W": "#minecraft:planks"
+    },
+    "id": "table"
+  },
+  {
+    "key": "Scribe1",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:scribing_tools",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:glass_phial",
+      "minecraft:feather",
+      "#c:dyes/black"
+    ],
+    "id": "scribe1"
+  },
+  {
+    "key": "Scribe2",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:scribing_tools",
+      "count": 1
+    },
+    "ingredients": [
+      "minecraft:glass_bottle",
+      "minecraft:feather",
+      "#c:dyes/black"
+    ],
+    "id": "scribe2"
+  },
+  {
+    "key": "Scribe3",
+    "kind": "vanilla_shapeless",
+    "result": {
+      "id": "thaumcraft:scribing_tools",
+      "count": 1
+    },
+    "ingredients": [
+      "thaumcraft:scribing_tools",
+      "#c:dyes/black"
+    ],
+    "id": "scribe3"
+  },
+  {
+    "key": "Thaumometer",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumometer",
+      "count": 1
+    },
+    "pattern": [
+      " 1 ",
+      "IGI",
+      " 1 "
+    ],
+    "ingredients": {
+      "I": "minecraft:gold_ingot",
+      "G": "minecraft:glass",
+      "1": "#thaumcraft:shards"
+    },
+    "id": "thaumometer"
+  },
+  {
+    "key": "ThaumiumHelm",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_helmet",
+      "count": 1
+    },
+    "pattern": [
+      "III",
+      "I I"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium"
+    },
+    "id": "thaumium_helm"
+  },
+  {
+    "key": "ThaumiumChest",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_chestplate",
+      "count": 1
+    },
+    "pattern": [
+      "I I",
+      "III",
+      "III"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium"
+    },
+    "id": "thaumium_chest"
+  },
+  {
+    "key": "ThaumiumLegs",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_leggings",
+      "count": 1
+    },
+    "pattern": [
+      "III",
+      "I I",
+      "I I"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium"
+    },
+    "id": "thaumium_legs"
+  },
+  {
+    "key": "ThaumiumBoots",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_boots",
+      "count": 1
+    },
+    "pattern": [
+      "I I",
+      "I I"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium"
+    },
+    "id": "thaumium_boots"
+  },
+  {
+    "key": "ThaumiumShovel",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_shovel",
+      "count": 1
+    },
+    "pattern": [
+      "I",
+      "S",
+      "S"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium",
+      "S": "#c:rods/wooden"
+    },
+    "id": "thaumium_shovel"
+  },
+  {
+    "key": "ThaumiumPick",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_pickaxe",
+      "count": 1
+    },
+    "pattern": [
+      "III",
+      " S ",
+      " S "
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium",
+      "S": "#c:rods/wooden"
+    },
+    "id": "thaumium_pick"
+  },
+  {
+    "key": "ThaumiumAxe",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_axe",
+      "count": 1
+    },
+    "pattern": [
+      "II",
+      "SI",
+      "S "
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium",
+      "S": "#c:rods/wooden"
+    },
+    "id": "thaumium_axe"
+  },
+  {
+    "key": "ThaumiumHoe",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_hoe",
+      "count": 1
+    },
+    "pattern": [
+      "II",
+      "S ",
+      "S "
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium",
+      "S": "#c:rods/wooden"
+    },
+    "id": "thaumium_hoe"
+  },
+  {
+    "key": "ThaumiumSword",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:thaumium_sword",
+      "count": 1
+    },
+    "pattern": [
+      "I",
+      "I",
+      "S"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/thaumium",
+      "S": "#c:rods/wooden"
+    },
+    "id": "thaumium_sword"
+  },
+  {
+    "key": "VoidHelm",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_helmet",
+      "count": 1
+    },
+    "pattern": [
+      "III",
+      "I I"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal"
+    },
+    "id": "void_helm"
+  },
+  {
+    "key": "VoidChest",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_chestplate",
+      "count": 1
+    },
+    "pattern": [
+      "I I",
+      "III",
+      "III"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal"
+    },
+    "id": "void_chest"
+  },
+  {
+    "key": "VoidLegs",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_leggings",
+      "count": 1
+    },
+    "pattern": [
+      "III",
+      "I I",
+      "I I"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal"
+    },
+    "id": "void_legs"
+  },
+  {
+    "key": "VoidBoots",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_boots",
+      "count": 1
+    },
+    "pattern": [
+      "I I",
+      "I I"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal"
+    },
+    "id": "void_boots"
+  },
+  {
+    "key": "VoidShovel",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_shovel",
+      "count": 1
+    },
+    "pattern": [
+      "I",
+      "S",
+      "S"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal",
+      "S": "#c:rods/wooden"
+    },
+    "id": "void_shovel"
+  },
+  {
+    "key": "VoidPick",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_pickaxe",
+      "count": 1
+    },
+    "pattern": [
+      "III",
+      " S ",
+      " S "
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal",
+      "S": "#c:rods/wooden"
+    },
+    "id": "void_pick"
+  },
+  {
+    "key": "VoidAxe",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_axe",
+      "count": 1
+    },
+    "pattern": [
+      "II",
+      "SI",
+      "S "
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal",
+      "S": "#c:rods/wooden"
+    },
+    "id": "void_axe"
+  },
+  {
+    "key": "VoidHoe",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_hoe",
+      "count": 1
+    },
+    "pattern": [
+      "II",
+      "S ",
+      "S "
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal",
+      "S": "#c:rods/wooden"
+    },
+    "id": "void_hoe"
+  },
+  {
+    "key": "VoidSword",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:void_sword",
+      "count": 1
+    },
+    "pattern": [
+      "I",
+      "I",
+      "S"
+    ],
+    "ingredients": {
+      "I": "#c:ingots/void_metal",
+      "S": "#c:rods/wooden"
+    },
+    "id": "void_sword"
+  },
+  {
+    "key": "TallowCandle",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:white_tallow_candle",
+      "count": 3
+    },
+    "pattern": [
+      " S ",
+      " T ",
+      " T "
+    ],
+    "ingredients": {
+      "S": "minecraft:string",
+      "T": "thaumcraft:magic_tallow"
+    },
+    "id": "white_tallow_candle",
+    "alias": true
+  },
+  {
+    "key": "ArcaneStone2",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:arcane_stone_bricks",
+      "count": 4
+    },
+    "pattern": [
+      "SS",
+      "SS"
+    ],
+    "ingredients": {
+      "S": "thaumcraft:arcane_stone"
+    },
+    "id": "arcane_stone_bricks",
+    "alias": true
+  },
+  {
+    "key": "ArcaneStone3",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:arcane_stone_stairs",
+      "count": 4
+    },
+    "pattern": [
+      "K  ",
+      "KK ",
+      "KKK"
+    ],
+    "ingredients": {
+      "K": "thaumcraft:arcane_stone_bricks"
+    },
+    "id": "arcane_stone_stairs",
+    "alias": true
+  },
+  {
+    "key": "ArcaneStone4",
+    "kind": "vanilla_shaped",
+    "result": {
+      "id": "thaumcraft:arcane_stone_slab",
+      "count": 6
+    },
+    "pattern": [
+      "KKK"
+    ],
+    "ingredients": {
+      "K": "thaumcraft:arcane_stone_bricks"
+    },
+    "id": "arcane_stone_slab",
+    "alias": true
+  }
+]

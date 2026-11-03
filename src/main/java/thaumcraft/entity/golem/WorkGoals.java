@@ -1,6 +1,5 @@
 package thaumcraft.entity.golem;
 
-import java.util.EnumSet;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import thaumcraft.entity.golem.goal.work.CreeperSwellAvoidGoal;
 import thaumcraft.entity.golem.goal.work.CropHarvestGoal;
