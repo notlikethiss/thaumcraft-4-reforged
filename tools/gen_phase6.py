@@ -318,12 +318,19 @@ def furnaces(ctx):
         horizontal_state(ctx, name)
         ctx.mineable("pickaxe", name)
 
-    ctx.block_model("mnemonic_matrix", {
+    matrix_textures = {"particle": ctx.ref("brainbox"), "t": ctx.ref("brainbox")}
+    ctx.block_model("mnemonic_matrix", {"parent": "minecraft:block/block", "textures": matrix_textures, "elements": [cube_element(3, 13)]})
+    ctx.block_model("mnemonic_matrix_connected", {
         "parent": "minecraft:block/block",
-        "textures": {"particle": ctx.ref("brainbox"), "t": ctx.ref("brainbox")},
-        "elements": [cube_element(3, 13)],
+        "textures": matrix_textures,
+        "elements": [
+            cube_element(3, 13),
+            {"from": [6, 6, 0], "to": [10, 10, 3], "faces": {face: {"texture": "#t"} for face in ["down", "up", "north", "west", "east"]}},
+        ],
     })
-    ctx.blockstate("mnemonic_matrix", {"variants": {f"facing={facing}": {"model": ctx.ref("mnemonic_matrix")} for facing in FACINGS}})
+    ctx.blockstate("mnemonic_matrix", {"variants": {
+        f"facing={facing}": {"model": ctx.ref("mnemonic_matrix_connected"), **ARM_DIRECTIONS[facing]} for facing in FACINGS
+    }})
     ctx.block_item("mnemonic_matrix")
     ctx.self_drop("mnemonic_matrix")
     ctx.mineable("pickaxe", "mnemonic_matrix")
