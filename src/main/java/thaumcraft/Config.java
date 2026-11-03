@@ -14,9 +14,6 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue WUSS = BUILDER
         .translation("thaumcraft.configuration.wuss_mode")
         .define("general.wuss_mode", false);
-    public static final ModConfigSpec.BooleanValue ALLOW_CHEAT_SHEET = BUILDER
-        .translation("thaumcraft.configuration.allow_cheat_sheet")
-        .define("general.allow_cheat_sheet", false);
     public static final ModConfigSpec.BooleanValue WARDED_STONE = BUILDER
         .translation("thaumcraft.configuration.allow_warded_stone")
         .define("general.allow_warded_stone", true);
@@ -120,10 +117,6 @@ public final class Config {
 
     public static boolean wuss() {
         return flag(WUSS);
-    }
-
-    public static boolean allowCheatSheet() {
-        return flag(ALLOW_CHEAT_SHEET);
     }
 
     public static boolean wardedStone() {
