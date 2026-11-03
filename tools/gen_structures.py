@@ -250,25 +250,7 @@ def template(biome, builder):
     }
 
 
-def test_platform(size=(7, 7, 7)):
-    entries = []
-    for x in range(size[0]):
-        for z in range(size[2]):
-            entries.append({"pos": TagList([Int(x), Int(0), Int(z)], TAG_INT), "state": Int(0)})
-    return {
-        "DataVersion": Int(mcformat.profile.data_version),
-        "size": TagList([Int(value) for value in size], TAG_INT),
-        "palette": TagList([{mcformat.profile.block_state_keys[0]: "minecraft:stone"}], TAG_COMPOUND),
-        "blocks": TagList(entries, TAG_COMPOUND),
-        "entities": TagList([], TAG_COMPOUND),
-    }
-
-
 def generate(data_dir):
-    path = Path(data_dir) / NS / mcformat.profile.structure_folder / "test" / "platform.nbt"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(to_nbt(test_platform()))
-    path.with_name("eldritch_regression.nbt").write_bytes(to_nbt(test_platform((32, 9, 32))))
     for biome in BIOMES:
         for name, builder in (("wizard_tower", tower), ("banker_home", banker_home)):
             path = Path(data_dir) / NS / mcformat.profile.structure_folder / "village" / biome / f"{name}.nbt"

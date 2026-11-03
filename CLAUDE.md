@@ -29,7 +29,6 @@
 
 - Правятся только `platform/`, `client/platform/`, `compat/` (`ValueInput`/`ValueOutput`, `ItemStackTemplate`), регистрация и ресурсы профиля. Правка игровой логики здесь значит, что на `main` не хватает шва: шов добавляется на `main`, затем синхронизируется.
 - Бижутерия на Curios (`platform/BaublesCurios`, слоты генерирует `tools/gen_curios.py`), своих слотов `main` нет.
-- GameTest через `@GameTestHolder` + `@PrefixGameTestTemplate`.
 - Модели предметов через `models/item` с `overrides`, special-рендер через `BlockEntityWithoutLevelRenderer` + `IClientItemExtensions`, tint через `RegisterColorHandlersEvent.Item`.
 - Attachments без `.sync()`, `DataAttachments` шлёт свой payload.
 
@@ -38,7 +37,6 @@
 ```sh
 export JAVA_HOME=/opt/homebrew/opt/openjdk@25
 ./gradlew build
-./gradlew runGameTestServer
 python3 tools/check_seams.py
 python3 tools/validate_ids.py --mc 1.21.1
 python3 tools/gen_resources.py --mc 1.21.1 && git status --short src/generated

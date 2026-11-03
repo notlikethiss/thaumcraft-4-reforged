@@ -75,18 +75,10 @@ neoForge {
     runs {
         client {
             client()
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         server {
             server()
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-        gameTestServer {
-            type = "gameTestServer"
-            programArgument "--world"
-            programArgument file("build/gametestworld").absolutePath
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
@@ -150,13 +142,4 @@ idea {
 
 tasks.named('runServer') {
     standardInput = System.in
-}
-
-var prepareOuterLandsTests = tasks.register("prepareOuterLandsTests", Copy) {
-    from "src/gametest/packs/outer_lands"
-    into "build/gametestworld/datapacks/outer_lands"
-}
-
-tasks.named("runGameTestServer") {
-    dependsOn prepareOuterLandsTests
 }
