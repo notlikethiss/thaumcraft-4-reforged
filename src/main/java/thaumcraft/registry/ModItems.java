@@ -245,7 +245,7 @@ public final class ModItems {
     public static final DeferredItem<ResearchNotesItem> RESEARCH_NOTES = ITEMS.registerItem("research_notes", properties -> new ResearchNotesItem(properties, false), properties -> properties.rarity(Rarity.RARE));
     public static final DeferredItem<ResearchNotesItem> DISCOVERY = ITEMS.registerItem("discovery", properties -> new ResearchNotesItem(properties, true), properties -> properties.rarity(Rarity.EPIC).stacksTo(64));
     public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON = ITEMS.registerItem("thaumonomicon", properties -> new ThaumonomiconItem(properties, false), ThaumonomiconItem::properties);
-    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON_CHEAT = ITEMS.registerItem("thaumonomicon_cheat", properties -> new ThaumonomiconItem(properties, true), ThaumonomiconItem::properties);
+    public static final DeferredItem<ThaumonomiconItem> THAUMONOMICON_CHEAT = ITEMS.registerItem("thaumonomicon_cheat", properties -> new ThaumonomiconItem(properties, true), ThaumonomiconItem::cheatProperties);
 
     public static final DeferredItem<FocusPouchItem> FOCUS_POUCH = ITEMS.registerItem("focus_pouch", FocusPouchItem::new, properties -> properties.stacksTo(1).rarity(Rarity.RARE));
     public static final DeferredItem<FireFocus> FOCUS_FIRE = ITEMS.registerItem("focus_fire", FireFocus::new, FocusItem::properties);
