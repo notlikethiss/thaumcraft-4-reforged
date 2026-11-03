@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.util.FastColor;

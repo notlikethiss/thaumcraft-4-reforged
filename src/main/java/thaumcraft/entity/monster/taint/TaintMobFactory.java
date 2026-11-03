@@ -2,7 +2,6 @@ package thaumcraft.entity.monster.taint;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.LivingEntity;
 import javax.annotation.Nullable;
 import thaumcraft.registry.ModEntities;

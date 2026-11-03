@@ -18,7 +18,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.LiquidDeathBlock;
-import thaumcraft.block.PurifyingFluidBlock;
 import thaumcraft.platform.FluidPhysics;
 
 public final class ModFluids {

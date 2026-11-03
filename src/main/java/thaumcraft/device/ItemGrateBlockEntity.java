@@ -59,7 +59,6 @@ public class ItemGrateBlockEntity extends TcBlockEntity implements WorldlyContai
     @Override
     public void setItem(int slot, ItemStack stack) {
         pending = stack;
-        // SidedInvWrapper calls setChanged before setItem on 1.21.1.
         setChanged();
     }
 

@@ -13,6 +13,7 @@ import thaumcraft.client.geom.NodeStripGeometry;
 import thaumcraft.client.platform.ItemGeometry;
 import thaumcraft.node.NodeModifier;
 import thaumcraft.node.NodeType;
+import thaumcraft.client.geom.Colors;
 
 public final class NodeRendering {
     public static final ResourceLocation TEXTURE = Thaumcraft.id("textures/misc/nodes.png");
@@ -75,7 +76,7 @@ public final class NodeRendering {
             average += amount;
             float wave = (float) Math.sin(ticks / (14.0F - count)) * 0.25F + 0.5F;
             float layerScale = 0.2F + wave * (amount / 50.0F);
-            int argb = argb(layerAlpha / aspects.size(), aspect.getColor());
+            int argb = Colors.withAlpha(aspect.getColor(), layerAlpha / aspects.size());
             ItemGeometry.blended(
                 buffers,
                 poseStack,
@@ -109,7 +110,7 @@ public final class NodeRendering {
         }
         int centerStrip = strip;
         float centerScale = scale;
-        int argb = argb(alpha, 0xFFFFFF);
+        int argb = Colors.withAlpha(0xFFFFFF, alpha);
         ItemGeometry.blended(
             buffers,
             poseStack,
@@ -117,10 +118,5 @@ public final class NodeRendering {
             blend,
             sink -> NodeStripGeometry.strip(sink, centerScale, FRAMES, centerStrip, frame, argb, LIGHT)
         );
-    }
-
-    private static int argb(float alpha, int rgb) {
-        int channel = Math.max(0, Math.min(255, (int) (alpha * 255.0F)));
-        return (channel << 24) | (rgb & 0xFFFFFF);
     }
 }

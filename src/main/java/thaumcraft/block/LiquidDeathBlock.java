@@ -22,7 +22,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import javax.annotation.Nullable;
 import thaumcraft.damage.ModDamageTypes;
 import thaumcraft.registry.ModFluids;
 import thaumcraft.fx.Fx;

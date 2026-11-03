@@ -13,13 +13,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.geom.FacingQuads;
-import thaumcraft.client.geom.NodeGeometry;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.client.platform.VertexQuadSink;
 import thaumcraft.node.NodeStabilizerBlockEntity;
+import thaumcraft.client.geom.Colors;
 
 public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilizerBlockEntity> {
     private static final ResourceLocation BUBBLE = Thaumcraft.id("textures/misc/node_bubble.png");
@@ -59,7 +58,7 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
         NodeDeviceRendering.stabilizer(buffers, poseStack, state.ambient, state.lock, state.count, state.viewerTicks, true);
         if (state.count > 0) {
             float alpha = Mth.sin(state.viewerTicks / 8.0F) * 0.1F + 0.5F;
-            int color = NodeGeometry.argb(state.lock == 1 ? 16777215 : 16729156, state.count / 37.0F * alpha);
+            int color = Colors.withAlpha(state.lock == 1 ? 16777215 : 16729156, state.count / 37.0F * alpha);
             FacingQuads.Camera view = WorldRendering.camera(camera, state.blockPos);
             ItemGeometry.submit(
                 buffers,

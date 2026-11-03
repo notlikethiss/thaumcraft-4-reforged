@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.arcane.VisChargeRelayBlockEntity;
 import thaumcraft.vis.VisNet;
 import thaumcraft.vis.VisRelayBlockEntity;

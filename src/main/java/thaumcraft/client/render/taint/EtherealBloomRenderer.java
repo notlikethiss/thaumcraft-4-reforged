@@ -5,7 +5,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import thaumcraft.Thaumcraft;
 import thaumcraft.blockentity.EtherealBloomBlockEntity;
 import thaumcraft.client.geom.ModelBoxGeometry;

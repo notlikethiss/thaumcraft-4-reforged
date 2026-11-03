@@ -16,7 +16,6 @@ import thaumcraft.client.geom.QuadSink;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModSounds;
 
-/** A single target-seeking mote used by taint spores and swarms. */
 final class TaintSwarmFx extends ParticleFx {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final List<Long> BUZZ_TIMES = new ArrayList<>();

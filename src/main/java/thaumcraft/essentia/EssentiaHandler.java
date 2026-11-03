@@ -143,13 +143,6 @@ public final class EssentiaHandler {
             && requesterLocation.equals(mirror.getLink());
     }
 
-    public static void refreshSources(BlockEntity tile) {
-        Level level = tile.getLevel();
-        if (level != null) {
-            SOURCES.remove(GlobalPos.of(level.dimension(), tile.getBlockPos()));
-        }
-    }
-
     static void clearLevel(Level level) {
         SOURCES.keySet().removeIf(location -> location.dimension().equals(level.dimension()));
         SOURCES_DELAY.keySet().removeIf(location -> location.dimension().equals(level.dimension()));

@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.infusion.PedestalBlockEntity;
 
 public class ArcanePedestalRenderer implements BlockEntityRenderer<PedestalBlockEntity> {

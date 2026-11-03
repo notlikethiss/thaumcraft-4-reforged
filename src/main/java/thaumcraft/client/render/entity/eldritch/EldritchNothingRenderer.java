@@ -10,9 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
-import thaumcraft.Thaumcraft;
 import thaumcraft.client.platform.EldritchSurfaces;
-import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.eldritch.EldritchNothingBlockEntity;
 
 public final class EldritchNothingRenderer implements StateBlockRenderer<EldritchNothingBlockEntity, EldritchNothingRenderer.State> {

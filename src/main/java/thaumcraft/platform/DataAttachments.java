@@ -108,8 +108,6 @@ public final class DataAttachments {
 
     @SubscribeEvent
     static void onStartTracking(PlayerEvent.StartTracking event) {
-        // Item drops can receive their attachments before they are spawned. Send
-        // their current state after the spawn packet, also for late observers.
         Entity target = event.getTarget();
         if (event.getEntity() instanceof ServerPlayer player) {
             for (DataKey<?> key : DataKey.KEYS.values()) {

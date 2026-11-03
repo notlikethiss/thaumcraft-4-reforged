@@ -1,16 +1,13 @@
 package thaumcraft.item.armor;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import thaumcraft.platform.ArmorSlot;
 import thaumcraft.platform.TcArmorMaterial;
 import thaumcraft.platform.Registration;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
 import thaumcraft.item.gear.Repairable;
 import thaumcraft.item.gear.RunicArmor;
 import thaumcraft.item.gear.WarpingGear;

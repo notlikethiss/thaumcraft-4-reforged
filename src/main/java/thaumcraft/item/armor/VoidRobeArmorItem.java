@@ -2,7 +2,6 @@ package thaumcraft.item.armor;
 
 import java.util.List;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,7 +13,6 @@ import thaumcraft.platform.TcArmorMaterial;
 import thaumcraft.platform.Registration;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.item.gear.Goggles;
 import thaumcraft.item.gear.Repairable;

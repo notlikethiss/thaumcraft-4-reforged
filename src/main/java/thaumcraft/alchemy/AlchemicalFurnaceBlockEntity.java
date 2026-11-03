@@ -1,7 +1,6 @@
 package thaumcraft.alchemy;
 
 import java.util.List;
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

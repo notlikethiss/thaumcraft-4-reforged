@@ -5,7 +5,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -48,16 +47,6 @@ public final class EldritchEntities {
         event.put(CULTIST_LEADER.get(), CultistLeader.createAttributes().build());
         event.put(TAINTACLE_GIANT.get(), TaintacleGiant.createAttributes().build());
         event.put(CULTIST_PORTAL.get(), CultistPortal.createAttributes().build());
-    }
-
-    public static boolean spawnCultistPortal(ServerLevel level, BlockPos pos) {
-        CultistPortal portal = CULTIST_PORTAL.get().create(level);
-        if (portal == null) {
-            return false;
-        }
-        portal.moveTo(Vec3.atBottomCenterOf(pos), 0.0F, 0.0F);
-        portal.restrictTo(pos, 32);
-        return level.addFreshEntity(portal);
     }
 
     public static boolean spawnBoss(ServerLevel level, BlockPos pos, BossKind kind) {

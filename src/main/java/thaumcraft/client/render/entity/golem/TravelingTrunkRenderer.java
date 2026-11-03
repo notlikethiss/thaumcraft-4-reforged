@@ -3,7 +3,6 @@ package thaumcraft.client.render.entity.golem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import thaumcraft.client.platform.ImmediateGeometry;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import thaumcraft.client.platform.ItemModelResolver;

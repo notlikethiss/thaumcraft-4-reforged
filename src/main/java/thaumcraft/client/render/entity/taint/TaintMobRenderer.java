@@ -1,10 +1,8 @@
 package thaumcraft.client.render.entity.taint;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
@@ -13,11 +11,7 @@ import thaumcraft.client.platform.AlphaMobRenderer;
 import thaumcraft.client.platform.ClientLayers;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.entity.monster.taint.TaintSpore;
-import thaumcraft.entity.monster.taint.Taintacle;
-import thaumcraft.entity.monster.taint.TaintedChicken;
 import thaumcraft.entity.monster.taint.TaintedCreeper;
-import thaumcraft.entity.monster.taint.TaintedSheep;
-import thaumcraft.entity.monster.taint.TaintSwarmer;
 
 public class TaintMobRenderer<T extends Mob> extends AlphaMobRenderer<T, TaintEntityModel<T>> {
     private final TaintEntityModel.Kind kind;

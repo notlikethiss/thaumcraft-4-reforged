@@ -32,6 +32,7 @@ import thaumcraft.client.platform.VertexQuadSink;
 import thaumcraft.node.NodeBlockEntity;
 import thaumcraft.node.NodeModifier;
 import thaumcraft.node.NodeType;
+import thaumcraft.client.geom.Colors;
 
 public abstract class NodeRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
     private static final ResourceLocation NODES = Thaumcraft.id("textures/misc/nodes.png");
@@ -203,7 +204,7 @@ public abstract class NodeRenderer<T extends BlockEntity> implements BlockEntity
                 int frame = (int) ((state.nanoTime / 40000000L + pos.getX()) % RING_FRAMES);
                 ItemGeometry.submit(buffers, poseStack, TcRenderTypes.additive(RING), (pose, buffer) -> {
                     QuadSink sink = new VertexQuadSink(pose, buffer);
-                    FacingQuads.frame(sink, view, 0.5F, 0.5F, 0.5F, 0.0F, 0.33F, RING_FRAMES, frame, NodeGeometry.argb(0xFFFFFF, 0.9F), RING_LIGHT);
+                    FacingQuads.frame(sink, view, 0.5F, 0.5F, 0.5F, 0.0F, 0.33F, RING_FRAMES, frame, Colors.withAlpha(0xFFFFFF, 0.9F), RING_LIGHT);
                 });
             }
         }

@@ -22,7 +22,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.geom.QuadSink;
 import thaumcraft.client.platform.SeeThroughGeometry;

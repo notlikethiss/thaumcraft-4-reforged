@@ -15,12 +15,12 @@ import net.minecraft.world.phys.Vec3;
 import thaumcraft.blockentity.HoleBlockEntity;
 import thaumcraft.blockentity.WardedBlockEntity;
 import thaumcraft.client.geom.ConnectedTextureGeometry;
-import thaumcraft.client.geom.NodeGeometry;
 import thaumcraft.client.platform.FocusSurfaces;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.wand.WandItem;
 import thaumcraft.wand.Wands;
 import thaumcraft.wand.focus.WardingFocus;
+import thaumcraft.client.geom.Colors;
 
 public final class FocusBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
     public static final class State {
@@ -70,7 +70,7 @@ public final class FocusBlockRenderer<T extends BlockEntity> implements BlockEnt
         float red = Mth.sin(player.tickCount / 2.0F + pos.getX()) * 0.2F + 0.8F;
         float green = Mth.sin(player.tickCount / 3.0F + pos.getY()) * 0.2F + (owner ? 0.7F : 0.28F);
         float blue = Mth.sin(player.tickCount / 4.0F + pos.getZ()) * 0.2F + 0.28F;
-        state.color = NodeGeometry.argb((int) (red * 255.0F) << 16 | (int) (green * 255.0F) << 8 | (int) (blue * 255.0F), owner ? 0.5F : 0.25F);
+        state.color = Colors.withAlpha((int) (red * 255.0F) << 16 | (int) (green * 255.0F) << 8 | (int) (blue * 255.0F), owner ? 0.5F : 0.25F);
         for (Direction side : Direction.values()) {
             if (level.getBlockState(pos.relative(side)).is(ModBlocks.WARDED_BLOCK.get())) continue;
             int index = side.get3DDataValue();

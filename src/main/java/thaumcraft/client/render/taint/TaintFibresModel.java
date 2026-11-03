@@ -12,7 +12,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBaker;
@@ -35,7 +34,6 @@ import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import thaumcraft.taint.TaintBlock;
 import thaumcraft.taint.TaintFibresBlock;
 
-/** Dynamic 1.21 block model for attached fibres and their taint growth stages. */
 public final class TaintFibresModel extends BakedModelWrapper<BakedModel> {
     private static final ModelProperty<WorldPos> WORLD_POS = new ModelProperty<>();
     private final List<BakedModel> faces;
@@ -131,7 +129,6 @@ public final class TaintFibresModel extends BakedModelWrapper<BakedModel> {
         for (BakedQuad quad : quads) {
             int[] vertices = quad.getVertices().clone();
             int stride = DefaultVertexFormat.BLOCK.getVertexSize() / Integer.BYTES;
-            // UV2 is element 6 in DefaultVertexFormat.BLOCK.
             for (int vertex = 0; vertex < 4; vertex++) vertices[vertex * stride + 6] = 200;
             result.add(new BakedQuad(vertices, quad.getTintIndex(), quad.getDirection(), quad.getSprite(), false, false));
         }

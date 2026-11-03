@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +57,6 @@ public final class MazeHandler {
             String id = mazeId(originChunkX, originChunkZ);
             OuterLandsData.MazeState state = data.maze(id);
             if (state == null) {
-                // An eye can be inserted before the next tick drains the worldgen queue.
                 MazeRequest reservation = REQUESTS.stream()
                     .filter(request -> request.server() == level.getServer() && request.worldSeed() == level.getSeed()
                         && request.originChunkX() == originChunkX && request.originChunkZ() == originChunkZ)
@@ -452,17 +450,6 @@ public final class MazeHandler {
             }
             MAZE_CELLS.put(new ServerSeed(level.getServer(), level.getSeed()), Set.copyOf(cells));
         }
-    }
-
-    public static boolean mazesInRange(ServerLevel level, int chunkX, int chunkZ, int width, int height) {
-        for (int x = -width; x <= width; x++) {
-            for (int z = -height; z <= height; z++) {
-                if (getCell(level, chunkX + x, chunkZ + z) != null) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @SubscribeEvent

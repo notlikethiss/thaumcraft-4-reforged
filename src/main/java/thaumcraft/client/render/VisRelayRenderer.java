@@ -14,13 +14,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.geom.PowerBeamGeometry;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.client.platform.VertexQuadSink;
 import thaumcraft.vis.VisNet;
 import thaumcraft.vis.VisRelayBlockEntity;
+import thaumcraft.client.geom.Colors;
 
 public class VisRelayRenderer implements BlockEntityRenderer<VisRelayBlockEntity> {
     private static final ResourceLocation BEAM = Thaumcraft.id("textures/misc/beam1.png");
@@ -87,7 +87,7 @@ public class VisRelayRenderer implements BlockEntityRenderer<VisRelayBlockEntity
             float pulseBoost = entity.getPulse() > 0 ? 0.5F * entity.getPulse() / 5.0F : 0.0F;
             float reveal = viewer instanceof LivingEntity living && NodeVisibility.wearsRevealer(living) ? 1.0F : 0.1F;
             state.opacity = (0.3F + pulseBoost) * reveal;
-            state.beamColor = NodeDeviceRendering.color(entity.getPulseRed(), entity.getPulseGreen(), entity.getPulseBlue());
+            state.beamColor = Colors.rgb(entity.getPulseRed(), entity.getPulseGreen(), entity.getPulseBlue());
         }
     }
 

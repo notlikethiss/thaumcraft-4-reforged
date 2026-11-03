@@ -18,7 +18,6 @@ public final class FollowingItemMotion {
             return;
         }
         item.baseTick();
-        // 1.21.1 updates old position and tickCount before EntityTickEvent.Pre.
         item.xo = item.getX();
         item.yo = item.getY();
         item.zo = item.getZ();

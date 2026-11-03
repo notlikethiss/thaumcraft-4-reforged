@@ -2,7 +2,6 @@ package thaumcraft.block;
 
 import thaumcraft.blockentity.TcBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -28,7 +27,6 @@ import thaumcraft.blockentity.WandPedestalBlockEntity;
 import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.wand.VisStorage;
-import thaumcraft.wand.Wands;
 
 public class WandPedestalBlock extends Block implements EntityBlock {
     private static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 16, 12);

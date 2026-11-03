@@ -3,7 +3,6 @@ package thaumcraft.world.dim;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -379,59 +378,6 @@ public class MazeGenerator {
             return ceil - 1;
         } else {
             return r <= 0.9F ? this.rand.nextInt(ceil) : 0;
-        }
-    }
-
-    public void print() {
-        HashMap<Integer, String[]> tiles = new HashMap<>();
-        tiles.put(0, new String[]{"...", "...", "..."});
-        tiles.put(1, new String[]{"# #", "# #", "###"});
-        tiles.put(2, new String[]{"###", "# #", "# #"});
-        tiles.put(4, new String[]{"###", "#  ", "###"});
-        tiles.put(8, new String[]{"###", "  #", "###"});
-        tiles.put(3, new String[]{"# #", "# #", "# #"});
-        tiles.put(9, new String[]{"# #", "  #", "###"});
-        tiles.put(5, new String[]{"# #", "#  ", "###"});
-        tiles.put(10, new String[]{"###", "  #", "# #"});
-        tiles.put(6, new String[]{"###", "#  ", "# #"});
-        tiles.put(12, new String[]{"###", "   ", "###"});
-        tiles.put(7, new String[]{"# #", "#  ", "# #"});
-        tiles.put(11, new String[]{"# #", "  #", "# #"});
-        tiles.put(13, new String[]{"# #", "   ", "###"});
-        tiles.put(14, new String[]{"###", "   ", "# #"});
-        tiles.put(15, new String[]{"# #", "   ", "# #"});
-        tiles.put(19, new String[]{"#-#", " A ", "#-#"});
-        tiles.put(28, new String[]{"# #", "|A|", "# #"});
-        tiles.put(35, new String[]{"#-#", " B ", "#-#"});
-        tiles.put(44, new String[]{"# #", "|B|", "# #"});
-
-        for (int y = 0; y < this.height; y++) {
-            for (int q = 0; q < 3; q++) {
-                for (int x = 0; x < this.width; x++) {
-                    Cell c = new Cell((short)this.grid[y][x]);
-                    if (tiles.containsKey(this.grid[y][x])) {
-                        System.out.print(tiles.get(this.grid[y][x])[q]);
-                    } else if (c.feature == 1) {
-                        if ((q != 0 || !c.north) && (q != 2 || !c.south)) {
-                            if (q == 1 && c.west && !c.east) {
-                                System.out.print("-PP");
-                            } else if (q == 1 && c.east && !c.west) {
-                                System.out.print("PP-");
-                            } else if (q == 1 && c.east && c.west) {
-                                System.out.print("-P-");
-                            } else {
-                                System.out.print("PPP");
-                            }
-                        } else {
-                            System.out.print("P|P");
-                        }
-                    } else if (c.feature > 1) {
-                        System.out.print("FFF");
-                    }
-                }
-
-                System.out.println();
-            }
         }
     }
 

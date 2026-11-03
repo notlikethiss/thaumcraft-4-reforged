@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import javax.annotation.Nullable;
 import thaumcraft.node.NodeTransducerBlockEntity;
 
 public class NodeTransducerRenderer implements BlockEntityRenderer<NodeTransducerBlockEntity> {

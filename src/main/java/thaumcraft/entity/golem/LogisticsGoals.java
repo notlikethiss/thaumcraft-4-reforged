@@ -29,7 +29,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import thaumcraft.alchemy.AlembicBlockEntity;
 import thaumcraft.aspect.Aspect;
-import thaumcraft.aspect.AspectSource;
 import thaumcraft.essentia.EssentiaReservoirBlockEntity;
 import thaumcraft.essentia.EssentiaTransport;
 import thaumcraft.essentia.JarBlockEntity;

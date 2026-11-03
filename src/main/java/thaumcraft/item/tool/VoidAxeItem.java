@@ -1,15 +1,12 @@
 package thaumcraft.item.tool;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import thaumcraft.platform.Registration;
 import thaumcraft.item.gear.TcMaterials;
 import net.minecraft.world.item.ItemStack;
-import javax.annotation.Nullable;
 import thaumcraft.item.gear.Repairable;
 import thaumcraft.item.gear.SelfRepair;
 import thaumcraft.item.gear.WarpingGear;

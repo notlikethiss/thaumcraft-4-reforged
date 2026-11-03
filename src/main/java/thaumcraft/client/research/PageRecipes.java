@@ -16,7 +16,6 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import javax.annotation.Nullable;
-import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.client.platform.GuiBlit;
 import thaumcraft.crafting.ArcaneRecipe;

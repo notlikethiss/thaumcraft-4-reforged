@@ -12,12 +12,10 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
-/** Living renderer that applies the entity's alpha to its model vertices. */
 public abstract class AlphaMobRenderer<T extends Mob, M extends EntityModel<T>> extends MobRenderer<T, M> {
     protected AlphaMobRenderer(EntityRendererProvider.Context context, M model, float shadowRadius) {
         super(context, model, shadowRadius);

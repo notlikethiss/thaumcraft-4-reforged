@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import javax.annotation.Nullable;
 import thaumcraft.item.gear.Repairable;
 import thaumcraft.item.gear.SelfRepair;
 import thaumcraft.item.gear.WarpingGear;

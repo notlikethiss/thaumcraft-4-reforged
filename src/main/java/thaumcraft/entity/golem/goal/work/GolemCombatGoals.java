@@ -3,9 +3,7 @@ package thaumcraft.entity.golem.goal.work;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -15,12 +13,10 @@ import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import thaumcraft.Thaumcraft;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.entity.projectile.DartProjectile;
-import thaumcraft.registry.ModEntities;
 
 public final class GolemCombatGoals {
     private GolemCombatGoals() {

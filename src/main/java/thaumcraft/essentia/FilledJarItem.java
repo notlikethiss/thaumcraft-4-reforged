@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
-import javax.annotation.Nullable;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectProvidingItem;
 import thaumcraft.item.AspectTooltips;
@@ -24,10 +23,6 @@ public class FilledJarItem extends BlockItem implements AspectProvidingItem {
 
     public Block jar() {
         return jar;
-    }
-
-    public static @Nullable Aspect getFilter(ItemStack stack) {
-        return EssentiaKeys.FILTER.get(stack);
     }
 
     @Override

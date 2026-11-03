@@ -4,19 +4,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.registry.EldritchContent;
-import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModEntities;
 import thaumcraft.entity.monster.eldritch.EldritchGuardian;
 import thaumcraft.entity.monster.ChampionModifier;
-import thaumcraft.device.CrystalClusterBlock;
-import thaumcraft.block.LootBlock;
 
 public class GenKeyRoom extends GenCommon {
     void generateRoom(ServerLevel world, RandomSource random, int cx, int cz, int y, Cell cell) {

@@ -3,12 +3,10 @@ package thaumcraft.client.platform;
 import com.mojang.logging.LogUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +19,6 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.slf4j.Logger;
 import thaumcraft.Thaumcraft;
 
-/** Owns Thaumcraft's post chains without replacing GameRenderer's active chain. */
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class WarpPostEffects implements ResourceManagerReloadListener {
     private static final Logger LOGGER = LogUtils.getLogger();

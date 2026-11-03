@@ -21,7 +21,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.DifficultyInstance;
 import thaumcraft.compat.ValueInput;
 import thaumcraft.compat.ValueOutput;
-import net.minecraft.world.phys.AABB;
 import javax.annotation.Nullable;
 import thaumcraft.entity.monster.ChampionModifier;
 import thaumcraft.entity.monster.taint.Taintacle;

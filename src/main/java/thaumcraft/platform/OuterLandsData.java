@@ -13,7 +13,6 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.core.HolderLookup;
-import thaumcraft.Thaumcraft;
 import thaumcraft.world.dim.CellLoc;
 
 public final class OuterLandsData extends SavedData {

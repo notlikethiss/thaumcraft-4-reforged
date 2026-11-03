@@ -20,6 +20,7 @@ import thaumcraft.client.platform.ItemGeometry;
 import thaumcraft.client.platform.TcRenderTypes;
 import thaumcraft.client.platform.TcRenderTypes.Kind;
 import thaumcraft.client.render.model.ObjModel;
+import thaumcraft.client.geom.Colors;
 
 public final class EssentiaRendering {
     public static final ResourceLocation ANIMATED_GLOW = Thaumcraft.id("block/animatedglow");
@@ -117,7 +118,7 @@ public final class EssentiaRendering {
     }
 
     public static void oneway(MultiBufferSource buffers, PoseStack poseStack, Direction facing, int light) {
-        int tint = NodeDeviceRendering.color(0.45F, 0.5F, 1.0F);
+        int tint = Colors.rgb(0.45F, 0.5F, 1.0F);
         poseStack.pushPose();
         tubeOrientation(poseStack, facing);
         poseStack.scale(1.1F, 0.5F, 1.1F);
@@ -131,7 +132,7 @@ public final class EssentiaRendering {
     }
 
     public static void buffer(MultiBufferSource buffers, PoseStack poseStack, Direction side, boolean blocked, int light) {
-        int tint = blocked ? NodeDeviceRendering.color(1.0F, 0.3F, 0.3F) : NodeDeviceRendering.color(0.3F, 0.3F, 1.0F);
+        int tint = blocked ? Colors.rgb(1.0F, 0.3F, 0.3F) : Colors.rgb(0.3F, 0.3F, 1.0F);
         poseStack.pushPose();
         tubeOrientation(poseStack, side.getOpposite());
         poseStack.scale(1.2F, 1.0F, 1.2F);
@@ -188,7 +189,7 @@ public final class EssentiaRendering {
         ObjModel base = ObjModel.get(CRYSTALLIZER_MODEL);
         ItemGeometry.submit(buffers, poseStack, TcRenderTypes.of(Kind.ENTITY_CUTOUT, CRYSTALLIZER_TEXTURE), (pose, buffer) -> base.renderAll(pose, buffer, WHITE, light));
         ObjModel relay = ObjModel.get(RELAY_MODEL);
-        int tint = NodeDeviceRendering.color(red, green, blue);
+        int tint = Colors.rgb(red, green, blue);
         for (int index = 0; index < 4; index++) {
             poseStack.pushPose();
             poseStack.scale(0.75F, 0.75F, 0.75F);
