@@ -1,12 +1,14 @@
 package thaumcraft.device;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BambooStalkBlock;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -14,11 +16,14 @@ import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import thaumcraft.Thaumcraft;
 import thaumcraft.block.ManaPodBlock;
 import thaumcraft.registry.ModBlocks;
@@ -81,6 +86,9 @@ public final class CropUtils {
         BlockState below = level.getBlockState(pos.below());
         return block instanceof BonemealableBlock bonemealable
                 && !(block instanceof StemBlock)
+                && !(block instanceof GrowingPlantHeadBlock)
+                && !(block instanceof BambooStalkBlock)
+                && hasMaxAge(state)
                 && !bonemealable.isValidBonemealTarget(level, pos, state)
             || block instanceof CropBlock crop && crop.isMaxAge(state) && !listedByBlock(block)
             || block instanceof NetherWartBlock && state.getValue(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE
@@ -88,6 +96,15 @@ public final class CropUtils {
             || isStandardCrop(state)
             || isClickableCrop(state)
             || isStackedCrop(state) && below.is(block);
+    }
+
+    private static boolean hasMaxAge(BlockState state) {
+        for (Property<?> property : state.getProperties()) {
+            if (property instanceof IntegerProperty age && age.getName().equals("age")) {
+                return state.getValue(age).equals(Collections.max(age.getPossibleValues()));
+            }
+        }
+        return false;
     }
 
     private static boolean listedByBlock(Block block) {
