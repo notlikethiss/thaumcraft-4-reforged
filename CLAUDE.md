@@ -9,7 +9,7 @@
 - Источник истины по поведению: декомпилят TC4 в `reference/decompiled`. Код TC3 Reforged (`~/projects/thaumcraft-reforged`) можно брать как заготовку для классов с общей родословной, логику сверять с TC4.
 - Баги TC4 чиним только если они ломают игру (дюп, потеря предметов, NPE, рассинхрон, краш сервера). Игровые особенности оставляем.
 - Сервер проверяет то, чему TC4 верил с клиента. Клиентские классы на сервер не протекают, всё должно работать на выделенном сервере.
-- Ресурсы делают Python-генераторы в `tools/`, datagen не используется.
+- `src/generated/resources` делает `tools/gen_resources.py`, datagen не используется. Мод портирован целиком, дальше идут точечные правки; разовые конвертеры TC4 удалены.
 - GameTest-ы не пишутся ни в одной ветке (решение пользователя). Логику проверяет пользователь в `runClient` и `runServer`.
 
 ## Ветки и версии
@@ -35,7 +35,6 @@
 - `reference/decompiled/` TC4 (Vineflower 1.12 + MCP `stable_12-1.7.10`), ассеты оригинала в `reference/decompiled/assets/`, оставшиеся SRG-имена в `reference/decompiled-unmapped.txt`.
 - `reference/mc1710/` MC 1.7.10, исходники Forge 10.13.4.1614 и патчи Forge диффами (к ванильным классам не применены, читать рядом).
 - `reference/mc`, `reference/neo`: исходники MC и NeoForge текущей версии `main` (из `build/moddev/artifacts` и `neoforge-*-sources.jar`). `reference/26.1.2`, `reference/1.21.1`, `reference/1.19.2` для бэкпортов.
-- Пересборка: `tools/fetch_1710.py` (загрузки в `tools/cache/`), затем `tools/decompile.py tc4|mc1710`.
 
 ## Архитектура
 
@@ -45,31 +44,21 @@
 - Регистрация: `registry/` (`DeferredRegister`), пакеты в `network/ModPayloads`, клиентские хендлеры в `client/ClientPayloadHandlers`, capabilities в `registry/ModCapabilities`.
 - Meta TC4 раскладывается в отдельные id или свойства blockstate по `tools/id_map.json` (уникальна пара id + state).
 
-## Генерируемые файлы (руками не править)
+## Ресурсы и данные
 
-| Файл | Генератор |
-|---|---|
-| `aspect/ConfigAspects.java` | `tools/convert_tags.py` |
-| `aspect/ModernAspects.java` | `tools/gen_modern_aspects.py` из `tools/modern_aspects/` |
-| `research/ConfigResearch.java` | `tools/convert_research.py` |
-| `crafting/ConfigRecipes.java`, `tools/tc_recipes.json` | `tools/convert_recipes.py` |
-| `client/render/armor/ArmorLayers.java` | `tools/convert_armor_models.py` |
-| `src/main/resources/assets/thaumcraft` (текстуры, звуки, `.obj`, lang) | `tools/convert_assets.py` (+ `tools/assets_extra/`, `tools/lang/`) |
-| `src/generated/resources` (перезаписывается целиком) | `tools/gen_resources.py [--mc <версия>]` |
-| `tools/vanilla_ids.json` | `tools/vanilla_ids.py` |
-| `INVENTORY.md` (локально, gitignore) | `tools/inventory.py` |
-
-- После правки lang: `convert_assets.py`, затем `gen_resources.py`. Ручные переводы только en_us и ru_ru в `tools/lang/`.
+- `src/generated/resources` перезаписывается целиком командой `tools/gen_resources.py [--mc <версия>]`, руками не править. Профили форматов по версиям в `tools/mcformat.py`.
 - Новый генератор фазы подключается в `gen_resources.main()` до финального `gen_phase5.recipes` (иначе рецепты на его предметы считаются ждущими).
-- `tools/id_map.json` правится руками, ручные правки `inventory.py` сохраняет. Имена сущностей 1.7.10 в `tools/entity_ids.json`.
-- Профили форматов ресурсов по версиям в `tools/mcformat.py`.
+- Перенесённые из TC4 файлы правятся руками: `aspect/ConfigAspects.java`, `aspect/ModernAspects.java`, `research/ConfigResearch.java`, `crafting/ConfigRecipes.java`, `client/render/armor/ArmorLayers.java`, ассеты и lang в `src/main/resources/assets/thaumcraft`.
+- Lang правится в `src/main/resources/assets/thaumcraft/lang/` (вручную поддерживаются en_us и ru_ru), затем `gen_resources.py`: `gen_phase13` дописывает туда названия блоков Outer Lands из lang TC4.
+- `tools/tc_recipes.json` читает `gen_phase5` (обычные рецепты на предметы TC), правится вместе с `ConfigRecipes.java`.
+- Справочные таблицы правятся руками: `tools/id_map.json` (meta TC4 → id и состояние), `tools/vanilla_ids.json` (ванильные id 1.7.10), `tools/entity_ids.json` (имена сущностей 1.7.10).
 
 ## Порт механики из TC4
 
 1. Найти класс в `reference/decompiled`, сверить ванильное поведение 1.7.10 по `reference/mc1710`.
 2. Id и состояния взять из `tools/id_map.json`, ванильные id из `tools/vanilla_ids.json`.
 3. Версионно-зависимые вызовы спрятать в шов, геометрию вынести в `client/geom`.
-4. Ресурсы через генератор, тексты по ключам lang (строки, захардкоженные в TC4, выносить в `tools/lang/ui`).
+4. Ресурсы через генератор, тексты по ключам lang (строки, захардкоженные в TC4, выносить в lang en_us и ru_ru).
 
 ## Проверки
 
@@ -78,7 +67,6 @@ export JAVA_HOME=/opt/homebrew/opt/openjdk@25
 ./gradlew build
 python3 tools/check_seams.py
 python3 tools/validate_ids.py --mc 26.3 --reports-dir <dir> --server-jar <jar> --client-jar <jar>
-python3 tools/inventory.py --check
 python3 tools/gen_resources.py && git status --short src/generated
 ```
 
