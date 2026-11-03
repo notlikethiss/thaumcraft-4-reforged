@@ -21,7 +21,7 @@
   "champion.mod.venomous": "Venomous",
   "champion.mod.warded": "Warded",
   "champion.mod.warp": "Warped",
-  "commands.thaumcraft.help.aliases": "You can also use /thaum or /tc instead of /thaumcraft.",
+  "commands.thaumcraft.help.aliases": "You can also use /tc instead of /thaumcraft.",
   "commands.thaumcraft.help.aspect": "Use this to give aspect research points to a player.",
   "commands.thaumcraft.help.aspect.usage": "  /thaumcraft aspect <player> <aspect|all> <amount>",
   "commands.thaumcraft.help.research": "Use this to give research to a player.",
