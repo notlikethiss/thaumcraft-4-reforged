@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 
 MODERN = """#version 330
@@ -88,8 +87,9 @@ void main() {
 """
 
 
-def generate(mc, out):
-    root = Path(out) / "assets/thaumcraft/shaders/core"
+def generate(ctx):
+    mc = ctx.profile.name
+    root = ctx.ASSETS / "shaders" / "core"
     root.mkdir(parents=True, exist_ok=True)
     (root / "node.fsh").write_text({"26.3": MODERN, "26.1.2": MODERN_26_1}.get(mc, LEGACY), encoding="utf-8")
     if mc in ("26.3", "26.1.2"):

@@ -1,6 +1,5 @@
-import gen_phase4
+from .common import NS
 
-NS = "thaumcraft"
 HORIZONTAL = ["north", "south", "west", "east"]
 DOOR_YAW = {"east": 0, "south": 90, "west": 180, "north": 270}
 HUNGRY_CHEST_ITEM = {"type": f"{NS}:hungry_chest"}
@@ -58,10 +57,10 @@ def pressure_plate(ctx):
 
 
 def hungry_chest(ctx):
-    gen_phase4.particle_model(ctx, "hungry_chest", "woodplain")
+    ctx.particle_model("hungry_chest", "woodplain")
     ctx.blockstate("hungry_chest", {"variants": {f"facing={facing}": {"model": ctx.ref("hungry_chest")} for facing in HORIZONTAL}})
-    gen_phase4.item_base_particle(ctx, "hungry_chest", "woodplain")
-    gen_phase4.special_item(ctx, "hungry_chest", HUNGRY_CHEST_ITEM)
+    ctx.item_base_particle("hungry_chest", "woodplain")
+    ctx.special_item("hungry_chest", HUNGRY_CHEST_ITEM)
     ctx.self_drop("hungry_chest")
     ctx.mineable("axe", "hungry_chest")
 
@@ -94,10 +93,10 @@ def brain_jar(ctx):
 
 
 def banner(ctx):
-    gen_phase4.particle_model(ctx, "banner", "woodplain")
+    ctx.particle_model("banner", "woodplain")
     ctx.simple_state("banner")
-    gen_phase4.item_base_particle(ctx, "banner", "woodplain")
-    gen_phase4.special_item(ctx, "banner", BANNER_ITEM)
+    ctx.item_base_particle("banner", "woodplain")
+    ctx.special_item("banner", BANNER_ITEM)
     ctx.mineable("axe", "banner")
 
 

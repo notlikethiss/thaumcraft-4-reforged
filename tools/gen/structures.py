@@ -1,10 +1,10 @@
 import gzip
 import struct
-from pathlib import Path
 
 import mcformat
 
-NS = "thaumcraft"
+from .common import NS
+
 BIOMES = {"plains": "plains", "taiga": "taiga", "savanna": "savanna", "snowy": "snow", "desert": "desert"}
 WOODS = {"plains": "oak", "taiga": "spruce", "savanna": "acacia", "snowy": "spruce", "desert": "oak"}
 
@@ -250,9 +250,9 @@ def template(biome, builder):
     }
 
 
-def generate(data_dir):
+def generate(ctx):
     for biome in BIOMES:
         for name, builder in (("wizard_tower", tower), ("banker_home", banker_home)):
-            path = Path(data_dir) / NS / mcformat.profile.structure_folder / "village" / biome / f"{name}.nbt"
+            path = ctx.DATA / NS / ctx.profile.structure_folder / "village" / biome / f"{name}.nbt"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(to_nbt(template(biome, builder)))

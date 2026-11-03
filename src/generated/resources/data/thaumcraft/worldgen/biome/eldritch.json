@@ -30,15 +30,15 @@
     "monster": [
       {
         "type": "thaumcraft:inhabited_zombie",
+        "weight": 1,
         "minCount": 1,
-        "maxCount": 1,
-        "weight": 1
+        "maxCount": 1
       },
       {
         "type": "thaumcraft:eldritch_guardian",
+        "weight": 1,
         "minCount": 1,
-        "maxCount": 1,
-        "weight": 1
+        "maxCount": 1
       }
     ],
     "underground_water_creature": [],

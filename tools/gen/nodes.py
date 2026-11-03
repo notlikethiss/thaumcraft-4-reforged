@@ -1,84 +1,13 @@
-NS = "thaumcraft"
-
-FACINGS = ["down", "up", "north", "south", "west", "east"]
-
-CAPS = {
-    "iron": "wand_cap_iron",
-    "gold": "wand_cap_gold",
-    "thaumium": "wand_cap_thaumium",
-    "copper": "wand_cap_copper",
-    "silver": "wand_cap_silver",
-    "inert_silver": "wand_cap_silver_inert",
-    "inert_thaumium": "wand_cap_thaumium_inert",
-    "void": "wand_cap_void",
-    "inert_void": "wand_cap_void_inert",
-}
-
-RODS = {
-    "greatwood": "greatwood",
-    "obsidian": "obsidian",
-    "silverwood": "silverwood",
-    "icy": "ice",
-    "quartz": "quartz",
-    "reed": "reed",
-    "blazing": "blaze",
-    "bone": "bone",
-}
-
-
-def particle_model(ctx, name, texture, kind="block"):
-    ctx.block_model(name, {"parent": "minecraft:block/block", "textures": {"particle": ctx.ref(texture, kind)}})
-
-
-def special_item(ctx, name, model, base=None):
-    ctx.write(ctx.ASSETS / "items" / f"{name}.json", {
-        "model": {"type": "minecraft:special", "base": base or ctx.ref(name, "item"), "model": model},
-    })
-
-
-LEGACY_VIEWS = [
-    ("inventory", ["gui"]),
-    ("equipped", ["thirdperson_lefthand", "thirdperson_righthand"]),
-    ("first_person", ["firstperson_lefthand", "firstperson_righthand"]),
-]
-
-
-def legacy_special_item(ctx, name, model, particle, kind="minecraft:special"):
-    ctx.item_model(name, {"gui_light": "side", "textures": {"particle": ctx.ref(particle, "item")}})
-    base = ctx.ref(name, "item")
-
-    def special(view):
-        return {"type": kind, "base": base, "model": {**model, "view": view}}
-
-    ctx.write(ctx.ASSETS / "items" / f"{name}.json", {
-        "model": {
-            "type": "minecraft:select",
-            "property": "minecraft:display_context",
-            "cases": [{"when": contexts, "model": special(view)} for view, contexts in LEGACY_VIEWS],
-            "fallback": special("entity"),
-        },
-    })
-
-
-def item_base_from_block(ctx, name):
-    ctx.item_model(name, {"parent": ctx.ref(name)})
-
-
-def item_base_particle(ctx, name, texture, kind="block"):
-    ctx.item_model(name, {"parent": "minecraft:block/block", "textures": {"particle": ctx.ref(texture, kind)}})
-
-
-def box(ctx, start, end, faces):
-    return {"from": start, "to": end, "faces": faces}
+from .common import FACES, NS, box
 
 
 def nodes(ctx):
     for name in ["aura_node", "energized_aura_node"]:
-        particle_model(ctx, name, "blank", "item")
+        ctx.particle_model(name, "blank", "item")
         ctx.simple_state(name)
         ctx.write_loot(name, [])
-    item_base_particle(ctx, "aura_node", "blank", "item")
-    special_item(ctx, "aura_node", {"type": f"{NS}:aura_node"})
+    ctx.item_base_particle("aura_node", "blank", "item")
+    ctx.special_item("aura_node", {"type": f"{NS}:aura_node"})
 
     ctx.simple_state("charged_obsidian_totem", ctx.ref("obsidian_totem"))
     ctx.block_item("charged_obsidian_totem", model=ctx.ref("obsidian_totem"))
@@ -113,16 +42,16 @@ def devices(ctx):
         ("vis_relay", {"type": f"{NS}:vis_relay"}),
     ]:
         texture = "thaumiumblock" if name == "vis_relay" else "pedestal_top"
-        particle_model(ctx, name, texture)
-        item_base_particle(ctx, name, texture)
-        special_item(ctx, name, model)
+        ctx.particle_model(name, texture)
+        ctx.item_base_particle(name, texture)
+        ctx.special_item(name, model)
         ctx.self_drop(name)
         ctx.mineable("pickaxe", name)
     for name in ["node_stabilizer", "advanced_node_stabilizer", "node_transducer"]:
         ctx.simple_state(name)
     ctx.blockstate("vis_relay", {"variants": {
         f"connected={connected},facing={facing}": {"model": ctx.ref("vis_relay")}
-        for facing in FACINGS
+        for facing in FACES
         for connected in ["false", "true"]
     }})
 
@@ -130,16 +59,16 @@ def devices(ctx):
         "parent": "minecraft:block/block",
         "textures": {"particle": ctx.ref("wandpedestal_side"), "side": ctx.ref("wandpedestal_side"), "top": ctx.ref("wandpedestal_top")},
         "elements": [
-            box(ctx, [0, 0, 0], [16, 4, 16], {
+            box([0, 0, 0], [16, 4, 16], {
                 "down": {"texture": "#top", "cullface": "down"}, "up": {"texture": "#top"},
                 "north": {"texture": "#side", "cullface": "north"}, "south": {"texture": "#side", "cullface": "south"},
                 "west": {"texture": "#side", "cullface": "west"}, "east": {"texture": "#side", "cullface": "east"},
             }),
-            box(ctx, [2, 4, 2], [14, 8, 14], {
+            box([2, 4, 2], [14, 8, 14], {
                 "up": {"texture": "#top"}, "north": {"texture": "#side"}, "south": {"texture": "#side"},
                 "west": {"texture": "#side"}, "east": {"texture": "#side"},
             }),
-            box(ctx, [4, 8, 4], [12, 16, 12], {
+            box([4, 8, 4], [12, 16, 12], {
                 "up": {"texture": "#top", "cullface": "up"}, "north": {"texture": "#side"}, "south": {"texture": "#side"},
                 "west": {"texture": "#side"}, "east": {"texture": "#side"},
             }),
@@ -153,7 +82,7 @@ def devices(ctx):
             "top": ctx.ref("wandpedestal_focus_top"),
             "side": ctx.ref("wandpedestal_focus_side"),
         },
-        "elements": [box(ctx, start, end, {
+        "elements": [box(start, end, {
             "down": {"texture": "#bottom"}, "up": {"texture": "#top"},
             "north": {"texture": "#side"}, "south": {"texture": "#side"},
             "west": {"texture": "#side"}, "east": {"texture": "#side"},
@@ -179,37 +108,11 @@ def devices(ctx):
 def jar(ctx):
     ctx.block_model("node_jar", {"parent": ctx.ref("warded_jar")})
     ctx.simple_state("node_jar")
-    item_base_from_block(ctx, "node_jar")
-    special_item(ctx, "node_jar", {"type": f"{NS}:node_jar"})
-
-
-def wands(ctx):
-    legacy_special_item(ctx, "wand", {"type": f"{NS}:wand"}, "wand_rod_greatwood", f"{NS}:special_owner")
-    for cap, texture in CAPS.items():
-        ctx.generated_item(f"{cap}_wand_cap", texture)
-    for rod, texture in RODS.items():
-        ctx.generated_item(f"{rod}_rod", f"wand_rod_{texture}")
-        ctx.generated_item(f"{rod}_staff_core", f"staff_rod_{texture}")
-    ctx.generated_item("primal_staff_core", "staff_rod_primal")
-    legacy_special_item(ctx, "thaumometer", {"type": f"{NS}:thaumometer"}, "blank")
-    ctx.generated_item("goggles_of_revealing", "gogglesrevealing")
-    ctx.write(ctx.ASSETS / "equipment" / "goggles.json", {
-        "layers": {"humanoid": [{"texture": f"{NS}:goggles"}]},
-    })
-
-
-def recipes(ctx):
-    ctx.shaped("iron_wand_cap", f"{NS}:iron_wand_cap", 1, ["NNN", "N N"], {"N": "#c:nuggets/iron"})
-    ctx.shaped(
-        "wand_iron_wood", f"{NS}:wand", 1, ["  I", " S ", "I  "],
-        {"I": f"{NS}:iron_wand_cap", "S": "#c:rods/wooden"},
-        components={f"{NS}:wand_parts": {"cap": "iron", "rod": "wood"}},
-    )
+    ctx.item_base_from_block("node_jar")
+    ctx.special_item("node_jar", {"type": f"{NS}:node_jar"})
 
 
 def generate(ctx):
     nodes(ctx)
     devices(ctx)
     jar(ctx)
-    wands(ctx)
-    recipes(ctx)

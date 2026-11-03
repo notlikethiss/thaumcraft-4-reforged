@@ -1,7 +1,4 @@
-import json
-from pathlib import Path
-
-import gen_structures
+from . import structures
 
 PRIMALS = ["air", "fire", "water", "earth", "order", "entropy"]
 APPRENTICE_RINGS = ["air", "earth", "fire", "water", "order", "entropy"]
@@ -121,4 +118,4 @@ def generate(ctx):
         "random_sequence": f"{ns}:chests/wizard_tower",
     }))
 
-    gen_structures.generate(ctx.DATA)
+    structures.generate(ctx)

@@ -1,6 +1,5 @@
-import gen_phase4
+from .common import FACES, NS
 
-NS = "thaumcraft"
 LINK_COMPONENT = f"{NS}:mirror_link"
 MIRRORS = [("magic_mirror", "mirrorframe"), ("essentia_mirror", "mirrorframe2")]
 
@@ -14,9 +13,9 @@ def mirror_item(ctx, name, frame, pane):
 
 def mirrors(ctx):
     for name, frame in MIRRORS:
-        gen_phase4.particle_model(ctx, name, frame)
+        ctx.particle_model(name, frame)
         ctx.blockstate(name, {"variants": {
-            f"facing={facing}": {"model": ctx.ref(name)} for facing in gen_phase4.FACINGS
+            f"facing={facing}": {"model": ctx.ref(name)} for facing in FACES
         }})
         mirror_item(ctx, name, frame, "mirrorpane")
         mirror_item(ctx, f"{name}_linked", frame, "mirrorpaneopen")

@@ -1,9 +1,5 @@
-import gen_phase4
+from .common import FACES, NS, SIDES, box, flat, uniform_faces
 
-NS = "thaumcraft"
-FACES = ["down", "up", "north", "south", "west", "east"]
-SIDES = ["north", "south", "west", "east"]
-FACINGS = ["down", "up", "north", "south", "west", "east"]
 ELEMENTS = ["air", "fire", "water", "earth", "order", "entropy"]
 CRYSTALS = [
     ("air_crystal_cluster", 0),
@@ -21,24 +17,9 @@ LEVITATOR_INNER_GLOW = 0xEECCFF
 LEVITATOR_ACTIVE_LIGHT = 11
 
 
-def box(start, end, faces, **extra):
-    return {"from": start, "to": end, "faces": faces, **extra}
-
-
-def uniform_faces(texture, names=FACES, **extra):
-    return {face: {"texture": texture, **extra} for face in names}
-
-
-def flat(face, start, end, texture, emission=0, **extra):
-    element = {"from": start, "to": end, "faces": {face: {"texture": texture, **extra}}}
-    if emission:
-        element["light_emission"] = emission
-    return element
-
-
 def airy(ctx):
     for name in ["nitor_light", "arcane_lamp_light", "warding_aura"]:
-        gen_phase4.particle_model(ctx, name, "blank")
+        ctx.particle_model(name, "blank")
         ctx.simple_state(name)
     ctx.write_loot("nitor_light", [{
         "rolls": 1,
@@ -65,11 +46,11 @@ def lamps(ctx):
                 "west": {"texture": "#side"}, "east": {"texture": "#side"},
             })],
         })
-    ctx.blockstate("arcane_lamp", {"variants": {f"facing={facing}": {"model": ctx.ref("arcane_lamp")} for facing in FACINGS}})
+    ctx.blockstate("arcane_lamp", {"variants": {f"facing={facing}": {"model": ctx.ref("arcane_lamp")} for facing in FACES}})
     for name in ["lamp_of_growth", "lamp_of_fertility"]:
         ctx.blockstate(name, {"variants": {
             f"facing={facing},lit={lit}": {"model": ctx.ref(f"{name}_{'lit' if lit == 'true' else 'unlit'}")}
-            for facing in FACINGS
+            for facing in FACES
             for lit in ["false", "true"]
         }})
     ctx.block_item("arcane_lamp")
@@ -192,10 +173,10 @@ def levitator(ctx):
 
 def crystals(ctx):
     for name, kind in CRYSTALS:
-        gen_phase4.particle_model(ctx, name, "crystal")
-        ctx.blockstate(name, {"variants": {f"facing={facing}": {"model": ctx.ref(name)} for facing in FACINGS}})
-        gen_phase4.item_base_particle(ctx, name, "crystal")
-        gen_phase4.special_item(ctx, name, {"type": f"{NS}:crystal_cluster", "kind": kind})
+        ctx.particle_model(name, "crystal")
+        ctx.blockstate(name, {"variants": {f"facing={facing}": {"model": ctx.ref(name)} for facing in FACES}})
+        ctx.item_base_particle(name, "crystal")
+        ctx.special_item(name, {"type": f"{NS}:crystal_cluster", "kind": kind})
         if kind < 6:
             pools = [{
                 "rolls": 1,
