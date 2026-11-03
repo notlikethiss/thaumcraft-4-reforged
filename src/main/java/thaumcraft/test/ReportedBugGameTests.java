@@ -44,6 +44,8 @@ import thaumcraft.registry.EldritchContent;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModEntities;
 import thaumcraft.registry.ModItems;
+import thaumcraft.research.Warp;
+import thaumcraft.research.WarpType;
 import thaumcraft.wand.WandRegistry;
 import thaumcraft.wand.Wands;
 import thaumcraft.wand.focus.BlockSwapper;
@@ -235,6 +237,50 @@ public final class ReportedBugGameTests {
         ItemStack output = InfusionCrafting.result(helper.getLevel(), InfusionCrafting.TYPE_RECIPE, "SanityCheck", new ItemStack(ModItems.THAUMOMETER.get()));
         helper.assertTrue(output.is(ModItems.SANITY_CHECKER.get()), "sanity checker infusion has no output");
         helper.assertValueEqual(output.getMaxStackSize(), 1, "sanity checker stack size");
+        helper.succeed();
+    }
+
+    @net.minecraft.gametest.framework.GameTest(template = "test/platform", timeoutTicks = 200, batch = "reportedbuggametests_soapkeepspermanentwarp")
+    public static void soapKeepsPermanentWarp(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer player = player(helper, GameType.SURVIVAL);
+        Warp.set(player, 7, WarpType.PERMANENT);
+        Warp.set(player, 100, WarpType.STICKY);
+        Warp.set(player, 4, WarpType.TEMPORARY);
+        ItemStack soap = new ItemStack(ModItems.SANITIZING_SOAP.get(), 40);
+        player.setItemInHand(InteractionHand.MAIN_HAND, soap);
+        for (int use = 0; use < 40; use++) {
+            ModItems.SANITIZING_SOAP.get().use(level, player, InteractionHand.MAIN_HAND);
+            ModItems.SANITIZING_SOAP.get().onUseTick(level, player, soap, 4);
+        }
+        helper.assertTrue(soap.isEmpty(), "every soap use should consume one soap");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 7, "soap changed permanent warp");
+        helper.assertValueEqual(Warp.get(player, WarpType.TEMPORARY), 0, "soap did not clear temporary warp");
+        int sticky = Warp.get(player, WarpType.STICKY);
+        helper.assertTrue(sticky >= 60 && sticky < 100, "soap removed " + (100 - sticky) + " sticky warp in 40 uses");
+        helper.succeed();
+    }
+
+    @net.minecraft.gametest.framework.GameTest(template = "test/platform", timeoutTicks = 200, batch = "reportedbuggametests_warpcommandaliases")
+    public static void warpCommandAliases(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer player = player(helper, GameType.SURVIVAL);
+        Warp.set(player, 0, WarpType.PERMANENT);
+        Warp.set(player, 0, WarpType.STICKY);
+        Warp.set(player, 0, WarpType.TEMPORARY);
+        var commands = level.getServer().getCommands();
+        var source = level.getServer().createCommandSourceStack().withLevel(level).withEntity(player);
+        commands.performPrefixedCommand(source, "tc warp @s set 5 PERM");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 5, "/tc warp set PERM");
+        commands.performPrefixedCommand(source, "thaum warp @s add -2 perm");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 3, "/thaum warp add -2 perm");
+        commands.performPrefixedCommand(source, "thaumcraft warp @s set 4 Temp");
+        helper.assertValueEqual(Warp.get(player, WarpType.TEMPORARY), 4, "/thaumcraft warp set Temp");
+        commands.performPrefixedCommand(source, "tc warp @s add 3 foo");
+        helper.assertValueEqual(Warp.get(player, WarpType.STICKY), 3, "unknown warp type should add sticky warp");
+        commands.performPrefixedCommand(source, "tc warp @s set 0");
+        helper.assertValueEqual(Warp.get(player, WarpType.STICKY), 0, "warp set without a type should change sticky warp");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 3, "sticky warp command changed permanent warp");
         helper.succeed();
     }
 }

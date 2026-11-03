@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Stream;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -71,6 +73,18 @@ import thaumcraft.research.WarpType;
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class ThaumcraftCommand {
     private static final int DEFAULT_BEAM_COLOR = 0xFF00FF;
+    private static final List<String> ALIASES = List.of("thaum", "tc");
+    private static final List<String> WARP_TYPES = List.of("PERM", "TEMP", "STICKY");
+    private static final List<String> HELP = List.of(
+        "aliases",
+        "research",
+        "research.usage",
+        "aspect",
+        "aspect.usage",
+        "warp",
+        "warp.usage",
+        "warp.type"
+    );
 
     private ThaumcraftCommand() {
     }
@@ -81,9 +95,10 @@ public final class ThaumcraftCommand {
     }
 
     private static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
-        dispatcher.register(
+        LiteralCommandNode<CommandSourceStack> root = dispatcher.register(
             Commands.literal(Thaumcraft.MODID)
                 .requires(source -> source.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .then(Commands.literal("help").executes(ThaumcraftCommand::help))
                 .then(
                     Commands.literal("fx")
                         .then(
@@ -162,9 +177,11 @@ public final class ThaumcraftCommand {
                                         .then(
                                             Commands.argument("amount", IntegerArgumentType.integer(0))
                                                 .executes(context -> warpSet(context, WarpType.STICKY))
-                                                .then(Commands.literal("perm").executes(context -> warpSet(context, WarpType.PERMANENT)))
-                                                .then(Commands.literal("temp").executes(context -> warpSet(context, WarpType.TEMPORARY)))
-                                                .then(Commands.literal("sticky").executes(context -> warpSet(context, WarpType.STICKY)))
+                                                .then(
+                                                    Commands.argument("type", StringArgumentType.word())
+                                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(WARP_TYPES, builder))
+                                                        .executes(context -> warpSet(context, warpType(StringArgumentType.getString(context, "type"))))
+                                                )
                                         )
                                 )
                                 .then(
@@ -172,9 +189,11 @@ public final class ThaumcraftCommand {
                                         .then(
                                             Commands.argument("amount", IntegerArgumentType.integer(-100, 100))
                                                 .executes(context -> warpAdd(context, WarpType.STICKY))
-                                                .then(Commands.literal("perm").executes(context -> warpAdd(context, WarpType.PERMANENT)))
-                                                .then(Commands.literal("temp").executes(context -> warpAdd(context, WarpType.TEMPORARY)))
-                                                .then(Commands.literal("sticky").executes(context -> warpAdd(context, WarpType.STICKY)))
+                                                .then(
+                                                    Commands.argument("type", StringArgumentType.word())
+                                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(WARP_TYPES, builder))
+                                                        .executes(context -> warpAdd(context, warpType(StringArgumentType.getString(context, "type"))))
+                                                )
                                         )
                                 )
                         )
@@ -244,6 +263,9 @@ public final class ThaumcraftCommand {
                         )
                 )
         );
+        for (String alias : ALIASES) {
+            dispatcher.register(Commands.literal(alias).requires(source -> source.hasPermission(Commands.LEVEL_GAMEMASTERS)).redirect(root));
+        }
     }
 
     private static int researchList(CommandContext<CommandSourceStack> context) {
@@ -323,23 +345,46 @@ public final class ThaumcraftCommand {
         return players.size();
     }
 
+    private static int help(CommandContext<CommandSourceStack> context) {
+        for (String line : HELP) {
+            ChatFormatting color = line.endsWith(".usage") || line.equals("warp.type") ? ChatFormatting.WHITE : ChatFormatting.DARK_AQUA;
+            context.getSource().sendSystemMessage(Component.translatable("commands.thaumcraft.help." + line).withStyle(color));
+        }
+        return HELP.size();
+    }
+
+    static WarpType warpType(String name) {
+        if (name.equalsIgnoreCase("PERM")) {
+            return WarpType.PERMANENT;
+        }
+        if (name.equalsIgnoreCase("TEMP")) {
+            return WarpType.TEMPORARY;
+        }
+        return WarpType.STICKY;
+    }
+
     private static int warpSet(CommandContext<CommandSourceStack> context, WarpType type) throws CommandSyntaxException {
         int amount = IntegerArgumentType.getInteger(context, "amount");
         Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "targets");
+        Component sender = context.getSource().getDisplayName();
         for (ServerPlayer player : players) {
             Warp.set(player, amount, type);
+            player.sendSystemMessage(Component.translatable("commands.thaumcraft.warp.set.target", sender, amount).withStyle(ChatFormatting.DARK_PURPLE));
         }
-        context.getSource().sendSuccess(() -> Component.literal("Set warp to " + amount + " for " + players.size() + " players"), true);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.thaumcraft.warp.set", amount, players.size()), true);
         return players.size();
     }
 
     private static int warpAdd(CommandContext<CommandSourceStack> context, WarpType type) throws CommandSyntaxException {
         int amount = IntegerArgumentType.getInteger(context, "amount");
         Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "targets");
+        Component sender = context.getSource().getDisplayName();
         for (ServerPlayer player : players) {
-            Warp.add(player, amount, type);
+            if (type == WarpType.PERMANENT && amount < 0) Warp.set(player, Warp.get(player, type) + amount, type);
+            else Warp.add(player, amount, type);
+            player.sendSystemMessage(Component.translatable("commands.thaumcraft.warp.add.target", sender, amount).withStyle(ChatFormatting.DARK_PURPLE));
         }
-        context.getSource().sendSuccess(() -> Component.literal("Added " + amount + " warp to " + players.size() + " players"), true);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.thaumcraft.warp.add", amount, players.size()), true);
         return players.size();
     }
 
