@@ -13,7 +13,7 @@ The `mc/26.1.2` and `mc/1.21.1` branches contain backports; Minecraft 1.19.2 is 
 ## Requirements to build
 
 - Java 25
-- Python 3 (for the conversion, resource generation and validation scripts)
+- Python 3 (for the resource generation and validation scripts)
 
 Versions used by the main branch:
 
@@ -41,7 +41,6 @@ export JAVA_HOME=/path/to/openjdk-25
 ./gradlew build               # build the mod jar into build/libs
 ./gradlew runClient           # start a development client
 ./gradlew runServer           # start a development server (game folder: run/)
-./gradlew runGameTestServer   # run the automated game tests
 python3 tools/check_seams.py  # check version-specific API boundaries (also runs in CI)
 ```
 
@@ -54,10 +53,13 @@ echo "forceload add 0 0" >> cmds
 
 ## Admin commands
 
+`/tc` works as a short alias for `/thaumcraft`.
+
 - `/thaumcraft research <players> <key|all>` grants research
 - `/thaumcraft research <players> reset` resets research
 - `/thaumcraft aspect <players> <aspect|all> <amount>` grants research points
-- `/thaumcraft warp <players> set <amount> [perm|temp|sticky]` sets warp
+- `/thaumcraft warp <players> <set|add> <amount> [PERM|TEMP]` sets or changes warp (sticky warp without a type)
+- `/thaumcraft help` lists the original commands
 - `/thaumcraft wand fill [players]` fills a held wand with vis
 - `/thaumcraft node info <x> <y> <z>` inspects an aura node
 - `/thaumcraft outer prepare <x> <y> <z>` prepares an Outer Lands maze
