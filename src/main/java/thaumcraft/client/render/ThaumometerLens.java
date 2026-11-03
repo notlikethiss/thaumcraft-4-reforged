@@ -49,7 +49,7 @@ final class ThaumometerLens {
         lens.rotateDegrees(Axis.XP, pitchBob * 0.1F);
         lens.rotateDegrees(Axis.YP, yawBob * 0.1F);
         float swing = hands.attackHand == InteractionHand.MAIN_HAND ? avatar.swingAnimation : 0.0F;
-        float hidden = hands.mainHandSwapScale * (1.0F - Mth.lerp(camera.cameraEntityPartialTicks, hands.oldMainHandHeight, hands.mainHandHeight));
+        float hidden = ThaumometerEquip.hidden(hands.mainHandSwapScale * (1.0F - Mth.lerp(camera.cameraEntityPartialTicks, hands.oldMainHandHeight, hands.mainHandHeight)));
         ThaumometerHandRenderer.applyEquipTransform(lens, swing, hidden, avatar.isUsingItem);
         ThaumometerHandRenderer.applyGripTransform(lens, pitchBob, yawBob);
         ThaumometerHandRenderer.applyModelTransform(lens);

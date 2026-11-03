@@ -57,7 +57,7 @@ public final class ThaumometerHandRenderer {
         SubmitNodeCollector collector = event.getSubmitNodeCollector();
         int light = event.getPackedLight();
         float swing = event.getSwingProgress();
-        float hidden = event.getEquipProgress();
+        float hidden = ThaumometerEquip.hidden(event.getEquipProgress());
         AvatarRenderState avatar = event.getPlayerState().avatarRenderState;
 
         poseStack.pushPose();
