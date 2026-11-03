@@ -1,6 +1,6 @@
 import colorsys
 
-NS = "thaumcraft"
+from .common import NS
 
 FLOWERS = [
     "poppy",
@@ -319,7 +319,7 @@ def generate(ctx):
         0.5,
         0.5,
         {
-            "minecraft:gameplay/natural_mob_spawns": spawns({}),
+            "minecraft:gameplay/natural_mob_spawns": spawns({"monster": [(f"{NS}:inhabited_zombie", 1, 1), (f"{NS}:eldritch_guardian", 1, 1)]}),
             "minecraft:visual/sky_color": hex_color(0x000000),
         },
         {"water_color": "#3f76e4"},
