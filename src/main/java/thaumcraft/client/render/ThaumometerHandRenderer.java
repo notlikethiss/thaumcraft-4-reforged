@@ -99,7 +99,7 @@ public final class ThaumometerHandRenderer {
         SubmitNodeCollector collector = event.getSubmitNodeCollector();
         int light = event.getPackedLight();
         float swing = event.getSwingProgress();
-        float hidden = event.getEquipProgress();
+        float hidden = ThaumometerEquip.hidden(event.getEquipProgress());
         float partialTick = event.getPartialTick();
         float pitchBob = player.getViewXRot(partialTick) - Mth.lerp(partialTick, player.xBobO, player.xBob);
         float yawBob = player.getViewYRot(partialTick) - Mth.lerp(partialTick, player.yBobO, player.yBob);
