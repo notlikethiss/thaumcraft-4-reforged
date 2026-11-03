@@ -1,75 +1,31 @@
-import json
-import shutil
-from pathlib import Path
-import gen_phase10_11
-
-ROOT = Path(__file__).resolve().parent.parent
-NS = "thaumcraft"
+from .common import FACES, NS
 
 BLOCKS = {
-    "eldritch_altar": ("obsidiantile", "tile.blockEldritch.0.name"),
-    "eldritch_obelisk": ("obsidiantile", "tile.blockEldritch.1.name"),
-    "eldritch_capstone": ("obsidiantile", "tile.blockEldritch.3.name"),
-    "glowing_crusted_stone": ("es_i_1", "tile.blockEldritch.4.name"),
-    "glyphed_stone": ("es_i_2", "tile.blockEldritch.5.name"),
-    "ancient_doorway": ("deco_3", "tile.blockEldritch.7.name"),
-    "ancient_locking_mechanism": ("deco_2", "tile.blockEldritch.8.name"),
-    "crusted_opening": ("crust", "tile.blockEldritch.9.name"),
-    "runed_stone": ("es_5", "tile.blockEldritch.10.name"),
-    "eldritch_portal": ("item/blank", "tile.blockPortalEldritch.name"),
-    "eldritch_nothing": ("item/blank", None),
+    "eldritch_altar": "obsidiantile",
+    "eldritch_obelisk": "obsidiantile",
+    "eldritch_capstone": "obsidiantile",
+    "glowing_crusted_stone": "es_i_1",
+    "glyphed_stone": "es_i_2",
+    "ancient_doorway": "deco_3",
+    "ancient_locking_mechanism": "deco_2",
+    "crusted_opening": "crust",
+    "runed_stone": "es_5",
+    "eldritch_portal": "item/blank",
+    "eldritch_nothing": "item/blank",
 }
 
 ITEMS = {
-    "eldritch_eye": ("eldritch_object", "item.ItemEldritchObject.0.name"),
-    "crimson_rites": ("crimson_rites", "item.ItemEldritchObject.1.name"),
-    "runed_tablet": ("eldritch_object_2", "item.ItemEldritchObject.2.name"),
-    "primordial_pearl": ("eldritch_object_3", "item.ItemEldritchObject.3.name"),
-    "eldritch_obelisk_placer": ("ob_placer", "item.ItemEldritchObject.4.name"),
+    "eldritch_eye": "eldritch_object",
+    "crimson_rites": "crimson_rites",
+    "runed_tablet": "eldritch_object_2",
+    "primordial_pearl": "eldritch_object_3",
+    "eldritch_obelisk_placer": "ob_placer",
 }
-
-SPAWN_EGGS = {
-    "eldritch_warden_spawn_egg": (0x552222, 0x404040),
-    "eldritch_golem_spawn_egg": (0x555555, 0x404040),
-    "cultist_leader_spawn_egg": (0xFF5055, 0x505050),
-    "cultist_portal_spawn_egg": (0xFF5055, 0xFF50FF),
-    "taintacle_giant_spawn_egg": (0xFFC0FF, 0x808080),
-}
-
-
-def read_legacy_language(path):
-    values = {}
-    if not path.exists():
-        return values
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        values[key.strip()] = value.strip()
-    return values
-
-
-def modern_key(kind, name):
-    return f"{kind}.{NS}.{name}"
-
-
-def copy_legacy_texture(ctx, name, folder):
-    source = ROOT / "reference" / "decompiled" / "assets" / NS / "textures" / folder / f"{name}.png"
-    target = ctx.ASSETS / "textures" / ("block" if folder == "blocks" else "item") / f"{name}.png"
-    target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, target)
 
 
 def generate(ctx):
-    assets = ctx.ASSETS
     data = ctx.DATA
-    for texture in {texture.removeprefix("item/") for texture, _ in BLOCKS.values()}:
-        if texture != "blank" and not (ctx.SOURCE_TEXTURES / "block" / f"{texture}.png").exists():
-            copy_legacy_texture(ctx, texture, "blocks")
-    for texture in {texture for texture, _ in ITEMS.values()}:
-        if not (ctx.SOURCE_TEXTURES / "item" / f"{texture}.png").exists():
-            copy_legacy_texture(ctx, texture, "items")
-    for name, (texture, _) in BLOCKS.items():
+    for name, texture in BLOCKS.items():
         model_name = f"{name}_block"
         texture_id = f"{NS}:{texture if "/" in texture else "block/" + texture}"
         if name in {"glowing_crusted_stone", "glyphed_stone"}:
@@ -117,7 +73,7 @@ def generate(ctx):
                 ctx.block_model(variant_name, {
                     "textures": {"particle": texture_id, "all": texture_id},
                     "elements": [{"from": lower, "to": upper, "faces": {
-                        side: {"texture": "#all"} for side in ("down", "up", "north", "south", "west", "east")
+                        side: {"texture": "#all"} for side in FACES
                     }}],
                 })
                 variants[f"bounds={mask}"] = {"model": f"{NS}:block/{variant_name}"}
@@ -139,16 +95,8 @@ def generate(ctx):
             ctx.self_drop(name)
         elif name == "glyphed_stone":
             ctx.write_loot(name, [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"{NS}:knowledge_fragment"}]}])
-    for name, texture in {
-        "eldritch_eye": "eldritch_object",
-        "crimson_rites": "crimson_rites",
-        "runed_tablet": "eldritch_object_2",
-        "primordial_pearl": "eldritch_object_3",
-        "eldritch_obelisk_placer": "ob_placer",
-    }.items():
+    for name, texture in ITEMS.items():
         ctx.generated_item(name, texture)
-    for name, (base_color, spot_color) in SPAWN_EGGS.items():
-        gen_phase10_11.write_spawn_egg(ctx, name, base_color, spot_color)
 
     dimension_type = {
         "ambient_light": 0.0,
@@ -191,30 +139,3 @@ def generate(ctx):
             "biome_source": {"type": "minecraft:fixed", "biome": f"{NS}:eldritch"},
         },
     })
-
-    biome_path = data / NS / "worldgen" / "biome" / "eldritch.json"
-    biome = json.loads(biome_path.read_text(encoding="utf-8"))
-    if ctx.mcformat.profile.modern:
-        biome["attributes"]["minecraft:gameplay/natural_mob_spawns"]["argument"]["spawns_by_category"]["monster"] = [
-            {"type": f"{NS}:{name}", "count": 1, "weight": 1} for name in ["inhabited_zombie", "eldritch_guardian"]
-        ]
-    else:
-        biome["spawners"]["monster"] = [
-            {"type": f"{NS}:{name}", "minCount": 1, "maxCount": 1, "weight": 1} for name in ["inhabited_zombie", "eldritch_guardian"]
-        ]
-    ctx.write(biome_path, biome)
-
-    locale_files = sorted((ctx.SOURCE_TEXTURES.parent / "lang").glob("*.json"))
-    legacy_lang_root = ROOT / "reference" / "decompiled" / "assets" / NS / "lang"
-    for locale_path in locale_files:
-        locale = locale_path.stem
-        legacy_locale = locale.split("_")[0] + "_" + locale.split("_")[1].upper()
-        legacy = read_legacy_language(legacy_lang_root / f"{legacy_locale}.lang")
-        translations = json.loads(locale_path.read_text(encoding="utf-8"))
-        for name, (_, old_key) in BLOCKS.items():
-            if old_key and old_key in legacy:
-                translations[modern_key("block", name)] = legacy[old_key]
-        for name, (_, old_key) in ITEMS.items():
-            if old_key in legacy:
-                translations[modern_key("item", name)] = legacy[old_key]
-        locale_path.write_text(json.dumps(translations, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

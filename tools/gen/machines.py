@@ -1,8 +1,6 @@
-import gen_phase4
+from .common import FACES, NS
 
-NS = "thaumcraft"
 FACING_ROTATION = {"north": 0, "east": 90, "south": 180, "west": 270}
-FACES = ["down", "up", "north", "south", "west", "east"]
 SIDE_COLUMNS = {
     "north": {1: 2, 2: 1, 3: 0},
     "south": {7: 0, 8: 1, 9: 2},
@@ -98,17 +96,17 @@ def infernal_furnace(ctx):
 
 
 def bore(ctx):
-    gen_phase4.particle_model(ctx, "arcane_bore_base", "planks_greatwood")
+    ctx.particle_model("arcane_bore_base", "planks_greatwood")
     ctx.blockstate("arcane_bore_base", {"variants": {
         f"facing={facing}": {"model": ctx.ref("arcane_bore_base")}
-        for facing in ["down", "up", "north", "south", "west", "east"]
+        for facing in FACES
     }})
-    gen_phase4.item_base_particle(ctx, "arcane_bore_base", "planks_greatwood")
-    gen_phase4.special_item(ctx, "arcane_bore_base", BORE_BASE_ITEM)
-    gen_phase4.particle_model(ctx, "arcane_bore", "planks_greatwood")
+    ctx.item_base_particle("arcane_bore_base", "planks_greatwood")
+    ctx.special_item("arcane_bore_base", BORE_BASE_ITEM)
+    ctx.particle_model("arcane_bore", "planks_greatwood")
     ctx.blockstate("arcane_bore", {"variants": {f"base={base}": {"model": ctx.ref("arcane_bore")} for base in ["up", "down"]}})
-    gen_phase4.item_base_particle(ctx, "arcane_bore", "planks_greatwood")
-    gen_phase4.special_item(ctx, "arcane_bore", BORE_ITEM)
+    ctx.item_base_particle("arcane_bore", "planks_greatwood")
+    ctx.special_item("arcane_bore", BORE_ITEM)
     for name in ["arcane_bore_base", "arcane_bore"]:
         ctx.self_drop(name)
         ctx.mineable("axe", name)

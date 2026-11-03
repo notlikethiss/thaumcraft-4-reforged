@@ -1,0 +1,72 @@
+from . import (
+    alchemy,
+    arcane,
+    biomes,
+    blocks,
+    curios,
+    devices,
+    eldritch,
+    entities,
+    equipment,
+    finalize,
+    font,
+    golems,
+    items,
+    legacy,
+    loot,
+    machines,
+    mirrors,
+    node_shaders,
+    nodes,
+    recipes,
+    research,
+    taint,
+    villages,
+    warded,
+    wands,
+    warp_shaders,
+    world,
+)
+from .context import Context
+
+STEPS = [
+    blocks.generate,
+    items.generate,
+    recipes.recipes,
+    font.galactic_font,
+    world.generate,
+    biomes.generate,
+    loot.generate,
+    villages.generate,
+    nodes.generate,
+    wands.generate,
+    research.generate,
+    arcane.generate,
+    alchemy.generate,
+    equipment.generate,
+    devices.generate,
+    warded.generate,
+    machines.generate,
+    mirrors.generate,
+    curios.generate,
+    entities.generate,
+    taint.generate,
+    golems.generate,
+    eldritch.generate,
+    warp_shaders.generate,
+    node_shaders.generate,
+    recipes.tc_recipes,
+    finalize.write_tags,
+    legacy.apply_render_types,
+    legacy.write_extras,
+    legacy.write_manifests,
+    finalize.validate_textures,
+    finalize.validate_models,
+]
+
+
+def build(profile, out):
+    ctx = Context(profile, out)
+    for step in STEPS:
+        step(ctx)
+    return ctx

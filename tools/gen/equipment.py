@@ -1,9 +1,8 @@
 import shutil
 
-import gen_phase4
-import gen_phase6
+from .arcane import table_model
+from .common import NS
 
-NS = "thaumcraft"
 ROBE_COLOR = 6961280
 PRIMAL_COLORS = {
     "air": 0xFFFF7E,
@@ -271,13 +270,13 @@ def equipment(ctx):
 
 
 def blocks(ctx):
-    gen_phase6.table_model(ctx, "focal_manipulator", "wandtable")
+    table_model(ctx, "focal_manipulator", "wandtable")
     ctx.block_tags["minecraft:mineable/axe"].discard(f"{NS}:focal_manipulator")
     ctx.mineable("pickaxe", "focal_manipulator")
-    gen_phase4.particle_model(ctx, "hole", "blank", "item")
+    ctx.particle_model("hole", "blank", "item")
     ctx.simple_state("hole")
     ctx.write_loot("hole", [])
-    gen_phase4.particle_model(ctx, "warded_block", "wardedstone")
+    ctx.particle_model("warded_block", "wardedstone")
     if ctx.profile.modern:
         ctx.blockstate("warded_block", {"variants": {"": {"type": f"{NS}:warded", "fallback": {"model": "minecraft:block/stone"}}}})
     else:
@@ -369,29 +368,6 @@ def enchantments(ctx):
         ctx.write(ctx.DATA / "minecraft" / "tags" / "enchantment" / f"{tag}.json", {"replace": False, "values": [f"{NS}:haste", f"{NS}:repair"]})
 
 
-DAMAGE_TYPES = {
-    "airarrow": ["minecraft:is_projectile", "minecraft:bypasses_armor", "minecraft:witch_resistant_to"],
-    "firearrow": ["minecraft:is_projectile", "minecraft:is_fire"],
-    "orderarrow": ["minecraft:is_projectile", "minecraft:bypasses_armor", "minecraft:witch_resistant_to"],
-}
-
-
-def damage_types(ctx):
-    if not ctx.profile.enchantment_json:
-        return
-    tags = {}
-    for name, names in DAMAGE_TYPES.items():
-        content = {"exhaustion": 0.1, "message_id": f"{NS}.{name}", "scaling": "when_caused_by_living_non_player"}
-        if "minecraft:is_fire" in names:
-            content["effects"] = "burning"
-        ctx.write(ctx.DATA / NS / "damage_type" / f"{name}.json", content)
-        for tag in names:
-            tags.setdefault(tag, []).append(f"{NS}:{name}")
-    for tag, values in tags.items():
-        namespace, path = tag.split(":")
-        ctx.write(ctx.DATA / namespace / "tags" / "damage_type" / f"{path}.json", {"replace": False, "values": sorted(values)})
-
-
 def recipes(ctx):
     for name in ["robe_armor_dye", "void_robe_armor_dye"]:
         ctx.recipe(name, {"type": f"{NS}:{name}"}, [])
@@ -407,5 +383,4 @@ def generate(ctx):
     blocks(ctx)
     tags(ctx)
     enchantments(ctx)
-    damage_types(ctx)
     recipes(ctx)

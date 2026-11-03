@@ -1,4 +1,4 @@
-NS = "thaumcraft"
+from .common import NS
 
 SLOTS = {
     "necklace": ["mundane_amulet", "runic_shielding_amulet", "emergency_shielding_amulet", "vis_stone", "vis_amulet"],
