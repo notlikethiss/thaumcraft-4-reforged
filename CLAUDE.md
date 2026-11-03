@@ -17,7 +17,9 @@
 
 ## Синхронизация с main
 
-Последний синхронизированный коммит `main`: `79dd001`.
+Последний синхронизированный коммит `main`: `325c922`.
+
+Ветка отстаёт от `main` по содержанию: коммит `95dcec5` (parity fixes 2026-10-15) не перенесён, на ветке нет `StartupConfig`/`allow_cheat_sheet`, `SpawnToggles`, `LegacyDrops`, `MonsterBiomeSpawnModifier`, `WardedPearlEvents` и `world_generation_nether`. Sha выше отражает только порядок синхронизации, а пропущенное переносится отдельно.
 
 1. `git log --reverse <sha>..main`.
 2. Коммит только с ресурсами, lang или `tools/`: `git cherry-pick`, затем `python3 tools/gen_resources.py --mc 1.21.1`.
@@ -28,9 +30,10 @@
 ## Где ветка отличается
 
 - Правятся только `platform/`, `client/platform/`, `compat/` (`ValueInput`/`ValueOutput`, `ItemStackTemplate`), регистрация и ресурсы профиля. Правка игровой логики здесь значит, что на `main` не хватает шва: шов добавляется на `main`, затем синхронизируется.
-- Бижутерия на Curios (`platform/BaublesCurios`, слоты генерирует `tools/gen_curios.py`), своих слотов `main` нет.
+- Бижутерия на Curios (`platform/BaublesCurios`, слоты генерирует `tools/gen/curios.py`), своих слотов `main` нет.
 - Модели предметов через `models/item` с `overrides`, special-рендер через `BlockEntityWithoutLevelRenderer` + `IClientItemExtensions`, tint через `RegisterColorHandlersEvent.Item`.
 - Attachments без `.sync()`, `DataAttachments` шлёт свой payload.
+- Legacy-форматы ресурсов живут в `tools/gen/context.py` (`special_item`, `view_select_item`, `composite_item`, `ITEM_IDS`, `MANIFEST`) и `tools/gen/legacy.py` (render types, extras, манифесты в `tools/backport/`). `apply_render_types` требует Pillow.
 
 ## Проверки
 
