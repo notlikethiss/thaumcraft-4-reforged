@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 
 public enum LegacyItemView implements StringRepresentable {
@@ -27,6 +28,10 @@ public enum LegacyItemView implements StringRepresentable {
     }
 
     public void apply(PoseStack poseStack) {
+        apply(poseStack, -1.0F);
+    }
+
+    public void apply(PoseStack poseStack, float bowTicks) {
         poseStack.translate(0.5F, 0.5F, 0.5F);
         switch (this) {
             case INVENTORY -> {
@@ -53,9 +58,33 @@ public enum LegacyItemView implements StringRepresentable {
             case FIRST_PERSON -> {
                 poseStack.rotateDegrees(Axis.YP, 45.0F);
                 poseStack.scale(0.4F, 0.4F, 0.4F);
+                if (bowTicks >= 0.0F) {
+                    applyBow(poseStack, bowTicks);
+                }
                 poseStack.translate(-0.5F, -0.5F, -0.5F);
             }
             case ENTITY -> poseStack.scale(0.5F, 0.5F, 0.5F);
         }
+    }
+
+    private static void applyBow(PoseStack poseStack, float ticks) {
+        poseStack.rotateDegrees(Axis.ZP, -18.0F);
+        poseStack.rotateDegrees(Axis.YP, -12.0F);
+        poseStack.rotateDegrees(Axis.XP, -8.0F);
+        poseStack.translate(-0.9F, 0.2F, 0.0F);
+        float held = ticks - 1.0F;
+        float power = held / 20.0F;
+        power = Math.min((power * power + power * 2.0F) / 3.0F, 1.0F);
+        if (power > 0.1F) {
+            poseStack.translate(0.0F, Mth.sin((held - 0.1F) * 1.3F) * 0.01F * (power - 0.1F), 0.0F);
+        }
+        poseStack.translate(0.0F, 0.0F, power * 0.1F);
+        poseStack.rotateDegrees(Axis.ZP, -335.0F);
+        poseStack.rotateDegrees(Axis.YP, -50.0F);
+        poseStack.translate(0.0F, 0.5F, 0.0F);
+        poseStack.scale(1.0F, 1.0F, 1.0F + power * 0.2F);
+        poseStack.translate(0.0F, -0.5F, 0.0F);
+        poseStack.rotateDegrees(Axis.YP, 50.0F);
+        poseStack.rotateDegrees(Axis.ZP, 335.0F);
     }
 }
