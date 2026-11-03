@@ -22,7 +22,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
-import thaumcraft.aspect.Aspect;
 import thaumcraft.aspect.AspectKeys;
 import thaumcraft.aspect.AspectList;
 import thaumcraft.essentia.PhialItem;

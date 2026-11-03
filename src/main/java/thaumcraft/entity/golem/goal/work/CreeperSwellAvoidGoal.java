@@ -3,7 +3,6 @@ package thaumcraft.entity.golem.goal.work;
 import java.util.EnumSet;
 import java.util.List;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.pathfinder.Path;

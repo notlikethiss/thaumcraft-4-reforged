@@ -6,9 +6,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.geom.FacingQuads;
-import thaumcraft.client.geom.NodeGeometry;
 import thaumcraft.client.geom.QuadSink;
 import thaumcraft.client.platform.WorldFx;
+import thaumcraft.client.geom.Colors;
 
 public class VisSparkleFx extends WorldFx {
     private static final Identifier TEXTURE = Thaumcraft.id("textures/misc/particles.png");
@@ -101,7 +101,7 @@ public class VisSparkleFx extends WorldFx {
             0.5F,
             u1,
             0.5625F,
-            NodeGeometry.argb(color, 0.5F),
+            Colors.withAlpha(color, 0.5F),
             240
         );
     }

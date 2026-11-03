@@ -259,25 +259,6 @@ public final class ResearchManager {
         return keys.get(random.nextInt(keys.size()));
     }
 
-    public static @Nullable String findMatchingResearch(ServerPlayer player, Aspect aspect) {
-        List<String> keys = new ArrayList<>();
-        for (ResearchItem research : ResearchCategories.allResearch()) {
-            boolean secondary = research.isSecondary() && Config.researchDifficulty() == 0 || Config.researchDifficulty() == -1;
-            if (!secondary
-                && !research.isHidden()
-                && !research.isLost()
-                && !research.isAutoUnlock()
-                && !research.isVirtual()
-                && !research.isStub()
-                && !isComplete(player, research.key())
-                && hasRequisites(player, research.key())
-                && research.tags().getAmount(aspect) > 0) {
-                keys.add(research.key());
-            }
-        }
-        return keys.isEmpty() ? null : keys.get(player.getRandom().nextInt(keys.size()));
-    }
-
     public static void handlePlayerComplete(PlayerCompletePayload payload, Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return;
