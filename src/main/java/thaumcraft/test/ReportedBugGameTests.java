@@ -56,6 +56,8 @@ import thaumcraft.registry.EldritchContent;
 import thaumcraft.registry.ModBlocks;
 import thaumcraft.registry.ModEntities;
 import thaumcraft.registry.ModItems;
+import thaumcraft.research.Warp;
+import thaumcraft.research.WarpType;
 import thaumcraft.wand.WandRegistry;
 import thaumcraft.wand.Wands;
 import thaumcraft.wand.focus.BlockSwapper;
@@ -65,7 +67,7 @@ import thaumcraft.wand.focus.TradeFocus;
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class ReportedBugGameTests {
     private static final DeferredRegister<Consumer<GameTestHelper>> FUNCTIONS = DeferredRegister.create(Registries.TEST_FUNCTION, Thaumcraft.MODID);
-    private static final List<String> TESTS = List.of("trade_focus_rejects_double_plant", "trade_focus_clears_on_sneak_air", "trade_focus_keeps_unplaceable_item", "bell_reset_clears_markers", "golem_placed_on_pedestal", "ring_accepts_short_grass", "guardian_spawn_light_limit", "node_place_replaces_plant", "sanity_checker_infusion");
+    private static final List<String> TESTS = List.of("trade_focus_rejects_double_plant", "trade_focus_clears_on_sneak_air", "trade_focus_keeps_unplaceable_item", "bell_reset_clears_markers", "golem_placed_on_pedestal", "ring_accepts_short_grass", "guardian_spawn_light_limit", "node_place_replaces_plant", "sanity_checker_infusion", "soap_keeps_permanent_warp", "warp_command_aliases");
 
     static {
         FUNCTIONS.register(TESTS.get(0), () -> ReportedBugGameTests::rejectsDoublePlant);
@@ -77,6 +79,8 @@ public final class ReportedBugGameTests {
         FUNCTIONS.register(TESTS.get(6), () -> ReportedBugGameTests::guardianLight);
         FUNCTIONS.register(TESTS.get(7), () -> ReportedBugGameTests::nodePlace);
         FUNCTIONS.register(TESTS.get(8), () -> ReportedBugGameTests::sanityChecker);
+        FUNCTIONS.register(TESTS.get(9), () -> ReportedBugGameTests::soapKeepsPermanentWarp);
+        FUNCTIONS.register(TESTS.get(10), () -> ReportedBugGameTests::warpCommandAliases);
     }
 
     public static void register(IEventBus bus) {
@@ -265,6 +269,48 @@ public final class ReportedBugGameTests {
         ItemStack output = InfusionCrafting.result(helper.getLevel(), InfusionCrafting.TYPE_RECIPE, "SanityCheck", new ItemStack(ModItems.THAUMOMETER.get()));
         helper.assertTrue(output.is(ModItems.SANITY_CHECKER.get()), "sanity checker infusion has no output");
         helper.assertValueEqual(output.getMaxStackSize(), 1, "sanity checker stack size");
+        helper.succeed();
+    }
+
+    private static void soapKeepsPermanentWarp(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer player = player(helper, GameType.SURVIVAL);
+        Warp.set(player, 7, WarpType.PERMANENT);
+        Warp.set(player, 100, WarpType.STICKY);
+        Warp.set(player, 4, WarpType.TEMPORARY);
+        ItemStack soap = new ItemStack(ModItems.SANITIZING_SOAP.get(), 40);
+        player.setItemInHand(InteractionHand.MAIN_HAND, soap);
+        for (int use = 0; use < 40; use++) {
+            ModItems.SANITIZING_SOAP.get().use(level, player, InteractionHand.MAIN_HAND);
+            ModItems.SANITIZING_SOAP.get().onUseTick(level, player, soap, 4);
+        }
+        helper.assertTrue(soap.isEmpty(), "every soap use should consume one soap");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 7, "soap changed permanent warp");
+        helper.assertValueEqual(Warp.get(player, WarpType.TEMPORARY), 0, "soap did not clear temporary warp");
+        int sticky = Warp.get(player, WarpType.STICKY);
+        helper.assertTrue(sticky >= 60 && sticky < 100, "soap removed " + (100 - sticky) + " sticky warp in 40 uses");
+        helper.succeed();
+    }
+
+    private static void warpCommandAliases(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer player = player(helper, GameType.SURVIVAL);
+        Warp.set(player, 0, WarpType.PERMANENT);
+        Warp.set(player, 0, WarpType.STICKY);
+        Warp.set(player, 0, WarpType.TEMPORARY);
+        var commands = level.getServer().getCommands();
+        var source = level.getServer().createCommandSourceStack().withLevel(level).withEntity(player);
+        commands.performPrefixedCommand(source, "tc warp @s set 5 PERM");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 5, "/tc warp set PERM");
+        commands.performPrefixedCommand(source, "thaum warp @s add -2 perm");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 3, "/thaum warp add -2 perm");
+        commands.performPrefixedCommand(source, "thaumcraft warp @s set 4 Temp");
+        helper.assertValueEqual(Warp.get(player, WarpType.TEMPORARY), 4, "/thaumcraft warp set Temp");
+        commands.performPrefixedCommand(source, "tc warp @s add 3 foo");
+        helper.assertValueEqual(Warp.get(player, WarpType.STICKY), 3, "unknown warp type should add sticky warp");
+        commands.performPrefixedCommand(source, "tc warp @s set 0");
+        helper.assertValueEqual(Warp.get(player, WarpType.STICKY), 0, "warp set without a type should change sticky warp");
+        helper.assertValueEqual(Warp.get(player, WarpType.PERMANENT), 3, "sticky warp command changed permanent warp");
         helper.succeed();
     }
 }
