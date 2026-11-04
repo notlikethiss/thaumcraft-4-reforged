@@ -46,11 +46,6 @@ public class ResearchBrowserScreen extends Screen {
     private static final int PANE_HEIGHT = 230;
     private static final int VIEW_WIDTH = 224;
     private static final int VIEW_HEIGHT = 196;
-    private static final int MAX_VIEW_WIDTH = 736;
-    private static final int MAX_VIEW_HEIGHT = 708;
-    private static final int FRAME_CORNER = 32;
-    private static final float VIEW_FILL = 0.8F;
-    private static final float MAX_BACKGROUND_SPEED = 0.5F;
     private static final int SHADE = 0xC0000000;
 
     public static int lastX = -5;
@@ -65,12 +60,6 @@ public class ResearchBrowserScreen extends Screen {
     private double targetX;
     private double targetY;
     private boolean dragging;
-    private int viewWidth = VIEW_WIDTH;
-    private int viewHeight = VIEW_HEIGHT;
-    private int backgroundOriginX;
-    private int backgroundOriginY;
-    private float backgroundSpeedX;
-    private float backgroundSpeedY;
     private int guiMapTop;
     private int guiMapLeft;
     private int guiMapBottom;
@@ -114,52 +103,14 @@ public class ResearchBrowserScreen extends Screen {
         }
         guiMapTop = category.minColumn() * 24 - 85;
         guiMapLeft = category.minRow() * 24 - 112;
-        backgroundOriginX = guiMapTop;
-        backgroundOriginY = guiMapLeft;
-        backgroundSpeedX = Math.min(MAX_BACKGROUND_SPEED, 288.0F / Math.max(1, (category.maxColumn() - category.minColumn()) * 24 - 27));
-        backgroundSpeedY = Math.min(MAX_BACKGROUND_SPEED, 316.0F / Math.max(1, (category.maxRow() - category.minRow()) * 24 + 51));
-        guiMapBottom = category.maxColumn() * 24 - 112 - (viewWidth - VIEW_WIDTH);
-        guiMapRight = category.maxRow() * 24 - 61 - (viewHeight - VIEW_HEIGHT);
-        if (guiMapBottom <= guiMapTop) {
-            guiMapTop = guiMapBottom = (guiMapTop + guiMapBottom) / 2;
-            guiMapBottom++;
-        }
-        if (guiMapRight <= guiMapLeft) {
-            guiMapLeft = guiMapRight = (guiMapLeft + guiMapRight) / 2;
-            guiMapRight++;
-        }
-    }
-
-    @Override
-    protected void init() {
-        float fit = Math.max(1.0F, Math.min((width - 96) / (float) VIEW_WIDTH, (height - 50) / (float) VIEW_HEIGHT) * VIEW_FILL);
-        int newWidth = Math.min(MAX_VIEW_WIDTH, Math.round(VIEW_WIDTH * fit));
-        int newHeight = Math.min(MAX_VIEW_HEIGHT, Math.round(VIEW_HEIGHT * fit));
-        double shiftX = (newWidth - viewWidth) / 2;
-        double shiftY = (newHeight - viewHeight) / 2;
-        prevMapX -= shiftX;
-        mapX -= shiftX;
-        targetX -= shiftX;
-        prevMapY -= shiftY;
-        mapY -= shiftY;
-        targetY -= shiftY;
-        viewWidth = newWidth;
-        viewHeight = newHeight;
-        updateResearch();
-    }
-
-    private int paneWidth() {
-        return viewWidth + PANE_WIDTH - VIEW_WIDTH;
-    }
-
-    private int paneHeight() {
-        return viewHeight + PANE_HEIGHT - VIEW_HEIGHT;
+        guiMapBottom = category.maxColumn() * 24 - 112;
+        guiMapRight = category.maxRow() * 24 - 61;
     }
 
     @Override
     public void removed() {
-        lastX = (int) ((mapX + (viewWidth - VIEW_WIDTH) / 2 + 141 / 2 + 12.0) / 24.0);
-        lastY = (int) ((mapY + (viewHeight - VIEW_HEIGHT) / 2 + 141 / 2) / 24.0);
+        lastX = (int) ((mapX + 141 / 2 + 12.0) / 24.0);
+        lastY = (int) ((mapY + 141 / 2) / 24.0);
         super.removed();
     }
 
@@ -201,11 +152,11 @@ public class ResearchBrowserScreen extends Screen {
     }
 
     private int left() {
-        return (width - paneWidth()) / 2;
+        return (width - PANE_WIDTH) / 2;
     }
 
     private int top() {
-        return (height - paneHeight()) / 2;
+        return (height - PANE_HEIGHT) / 2;
     }
 
     private PlayerKnowledge knowledge() {
@@ -305,10 +256,10 @@ public class ResearchBrowserScreen extends Screen {
         ResearchCategory category = ResearchCategories.get(selectedCategory);
         Set<String> done = knowledge().research();
 
-        graphics.enableScissor(mapLeft, mapTop, mapLeft + viewWidth, mapTop + viewHeight);
-        int backgroundU = Mth.clamp((int) ((offsetX - backgroundOriginX) * backgroundSpeedX), 0, 1024 - viewWidth) / 2 * 2;
-        int backgroundV = Mth.clamp((int) ((offsetY - backgroundOriginY) * backgroundSpeedY), 0, 1024 - viewHeight) / 2 * 2;
-        GuiBlit.blit(graphics, category.background(), mapLeft, mapTop, viewWidth, viewHeight, backgroundU / 2, backgroundV / 2, viewWidth / 2, viewHeight / 2, 512, 512, 0xFFFFFFFF);
+        graphics.enableScissor(mapLeft, mapTop, mapLeft + VIEW_WIDTH, mapTop + VIEW_HEIGHT);
+        int backgroundU = (int) ((float) (offsetX - guiMapTop) / Math.abs(guiMapTop - guiMapBottom) * 288.0F) / 2 * 2;
+        int backgroundV = (int) ((float) (offsetY - guiMapLeft) / Math.abs(guiMapLeft - guiMapRight) * 316.0F) / 2 * 2;
+        GuiBlit.blit(graphics, category.background(), mapLeft, mapTop, VIEW_WIDTH, VIEW_HEIGHT, backgroundU, backgroundV, VIEW_WIDTH, VIEW_HEIGHT, 512, 512, 0xFFFFFFFF);
 
         for (ResearchItem item : research) {
             for (String parentKey : item.parents()) {
@@ -366,7 +317,7 @@ public class ResearchBrowserScreen extends Screen {
         for (ResearchItem item : research) {
             int relativeX = item.column() * 24 - offsetX;
             int relativeY = item.row() * 24 - offsetY;
-            if (item.isVirtual() || relativeX < -24 || relativeY < -24 || relativeX > viewWidth || relativeY > viewHeight) {
+            if (item.isVirtual() || relativeX < -24 || relativeY < -24 || relativeX > 224 || relativeY > 196) {
                 continue;
             }
             int x = mapLeft + relativeX;
@@ -416,7 +367,7 @@ public class ResearchBrowserScreen extends Screen {
                     ResearchIcons.drawFallback(graphics, item, iconX, iconY, iconTint);
                 }
             });
-            if (mouseX >= mapLeft && mouseY >= mapTop && mouseX < mapLeft + viewWidth && mouseY < mapTop + viewHeight
+            if (mouseX >= mapLeft && mouseY >= mapTop && mouseX < mapLeft + VIEW_WIDTH && mouseY < mapTop + VIEW_HEIGHT
                 && mouseX >= x && mouseX <= x + 22 && mouseY >= y && mouseY <= y + 22) {
                 currentHighlight = item;
             }
@@ -435,7 +386,7 @@ public class ResearchBrowserScreen extends Screen {
             boolean swop = index >= 9;
             int count = index % 9;
             boolean selected = tab.key().equals(selectedCategory);
-            int s0 = swop ? paneWidth() + 8 : 0;
+            int s0 = swop ? 264 : 0;
             int s1 = 0;
             int s2 = swop ? 14 : 0;
             if (!selected) {
@@ -459,33 +410,7 @@ public class ResearchBrowserScreen extends Screen {
                 }
             }
         }
-        drawFrame(graphics, paneX, paneY);
-    }
-
-    private void drawFrame(GuiGraphics graphics, int x, int y) {
-        int width = paneWidth();
-        int height = paneHeight();
-        int corner = FRAME_CORNER;
-        int edgeWidth = PANE_WIDTH - corner * 2;
-        int edgeHeight = PANE_HEIGHT - corner * 2;
-        frameTile(graphics, x, y, corner, corner, 0, 0);
-        frameTile(graphics, x + width - corner, y, corner, corner, PANE_WIDTH - corner, 0);
-        frameTile(graphics, x, y + height - corner, corner, corner, 0, PANE_HEIGHT - corner);
-        frameTile(graphics, x + width - corner, y + height - corner, corner, corner, PANE_WIDTH - corner, PANE_HEIGHT - corner);
-        for (int offset = corner; offset < width - corner; offset += edgeWidth) {
-            int size = Math.min(edgeWidth, width - corner - offset);
-            frameTile(graphics, x + offset, y, size, corner, corner, 0);
-            frameTile(graphics, x + offset, y + height - corner, size, corner, corner, PANE_HEIGHT - corner);
-        }
-        for (int offset = corner; offset < height - corner; offset += edgeHeight) {
-            int size = Math.min(edgeHeight, height - corner - offset);
-            frameTile(graphics, x, y + offset, corner, size, 0, corner);
-            frameTile(graphics, x + width - corner, y + offset, corner, size, PANE_WIDTH - corner, corner);
-        }
-    }
-
-    private void frameTile(GuiGraphics graphics, int x, int y, int width, int height, int u, int v) {
-        GuiBlit.blit(graphics, TEXTURE, x, y, width, height, u, v, width, height, 256, 256, 0xFFFFFFFF);
+        GuiBlit.blit(graphics, TEXTURE, paneX, paneY, PANE_WIDTH, PANE_HEIGHT, 0, 0, PANE_WIDTH, PANE_HEIGHT, 256, 256, 0xFFFFFFFF);
     }
 
     private void drawOverlays(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -493,8 +418,8 @@ public class ResearchBrowserScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(0.0F, 0.0F, 400.0F);
         if (popupTime > System.currentTimeMillis()) {
-            int centerX = left() + paneWidth() / 2;
-            int centerY = top() + paneHeight() / 2 + 13;
+            int centerX = left() + 128;
+            int centerY = top() + 128;
             Component message = Component.literal(popupMessage);
             int half = lines(minecraft.font, message, 150) * minecraft.font.lineHeight / 2;
             graphics.fill(centerX - 78, centerY - half - 3, centerX + 78, centerY + half + 3, SHADE);
@@ -508,7 +433,7 @@ public class ResearchBrowserScreen extends Screen {
         for (int index = 0; index < tabs.size(); index++) {
             boolean swop = index >= 9;
             int count = index % 9;
-            int localX = mouseX - (left() - 24 + (swop ? paneWidth() + 24 : 0));
+            int localX = mouseX - (left() - 24 + (swop ? 280 : 0));
             int localY = mouseY - (top() + count * 24);
             if (localX >= 0 && localX < 24 && localY >= 0 && localY < 24) {
                 graphics.drawString(minecraft.font, Component.translatable(tabs.get(index).nameKey()), mouseX, mouseY - 8, 0xFFFFFFFF, true);
@@ -668,7 +593,7 @@ public class ResearchBrowserScreen extends Screen {
         double mouseY = eventY;
         int viewX = left() + 8;
         int viewY = top() + 17;
-        dragging = mouseX >= viewX && mouseX < viewX + viewWidth && mouseY >= viewY && mouseY < viewY + viewHeight;
+        dragging = mouseX >= viewX && mouseX < viewX + VIEW_WIDTH && mouseY >= viewY && mouseY < viewY + VIEW_HEIGHT;
         popupTime = System.currentTimeMillis() - 1L;
         Set<String> done = knowledge().research();
         ResearchItem item = currentHighlight;
@@ -698,7 +623,7 @@ public class ResearchBrowserScreen extends Screen {
             for (int index = 0; index < tabs.size(); index++) {
                 boolean swop = index >= 9;
                 int count = index % 9;
-                double localX = mouseX - (left() - 24 + (swop ? paneWidth() + 24 : 0));
+                double localX = mouseX - (left() - 24 + (swop ? 280 : 0));
                 double localY = mouseY - (top() + count * 24);
                 if (localX >= 0 && localX < 24 && localY >= 0 && localY < 24) {
                     selectedCategory = tabs.get(index).key();
@@ -716,7 +641,7 @@ public class ResearchBrowserScreen extends Screen {
         if (button == InputConstants.MOUSE_BUTTON_LEFT && dragging) {
             int viewX = left() + 8;
             int viewY = top() + 17;
-            if (eventX >= viewX && eventX < viewX + viewWidth && eventY >= viewY && eventY < viewY + viewHeight) {
+            if (eventX >= viewX && eventX < viewX + VIEW_WIDTH && eventY >= viewY && eventY < viewY + VIEW_HEIGHT) {
                 mapX -= dragX;
                 mapY -= dragY;
                 targetX = mapX;

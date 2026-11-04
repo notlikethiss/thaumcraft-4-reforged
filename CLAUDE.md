@@ -7,7 +7,7 @@
 ## Версии
 
 - Minecraft 1.21.1, NeoForge 21.1.256, Java 21, Parchment 1.21.1 / 2024.11.17, ModDevGradle 2.0.148
-- JEI 19.57.0.451, TerraBlender 1.21.1-4.1.0.1, Curios 9.5.1+1.21.1
+- JEI 19.57.0.451, REI 16.0.799 (Architectury 13.0.11 в dev-ранах), TerraBlender 1.21.1-4.1.0.1, Curios 9.5.1+1.21.1
 
 ## Окружение
 
@@ -17,7 +17,7 @@
 
 ## Синхронизация с main
 
-Последний синхронизированный коммит `main`: `98f6ad2`.
+Последний синхронизированный коммит `main`: `99499a8`.
 
 Ветка отстаёт от `main` по содержанию: коммит `95dcec5` (parity fixes 2026-10-15) не перенесён, на ветке нет `StartupConfig`, `SpawnToggles`, `LegacyDrops`, `MonsterBiomeSpawnModifier`, `WardedPearlEvents` и `world_generation_nether`. Sha выше отражает только порядок синхронизации, а пропущенное переносится отдельно.
 
@@ -33,6 +33,7 @@
 - Бижутерия на Curios (`platform/BaublesCurios`, слоты генерирует `tools/gen/curios.py`), своих слотов `main` нет.
 - Модели предметов через `models/item` с `overrides`, special-рендер через `BlockEntityWithoutLevelRenderer` + `IClientItemExtensions`, tint через `RegisterColorHandlersEvent.Item`.
 - Attachments без `.sync()`, `DataAttachments` шлёт свой payload.
+- REI 16: в `compat/rei` общий плагин реализует `REIServerPlugin`, сериализатор дисплея пишет ключ рецепта в `CompoundTag` и регистрируется по `CategoryIdentifier`, `Display.getSerializer()` нет. Правки `compat/rei` с `main` переносятся руками.
 - Legacy-форматы ресурсов живут в `tools/gen/context.py` (`special_item`, `view_select_item`, `composite_item`, `ITEM_IDS`, `MANIFEST`) и `tools/gen/legacy.py` (render types, extras, манифесты в `tools/backport/`). `apply_render_types` требует Pillow.
 
 ## Проверки
@@ -51,7 +52,6 @@ python3 tools/gen_resources.py --mc 1.21.1 && git status --short src/generated
 ## Намеренные отступления от TC4
 
 - Жидкая смерть сохраняет конечный объём (4 четверти на ведро), но ищет кратчайший путь к спуску в пределах 4 горизонтальных шагов. Даже одна четверть может двигаться по этому пути; без доступного спуска остаётся выравнивание TC4.
-- Окно браузера исследований растягивается под экран с пропорциями TC4: область карты 224×196, умноженная на 80% доступного места (не меньше оригинала, не больше 736×708), рамка собирается из углов 32 px и повторяющихся краёв. Фон рисуется в 2x, как в TC4, но движется со скоростью TC4 (288 и 316 на размах вкладки при оригинальном окне), не быстрее половины скорости карты и не за край текстуры.
 
 ## Код-стайл
 
