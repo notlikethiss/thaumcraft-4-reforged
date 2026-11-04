@@ -54,6 +54,8 @@
 3. Версионно-зависимые вызовы спрятать в шов, геометрию вынести в `client/geom`.
 4. Ресурсы через генератор, тексты по ключам lang.
 
+- Ванильные цели ИИ не равны целям TC4: `HurtByTargetGoal.setAlertOthers(...)` принимает классы, которые НЕ зовутся, и ищет только мобов того же класса; второй аргумент `RangedAttackGoal` это скорость, а в `AILongRangeAttack` TC4 минимальная дистанция (`LongRangeAttackGoal`). Аналоги `AICultistHurtByTarget`, `AIAltarFocus`, `AIAttackOnCollide` лежат в `entity/ai/`.
+
 ## Проверки
 
 ```sh

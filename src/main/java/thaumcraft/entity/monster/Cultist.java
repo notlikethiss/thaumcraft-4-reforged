@@ -1,6 +1,7 @@
 package thaumcraft.entity.monster;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import thaumcraft.entity.boss.CultistLeader;
 import thaumcraft.registry.ModItems;
 
 public abstract class Cultist extends Monster {
@@ -28,6 +30,16 @@ public abstract class Cultist extends Monster {
             .add(Attributes.FOLLOW_RANGE, 32.0)
             .add(Attributes.MOVEMENT_SPEED, 0.3)
             .add(Attributes.ATTACK_DAMAGE, 4.0);
+    }
+
+    @Override
+    protected boolean considersEntityAsAlly(Entity entity) {
+        return entity instanceof Cultist || entity instanceof CultistLeader || super.considersEntityAsAlly(entity);
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return !(target instanceof Cultist) && !(target instanceof CultistLeader) && super.canAttack(target);
     }
 
     @Override

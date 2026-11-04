@@ -2,6 +2,7 @@ package thaumcraft.node;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.phys.AABB;
 import thaumcraft.aspect.Aspect;
@@ -24,6 +25,9 @@ public final class NodeHooks {
     }
 
     public static boolean spawnGiantBrainyZombie(ServerLevel level, BlockPos node, BlockPos pos) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL) {
+            return false;
+        }
         AABB area = new AABB(node).inflate(10.0, 6.0, 10.0);
         if (level.getEntitiesOfClass(GiantBrainyZombie.class, area).size() > 3) {
             return false;
