@@ -13,7 +13,7 @@
 
 ## Ветки
 
-- `main`: MC 26.3, NeoForge. `mc/26.1.2`: NeoForge, Java 25. `mc/1.21.1`: NeoForge, Java 21, Curios. `mc/1.19.2` (Forge через legacyforge, Java 17) планируется.
+- `main`: MC 26.3, NeoForge, JEI и REI. `mc/26.1.2`: NeoForge, Java 25. `mc/1.21.1`: NeoForge, Java 21, Curios. `mc/1.19.2` (Forge через legacyforge, Java 17) планируется.
 - Версии MC, загрузчика и зависимостей смотреть в `gradle.properties` нужной ветки. CI (`.github/workflows/build.yml`) публикует релиз с тегом `<mc>`.
 
 ## Окружение
@@ -34,6 +34,7 @@
 
 - `platform/` и `client/platform/` содержат всё, где API версий расходится: сеть (`ModNetwork`, `ClientNetwork`), данные стаков (`StackData`/`StackKey`), attachments (`DataAttachments`/`DataKey`), `Transfer`, `Teleport`, `BiomeEdit`, `Registration` (инструменты, броня, еда, топливо), `Baubles`, `Menus`, `GolemActions`, `OuterLandsData`, рендер-типы и пайплайны. Игровая логика ходит только через них, `tools/check_seams.py` (в CI) падает на запрещённых импортах.
 - Рендер: `client/geom` считает вершины и пишет в `QuadSink` без классов Minecraft (только JOML), `client/platform` реализует sink-и под версию. BER, рендереры и частицы тонкие.
+- JEI (`client/jei`) и REI (`compat/rei` common, `client/rei` клиент) берут рецепты, доп. стаки и скрытые стаки только из `recipeview/RecipeCatalog`, разметку из `client/recipeview`. Дисплеи REI сериализуются ключом рецепта TC4 (жезлы `wand:<cap>:<rod>`, скипетры `sceptre:<cap>:<rod>`), сериализаторы в common-плагине. В dev-ранах по умолчанию JEI, REI через `-Precipe_viewer=rei`.
 - Регистрация в `registry/` (`DeferredRegister`), пакеты в `network/ModPayloads`, клиентские хендлеры в `client/ClientPayloadHandlers`, capabilities в `registry/ModCapabilities`.
 - Знания игрока лежат в attachment `research/Knowledge` (ключи скана строками), владельцы и связи хранятся по UUID и `GlobalPos`, рецепты TC данными в `crafting/TcRecipes` по ключам TC4.
 - Публичные хуки для аддонов описаны в `docs/ADDON_API.md`. Их не удалять как неиспользуемые, а при изменении сигнатуры обновлять документ.
@@ -78,6 +79,7 @@ python3 tools/gen_resources.py && git status --short src/generated
 
 - Блоки модовых жидкостей добавляются генератором в `minecraft:washed_away_by_fluids`, иначе ванильный `FlowingFluid` не может обновлять уже существующий поток.
 - Curios под 26.3 падает на NeoForge 26.3.0.37+ (`ModConfig.Type.COMMON` удалён в FML 12), поэтому на `main` свои слоты за `platform/Baubles`. Конфиги только SYNCED, STARTUP, CLIENT.
+- Architectury 22.0.3 (транзитивно от REI) валит dev-раны миксином `MixinBlockTransformer` («No refMap loaded») на bootstrap ванильных блоков; в `localRuntime` явно подтянут 22.0.5 (`architectury_version`), пин убирать нельзя.
 - SDL3: левая кнопка мыши `1`, проверять `InputConstants.MOUSE_BUTTON_LEFT`.
 - Data components неизменяемые: стеки хранить как `ItemStackTemplate`, наборы как `ItemContainerContents`.
 - Цвета в `items/*.json` ARGB: `default` у `minecraft:dye` без альфы делает некрашеный слой прозрачным.
@@ -98,6 +100,7 @@ python3 tools/gen_resources.py && git status --short src/generated
 - Руки моделей брони TC4 вытянуты по оси руки (`TcArmorModel.SLEEVE_SCALE`): рукава и перчатки TC4 кончаются на y=9.5, рука игрока на y=10, и при взмахе из них торчит кисть.
 - Шпаргалка `thaumonomicon_cheat` работает без флага конфига и без подписи «Cheat Sheet», выдаётся из творческой вкладки и через `/give`.
 - Веса регионов TerraBlender 3 и 1.
+- Окно браузера исследований растягивается под экран с пропорциями TC4: область карты 224×196, умноженная на 80% доступного места (не меньше оригинала, не больше 736×708), рамка собирается из углов 32 px и повторяющихся краёв. Фон рисуется в 2x, как в TC4, но движется со скоростью TC4 (288 и 316 на размах вкладки при оригинальном окне), не быстрее половины скорости карты и не за край текстуры.
 
 ## Код-стайл
 
