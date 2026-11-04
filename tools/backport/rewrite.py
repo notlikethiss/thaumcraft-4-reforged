@@ -158,6 +158,7 @@ PACKAGE_MOVES_1_21_1 = {
     "net.minecraft.util.ARGB": "net.minecraft.util.FastColor",
     "org.jspecify.annotations.Nullable": "javax.annotation.Nullable",
     "net.minecraft.client.gui.GuiGraphicsExtractor": "net.minecraft.client.gui.GuiGraphics",
+    "mezz.jei.api.recipe.types.IRecipeType": "mezz.jei.api.recipe.RecipeType",
 }
 
 
@@ -195,7 +196,18 @@ def dedupe_imports(text):
 def rules_1_21_1():
     return [
         move_imports(PACKAGE_MOVES_1_21_1),
+        regex_rules([
+            (r"(?<![\w$])IRecipeType\.create\(", "new RecipeType<>("),
+            (r"RecipeIngredientRole\.CRAFTING_STATION\)\.add\(", "RecipeIngredientRole.CATALYST).addItemLike("),
+            (r"\.addCraftingStation\(", ".addRecipeCatalysts("),
+            (r"(\.set(?:Output|Standard)SlotBackground\(\))\.add\(", r"\1.addItemStack("),
+            (r"(?<![\w$.])acceptor\.add\(", "acceptor.addItemStack("),
+            (r"(?<![\w$.])EnchantmentHelper\.createBook\(", "EnchantedBookItem.createForEnchantment("),
+            (r"(?<![\w$])(BuiltInRegistries\.\w+)\.getValue\(", r"\1.get("),
+            (r"(?<![\w$.])graphics\.text\(", "graphics.drawString("),
+        ]),
         rename_all({
+            "IRecipeType": "RecipeType",
             "Identifier": "ResourceLocation",
             "EntitySpawnReason": "MobSpawnType",
             "EntityTypes": "EntityType",
