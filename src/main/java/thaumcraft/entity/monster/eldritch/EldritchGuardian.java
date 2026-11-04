@@ -247,11 +247,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, thaumc
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.GORE.get();
-    }
-
-    @Override
     protected SoundEvent getDeathSound() {
         return ModSounds.ELDRITCH_GUARDIAN_DEATH.get();
     }

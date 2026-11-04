@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -113,6 +115,16 @@ public class Wisp extends Mob implements Enemy {
     @Override
     protected int decreaseAirSupply(int currentSupply) {
         return currentSupply;
+    }
+
+    public static boolean checkWispSpawnRules(
+        EntityType<? extends Mob> type,
+        ServerLevelAccessor level,
+        EntitySpawnReason spawnReason,
+        BlockPos pos,
+        RandomSource random
+    ) {
+        return level.getDifficulty() != Difficulty.PEACEFUL && Mob.checkMobSpawnRules(type, level, spawnReason, pos, random);
     }
 
     @Override
