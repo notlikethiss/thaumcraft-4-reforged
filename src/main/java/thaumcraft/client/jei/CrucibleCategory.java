@@ -12,6 +12,7 @@ import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.recipeview.AspectGrid;
 import thaumcraft.crafting.CrucibleRecipe;
 import thaumcraft.registry.ModBlocks;
 
@@ -64,11 +65,11 @@ final class CrucibleCategory implements IRecipeCategory<CrucibleRecipe> {
     @Override
     public void draw(CrucibleRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         helper.getRecipeArrow().draw(graphics, 62, 5);
-        AspectStrip.draw(graphics, recipe.aspects(), PER_ROW, WIDTH, ASPECTS_Y, 1);
+        AspectGrid.draw(graphics, recipe.aspects(), PER_ROW, WIDTH, 0, ASPECTS_Y);
     }
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, CrucibleRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY) {
-        AspectStrip.tooltip(tooltip, recipe.aspects(), PER_ROW, WIDTH, ASPECTS_Y, mouseX, mouseY);
+        TcJei.aspectTooltip(tooltip, recipe.aspects(), PER_ROW, WIDTH, ASPECTS_Y, mouseX, mouseY);
     }
 }
