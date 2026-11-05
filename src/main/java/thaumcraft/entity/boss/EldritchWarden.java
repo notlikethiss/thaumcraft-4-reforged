@@ -2,7 +2,6 @@ package thaumcraft.entity.boss;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.BossEvent;
-import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

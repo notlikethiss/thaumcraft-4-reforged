@@ -3,7 +3,6 @@ package thaumcraft.client.render.entity.eldritch;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import java.util.Random;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -35,9 +34,6 @@ import thaumcraft.world.dim.OuterLands;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class EldritchBlockRenderer implements BlockEntityRenderer<EldritchBlockEntity, EldritchBlockRenderer.State> {
-    private static final net.minecraft.resources.Identifier TUNNEL = Thaumcraft.id("textures/misc/tunnel.png");
-    private static final net.minecraft.resources.Identifier FIELD = Thaumcraft.id("textures/misc/particlefield.png");
-    private static final net.minecraft.resources.Identifier FIELD_FAR = Thaumcraft.id("textures/misc/particlefield32.png");
     private final ItemModelResolver itemModelResolver;
     private final net.minecraft.client.model.geom.ModelPart cube;
     private final thaumcraft.client.render.model.ObjModel obelisk;

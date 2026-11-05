@@ -3,7 +3,6 @@ package thaumcraft.vis;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +28,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 import thaumcraft.registry.ModBlockEntities;
 import thaumcraft.registry.ModItems;
-import thaumcraft.registry.ModSounds;
 import thaumcraft.wand.WandInteractable;
 
 public class VisRelayBlock extends Block implements EntityBlock, WandInteractable {

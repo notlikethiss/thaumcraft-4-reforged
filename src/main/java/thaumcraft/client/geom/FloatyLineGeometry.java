@@ -64,7 +64,7 @@ public final class FloatyLineGeometry {
             pointY[index] = dy * f2 + offsetY;
             pointZ[index] = dz * f2 + offsetZ;
             texture[index] = (1.0F - f2) * dist - time * params.speed();
-            colors[index] = NodeGeometry.argb(rgb, f3);
+            colors[index] = Colors.withAlpha(rgb, f3);
         }
         for (int pass = 0; pass < 2; pass++) {
             float shiftX = pass == 0 ? 0.0F : width;

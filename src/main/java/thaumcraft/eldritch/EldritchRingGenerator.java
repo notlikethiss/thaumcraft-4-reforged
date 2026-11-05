@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.tags.BlockTags;
@@ -21,7 +20,6 @@ public final class EldritchRingGenerator {
     }
 
     public static boolean generate(WorldGenLevel level, Random random, int chunkX, int chunkZ, int x, int y, int z) {
-        // The decoration origin can be in a different chunk from the actual altar.
         chunkX = x >> 4;
         chunkZ = z >> 4;
         int width = 11 + random.nextInt(6) * 2;

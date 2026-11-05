@@ -5,7 +5,6 @@ import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-/** Projects a convex aperture into half spaces in a separate scene's coordinates. */
 public final class ProjectedWindow {
     private static final List<Vector4f> HIDDEN = List.of(new Vector4f(0, 0, 0, -1));
 
@@ -30,14 +29,12 @@ public final class ProjectedWindow {
         for (int i = 0; i < corners.length; i++) {
             Vector4f a = corners[i];
             Vector4f b = corners[(i + 1) % corners.length];
-            // A homogeneous line in screen coordinates: ax + by + cw >= 0.
             Vector4f edge = new Vector4f(a.y * b.w - a.w * b.y, a.w * b.x - a.x * b.w, 0, a.x * b.y - a.y * b.x);
             if (edge.dot(center) < 0) {
                 edge.negate();
             }
             planes.add(transpose.transform(edge));
         }
-        // Nodes behind the camera must not pass merely because their screen positions match.
         planes.add(transpose.transform(new Vector4f(0, 0, 0, 1)));
         return List.copyOf(planes);
     }

@@ -79,14 +79,6 @@ public final class Wands {
         WandKeys.VIS.set(stack, getAllVisData(stack).with(aspect, amount));
     }
 
-    public static void storeAllVis(ItemStack stack, AspectList list) {
-        WandVis vis = getAllVisData(stack);
-        for (Aspect aspect : list.getAspects()) {
-            vis = vis.with(aspect, list.getAmount(aspect));
-        }
-        WandKeys.VIS.set(stack, vis);
-    }
-
     public static int addVis(ItemStack stack, Aspect aspect, int amount, boolean doit) {
         return addRealVis(stack, aspect, amount * 100, doit) / 100;
     }

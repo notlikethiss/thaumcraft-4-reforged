@@ -38,11 +38,6 @@ public final class ArcaneCrafting {
         return null;
     }
 
-    public static ItemStack findResult(List<ItemStack> grid, Player player) {
-        Match match = find(grid, player);
-        return match == null ? ItemStack.EMPTY : match.result();
-    }
-
     public static AspectList findAspects(List<ItemStack> grid, Player player) {
         Match match = find(grid, player);
         return match == null ? new AspectList() : match.aspects();

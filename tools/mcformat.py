@@ -5,7 +5,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUT = ROOT / "src" / "generated" / "resources"
-MANIFEST_DIR = ROOT / "tools" / "backport"
 NS = "thaumcraft"
 
 CHEST_DISPLAY = {
@@ -477,7 +476,6 @@ PROFILES = {"26.3": Profile(), "26.1.2": Profile2612(), "1.21.1": Profile1211(),
 profile = PROFILES["26.3"]
 out_root = DEFAULT_OUT
 out_overridden = False
-manifest_dir = MANIFEST_DIR
 
 
 def gradle_version():
@@ -491,11 +489,10 @@ def gradle_version():
 def add_arguments(parser):
     parser.add_argument("--mc", help="minecraft version profile (default: gradle.properties)")
     parser.add_argument("--out", help="output root (default: src/generated/resources)")
-    parser.add_argument("--manifest-dir", help="directory for backport manifests (default: tools/backport)")
 
 
 def init(argv=None, parser=None):
-    global profile, out_root, out_overridden, manifest_dir
+    global profile, out_root, out_overridden
     parser = parser or argparse.ArgumentParser()
     add_arguments(parser)
     args, _ = parser.parse_known_args(argv)
@@ -506,6 +503,4 @@ def init(argv=None, parser=None):
     if args.out:
         out_root = Path(args.out).resolve()
         out_overridden = True
-    if args.manifest_dir:
-        manifest_dir = Path(args.manifest_dir).resolve()
     return profile

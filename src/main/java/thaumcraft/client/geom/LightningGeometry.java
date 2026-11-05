@@ -28,7 +28,7 @@ public final class LightningGeometry {
             float rx2 = endVec.x - cameraX;
             float ry2 = endVec.y - cameraY;
             float rz2 = endVec.z - cameraZ;
-            int argb = NodeGeometry.argb(rgb(red, green, blue), mainAlpha * segment.light);
+            int argb = Colors.withAlpha(rgb(red, green, blue), mainAlpha * segment.light);
             sink.vertex(rx2 - diff2.x, ry2 - diff2.y, rz2 - diff2.z, 0.5F, 0.0F, argb, LIGHT);
             sink.vertex(rx1 - diff1.x, ry1 - diff1.y, rz1 - diff1.z, 0.5F, 0.0F, argb, LIGHT);
             sink.vertex(rx1 + diff1.x, ry1 + diff1.y, rz1 + diff1.z, 0.5F, 1.0F, argb, LIGHT);

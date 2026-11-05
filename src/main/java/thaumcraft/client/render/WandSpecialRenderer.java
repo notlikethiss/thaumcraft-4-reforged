@@ -44,8 +44,8 @@ public class WandSpecialRenderer implements SpecialModelRenderer<WandSpecialRend
         this.view = view;
     }
 
-    private static void transform(PoseStack poseStack, LegacyItemView view, boolean staff) {
-        view.apply(poseStack);
+    private static void transform(PoseStack poseStack, LegacyItemView view, boolean staff, float useTicks) {
+        view.apply(poseStack, useTicks);
         if (staff) {
             poseStack.translate(0.0F, 0.5F, 0.0F);
         }
@@ -148,7 +148,7 @@ public class WandSpecialRenderer implements SpecialModelRenderer<WandSpecialRend
         WandRod rod = resolved.getRod();
         boolean staff = rod.staff();
         boolean sceptre = resolved.sceptre();
-        transform(poseStack, view, staff);
+        transform(poseStack, view, staff, state == null ? -1.0F : state.useTicks());
         if (state != null) {
             animate(poseStack, state);
         }
@@ -181,7 +181,7 @@ public class WandSpecialRenderer implements SpecialModelRenderer<WandSpecialRend
     public void getExtents(Consumer<Vector3fc> output) {
         for (boolean staff : new boolean[] {false, true}) {
             PoseStack poseStack = new PoseStack();
-            transform(poseStack, view, staff);
+            transform(poseStack, view, staff, -1.0F);
             float top = staff ? 2.4F : 1.4F;
             for (float x : new float[] {-0.15F, 0.15F}) {
                 for (float y : new float[] {-0.1F, top}) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.joml.Vector4f;
 
-/** Clips textured quads against half spaces, including their UVs at the edges. */
 public final class ClippedQuadSink implements QuadSink {
     private final QuadSink output;
     private final List<Vector4f> planes;
@@ -50,7 +49,6 @@ public final class ClippedQuadSink implements QuadSink {
         if (polygon.size() == 4) {
             polygon.forEach(this::emit);
         } else {
-            // The particle pipeline takes quads; a repeated corner encodes a triangle.
             for (int i = 1; i + 1 < polygon.size(); i++) {
                 emit(polygon.getFirst());
                 emit(polygon.get(i));

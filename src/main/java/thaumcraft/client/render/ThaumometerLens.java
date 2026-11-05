@@ -14,9 +14,7 @@ import org.joml.Vector4f;
 import thaumcraft.client.geom.ProjectedWindow;
 import thaumcraft.registry.ModItems;
 
-/** The scanner's glass projected into the same clip space as the world. */
 final class ThaumometerLens {
-    // Inside the opaque frame of scanscreen.png, in its local [-0.5, 0.5] coordinates.
     private static final float[][] GLASS = {
         {-0.22F, 0.38F}, {0.22F, 0.38F}, {0.44F, 0.0F},
         {0.22F, -0.38F}, {-0.22F, -0.38F}, {-0.44F, 0.0F}
@@ -41,7 +39,6 @@ final class ThaumometerLens {
 
         PoseStack bob = new PoseStack();
         applyCameraEffects(bob, camera, game.optionsRenderState);
-        // Hand rendering starts at inverse(view), so modelView * pose is bob * hand.
         PoseStack lens = new PoseStack();
         lens.mulPose(bob.last().pose());
         float pitchBob = hands.viewXRot - hands.xBob;
@@ -49,7 +46,7 @@ final class ThaumometerLens {
         lens.rotateDegrees(Axis.XP, pitchBob * 0.1F);
         lens.rotateDegrees(Axis.YP, yawBob * 0.1F);
         float swing = hands.attackHand == InteractionHand.MAIN_HAND ? avatar.swingAnimation : 0.0F;
-        float hidden = hands.mainHandSwapScale * (1.0F - Mth.lerp(camera.cameraEntityPartialTicks, hands.oldMainHandHeight, hands.mainHandHeight));
+        float hidden = ThaumometerEquip.hidden(hands.mainHandSwapScale * (1.0F - Mth.lerp(camera.cameraEntityPartialTicks, hands.oldMainHandHeight, hands.mainHandHeight)));
         ThaumometerHandRenderer.applyEquipTransform(lens, swing, hidden, avatar.isUsingItem);
         ThaumometerHandRenderer.applyGripTransform(lens, pitchBob, yawBob);
         ThaumometerHandRenderer.applyModelTransform(lens);

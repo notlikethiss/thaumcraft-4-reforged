@@ -1,9 +1,6 @@
 package thaumcraft.eldritch;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -12,16 +9,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.entity.InsideBlockEffectApplier;
-import thaumcraft.platform.Teleport;
-import thaumcraft.research.ResearchManager;
-import thaumcraft.world.dim.MazeHandler;
-import thaumcraft.world.dim.OuterLands;
 
 public final class EldritchPortalBlock extends Block implements EntityBlock {
     public EldritchPortalBlock(Properties properties) {

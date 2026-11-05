@@ -1,23 +1,18 @@
 package thaumcraft.item;
 
-import java.util.function.Consumer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import thaumcraft.aspect.Aspect;
 import thaumcraft.registry.ModSounds;
 import thaumcraft.research.Knowledge;
 import thaumcraft.research.ResearchCategories;
 import thaumcraft.research.ResearchClientHooks;
-import thaumcraft.Config;
 import thaumcraft.research.ResearchItem;
 import thaumcraft.research.ResearchManager;
 
@@ -29,18 +24,18 @@ public class ThaumonomiconItem extends Item {
         this.cheat = cheat;
     }
 
-    public boolean isCheat() {
-        return cheat;
+    public static Properties properties(Properties properties) {
+        return properties.stacksTo(1).rarity(Rarity.UNCOMMON);
     }
 
-    public static Properties properties(Properties properties) {
-        return properties.stacksTo(1);
+    public static Properties cheatProperties(Properties properties) {
+        return properties.stacksTo(1).rarity(Rarity.EPIC);
     }
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer) {
-            if (cheat && Config.allowCheatSheet()) {
+            if (cheat) {
                 for (ResearchItem item : ResearchCategories.allResearch()) {
                     ResearchManager.complete(serverPlayer, item.key(), false);
                 }
@@ -64,13 +59,5 @@ public class ThaumonomiconItem extends Item {
             ResearchClientHooks.openBook();
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
-        if (cheat) {
-            builder.accept(Component.translatable("tc.cheatsheet"));
-        }
-        super.appendHoverText(stack, context, display, builder, flag);
     }
 }

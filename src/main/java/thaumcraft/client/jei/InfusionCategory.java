@@ -12,6 +12,8 @@ import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.recipeview.AspectGrid;
+import thaumcraft.client.recipeview.InfusionLayout;
 import thaumcraft.crafting.InfusionRecipe;
 import thaumcraft.registry.ModBlocks;
 
@@ -52,19 +54,19 @@ final class InfusionCategory implements IRecipeCategory<InfusionRecipe> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, InfusionRecipe recipe, IFocusGroup focuses) {
         TcJei.accept(builder.addInputSlot(InfusionLayout.CENTER_X - 8, InfusionLayout.CENTER_Y - 8).setStandardSlotBackground(), recipe.central());
-        InfusionLayout.components(builder, recipe.components());
-        TcJei.accept(builder.addOutputSlot(InfusionLayout.WIDTH - 20, 0).setOutputSlotBackground(), recipe.result());
+        TcJei.components(builder, recipe.components());
+        TcJei.accept(builder.addOutputSlot(InfusionLayout.OUTPUT_X, InfusionLayout.OUTPUT_Y).setOutputSlotBackground(), recipe.result());
         builder.addInvisibleIngredients(RecipeIngredientRole.CRAFTING_STATION).add(ModBlocks.RUNIC_MATRIX.get());
     }
 
     @Override
     public void draw(InfusionRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
-        AspectStrip.draw(graphics, recipe.aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, InfusionLayout.ASPECTS_Y, 1);
-        InfusionLayout.instability(graphics, recipe.instability());
+        AspectGrid.draw(graphics, recipe.aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, 0, InfusionLayout.ASPECTS_Y);
+        InfusionLayout.instability(graphics, recipe.instability(), 0, 0);
     }
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, InfusionRecipe recipe, IRecipeSlotsView slots, double mouseX, double mouseY) {
-        AspectStrip.tooltip(tooltip, recipe.aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, InfusionLayout.ASPECTS_Y, mouseX, mouseY);
+        TcJei.aspectTooltip(tooltip, recipe.aspects(), InfusionLayout.PER_ROW, InfusionLayout.WIDTH, InfusionLayout.ASPECTS_Y, mouseX, mouseY);
     }
 }

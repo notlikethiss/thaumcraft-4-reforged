@@ -23,7 +23,6 @@ public final class ClientNetwork {
     public static <T extends CustomPacketPayload> void handle(CustomPacketPayload.Type<T> type, ModNetwork.Handler<T> handler) {
         HANDLERS.add(event -> event.register(type, (payload, context) -> {
             var player = Minecraft.getInstance().player;
-            // A queued play packet can arrive after the client has left the world.
             if (player != null) {
                 handler.handle(payload, player);
             }

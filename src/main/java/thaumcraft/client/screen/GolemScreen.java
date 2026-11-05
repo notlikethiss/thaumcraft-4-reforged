@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import thaumcraft.Thaumcraft;
 import thaumcraft.entity.golem.GolemBase;
 import thaumcraft.menu.GolemMenu;

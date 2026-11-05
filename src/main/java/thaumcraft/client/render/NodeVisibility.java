@@ -21,7 +21,6 @@ public final class NodeVisibility {
     }
 
     public static boolean holdsThaumometer(Player viewer) {
-        // Only the main-hand scanner has a first-person glass/readout renderer.
         return viewer.getMainHandItem().is(ModItems.THAUMOMETER.get());
     }
 

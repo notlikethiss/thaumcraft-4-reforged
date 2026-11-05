@@ -97,7 +97,7 @@ public final class NodeGeometry {
                 FRAMES,
                 0,
                 frame,
-                argb(layer.color(), stripAlpha),
+                Colors.withAlpha(layer.color(), stripAlpha),
                 LIGHT
             );
             count++;
@@ -138,18 +138,13 @@ public final class NodeGeometry {
             FRAMES,
             strip,
             frame,
-            argb(0xFFFFFF, alpha),
+            Colors.withAlpha(0xFFFFFF, alpha),
             LIGHT
         );
     }
 
     private static void renderFaint(Params params, QuadSink additive) {
         int frame = (int) ((params.nanoTime() / 40000000L + params.blockX()) % FRAMES);
-        FacingQuads.strip(additive, params.camera(), params.x(), params.y(), params.z(), 0.0F, 0.5F, FRAMES, 1, frame, argb(0xFFFFFF, 0.1F), LIGHT);
-    }
-
-    public static int argb(int rgb, float alpha) {
-        int channel = Math.clamp((int) (alpha * 255.0F), 0, 255);
-        return channel << 24 | (rgb & 0xFFFFFF);
+        FacingQuads.strip(additive, params.camera(), params.x(), params.y(), params.z(), 0.0F, 0.5F, FRAMES, 1, frame, Colors.withAlpha(0xFFFFFF, 0.1F), LIGHT);
     }
 }

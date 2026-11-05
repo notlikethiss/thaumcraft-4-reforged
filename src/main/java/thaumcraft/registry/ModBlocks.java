@@ -46,7 +46,6 @@ import thaumcraft.block.HoleBlock;
 import thaumcraft.block.InfusedStoneBlock;
 import thaumcraft.block.LootBlock;
 import thaumcraft.block.LiquidDeathBlock;
-import thaumcraft.blockentity.EtherealBloomBlockEntity;
 import thaumcraft.block.MagicalLeavesBlock;
 import thaumcraft.block.MagicalLogBlock;
 import thaumcraft.block.MagicalSaplingBlock;
