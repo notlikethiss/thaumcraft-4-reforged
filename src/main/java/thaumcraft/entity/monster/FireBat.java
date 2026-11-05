@@ -16,15 +16,19 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.compat.ValueInput;
 import net.minecraft.nbt.CompoundTag;
@@ -34,6 +38,18 @@ import javax.annotation.Nullable;
 import thaumcraft.fx.Fx;
 
 public class FireBat extends Monster {
+    public static boolean checkFireBatSpawnRules(
+        EntityType<? extends Monster> type,
+        ServerLevelAccessor level,
+        MobSpawnType spawnReason,
+        BlockPos pos,
+        RandomSource random
+    ) {
+        return level.getDifficulty() != Difficulty.PEACEFUL
+            && level.getMaxLocalRawBrightness(pos) <= random.nextInt(7)
+            && Mob.checkMobSpawnRules(type, level, spawnReason, pos, random);
+    }
+
     private static final EntityDataAccessor<Byte> DATA_FLAGS = SynchedEntityData.defineId(FireBat.class, EntityDataSerializers.BYTE);
     private static final TargetingConditions RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0);
     private static final TargetingConditions ATTACK_TARGETING = TargetingConditions.forCombat().range(12.0).ignoreLineOfSight();

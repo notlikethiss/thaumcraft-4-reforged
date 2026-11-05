@@ -22,6 +22,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Biome;
@@ -65,7 +66,7 @@ public class BrainyZombie extends Zombie {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        return allowedBiome(level.getBiome(this.blockPosition())) && super.checkSpawnRules(level, spawnReason);
+        return level.getDifficulty() != Difficulty.PEACEFUL && allowedBiome(level.getBiome(this.blockPosition())) && super.checkSpawnRules(level, spawnReason);
     }
 
     public static boolean checkBrainyZombieSpawnRules(

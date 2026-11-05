@@ -12,11 +12,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import thaumcraft.entity.ai.AttackOnCollideGoal;
+import thaumcraft.entity.ai.CultistHurtByTargetGoal;
 import thaumcraft.entity.ai.LongRangeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -50,11 +50,11 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new LongRangeAttackGoal(this, 16.0, 1.0, 30, 40, 24.0F));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.1, false));
+        this.goalSelector.addGoal(3, new AttackOnCollideGoal(this, 1.1, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(6, new MoveTowardsRestrictionGoal(this, 0.8));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(Cultist.class));
+        this.targetSelector.addGoal(1, new CultistHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
@@ -80,12 +80,12 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        return !(target instanceof Cultist) && super.canAttack(target);
+        return !(target instanceof Cultist) && !(target instanceof CultistLeader) && super.canAttack(target);
     }
 
     @Override
     public boolean isAlliedTo(net.minecraft.world.entity.Entity entity) {
-        return entity instanceof Cultist || super.isAlliedTo(entity);
+        return entity instanceof Cultist || entity instanceof CultistLeader || super.isAlliedTo(entity);
     }
 
     @Override
