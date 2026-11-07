@@ -98,6 +98,8 @@ def generate(ctx):
     for name, texture in ITEMS.items():
         ctx.generated_item(name, texture)
 
+    ctx.mineable("pickaxe", "glowing_crusted_stone", "glyphed_stone", "crusted_opening", "runed_stone")
+
     dimension_type = {
         "ambient_light": 0.0,
         "attributes": {
