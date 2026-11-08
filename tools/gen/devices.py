@@ -196,6 +196,7 @@ def crystals(ctx):
                 "condition": {"type": "minecraft:survives_explosion"},
             }]
         ctx.write_loot(name, pools)
+    ctx.mineable("pickaxe", "strange_crystals")
 
 
 def tags(ctx):

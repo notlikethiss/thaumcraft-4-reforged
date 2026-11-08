@@ -242,6 +242,10 @@
       "required": false
     },
     {
+      "id": "thaumcraft:strange_crystals",
+      "required": false
+    },
+    {
       "id": "thaumcraft:tallow_block",
       "required": false
     },
