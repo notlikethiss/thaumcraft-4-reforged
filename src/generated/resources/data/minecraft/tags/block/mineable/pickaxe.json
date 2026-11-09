@@ -114,6 +114,10 @@
       "required": false
     },
     {
+      "id": "thaumcraft:crusted_opening",
+      "required": false
+    },
+    {
       "id": "thaumcraft:crusted_stone",
       "required": false
     },
@@ -163,6 +167,14 @@
     },
     {
       "id": "thaumcraft:focal_manipulator",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:glowing_crusted_stone",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:glyphed_stone",
       "required": false
     },
     {
@@ -222,7 +234,15 @@
       "required": false
     },
     {
+      "id": "thaumcraft:runed_stone",
+      "required": false
+    },
+    {
       "id": "thaumcraft:runic_matrix",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:strange_crystals",
       "required": false
     },
     {
