@@ -26,8 +26,11 @@ public class GolemBellItem extends Item {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (!(target instanceof GolemBase golem)) return InteractionResult.PASS;
         if (!player.level().isClientSide()) {
-            if (player.isShiftKeyDown()) GolemKeys.BELL.remove(stack);
-            else GolemKeys.BELL.set(stack, selection(golem));
+            // Creative entity interaction passes a copy to the item callback.
+            ItemStack held = player.getItemInHand(hand);
+            ItemStack bell = held.getItem() == this ? held : stack;
+            if (player.isShiftKeyDown()) GolemKeys.BELL.remove(bell);
+            else GolemKeys.BELL.set(bell, selection(golem));
             ring(player.level(), golem.blockPosition());
         }
         return InteractionResult.SUCCESS;
