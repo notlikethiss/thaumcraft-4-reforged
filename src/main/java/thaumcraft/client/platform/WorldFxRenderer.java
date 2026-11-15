@@ -3,6 +3,8 @@ package thaumcraft.client.platform;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.context.ContextKey;
@@ -19,12 +21,18 @@ import thaumcraft.Thaumcraft;
 public final class WorldFxRenderer {
     private static final ContextKey<Frame> DATA_KEY = new ContextKey<>(Thaumcraft.id("world_fx"));
     private static final List<WorldFx> EFFECTS = new ArrayList<>();
+    private static final Queue<WorldFx> PENDING = new ConcurrentLinkedQueue<>();
+    private static boolean ticking;
 
     private WorldFxRenderer() {
     }
 
     public static void add(WorldFx fx) {
-        EFFECTS.add(fx);
+        if (ticking || !Minecraft.getInstance().isSameThread()) {
+            PENDING.add(fx);
+        } else {
+            EFFECTS.add(fx);
+        }
     }
 
     @SubscribeEvent
@@ -32,15 +40,30 @@ public final class WorldFxRenderer {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null) {
             EFFECTS.clear();
+            PENDING.clear();
             return;
         }
         if (minecraft.isPaused()) {
             return;
         }
-        EFFECTS.removeIf(fx -> {
-            fx.tick();
-            return fx.isDead();
-        });
+        drainPending();
+        ticking = true;
+        try {
+            EFFECTS.removeIf(fx -> {
+                fx.tick();
+                return fx.isDead();
+            });
+        } finally {
+            ticking = false;
+        }
+        drainPending();
+    }
+
+    private static void drainPending() {
+        WorldFx fx;
+        while ((fx = PENDING.poll()) != null) {
+            EFFECTS.add(fx);
+        }
     }
 
     @SubscribeEvent
