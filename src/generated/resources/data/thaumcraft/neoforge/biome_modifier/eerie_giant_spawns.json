@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "thaumcraft:eerie",
+  "spawners": {
+    "type": "thaumcraft:giant_brainy_zombie",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

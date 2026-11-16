@@ -31,6 +31,7 @@ public record HalloweenFirebatSpawnModifier(HolderSet<Biome> biomes) implements 
     );
 
     public static void register(IEventBus bus) {
+        CODECS.register("monster_biome_spawns", () -> MonsterBiomeSpawnModifier.CODEC);
         CODECS.register(bus);
     }
 

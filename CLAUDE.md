@@ -11,7 +11,7 @@
 
 ## Окружение
 
-- Worktree `~/projects/thaumcraft-4-reforged/.worktrees/mc-1.21.1`, основной checkout `~/projects/thaumcraft-4-reforged`.
+- Worktree `~/projects/mods/thaumcraft-4-reforged/.worktrees/mc-1.21.1`, основной checkout `~/projects/mods/thaumcraft-4-reforged`.
 - Gradle запускается на Java 25 (`export JAVA_HOME=/opt/homebrew/opt/openjdk@25`), тулчейн 21 из `gradle.properties`.
 - Справочники лежат в основном checkout (gitignore): `reference/decompiled` (TC4), `reference/mc1710`, `reference/1.21.1/{mc,neo}`. Порт тех же классов TC3 в ветке `mc/1.21.1` репозитория `~/projects/thaumcraft-reforged`: класс, который там есть, берётся оттуда.
 
@@ -19,7 +19,7 @@
 
 Последний синхронизированный коммит `main`: `99499a8`.
 
-Ветка отстаёт от `main` по содержанию: коммит `95dcec5` (parity fixes 2026-10-15) не перенесён, на ветке нет `StartupConfig`, `SpawnToggles`, `LegacyDrops`, `MonsterBiomeSpawnModifier`, `WardedPearlEvents` и `world_generation_nether`. Sha выше отражает только порядок синхронизации, а пропущенное переносится отдельно.
+Ветка отстаёт от `main` по содержанию: коммит `95dcec5` (parity fixes 2026-10-15) не перенесён, на ветке нет `StartupConfig`, `SpawnToggles`, `LegacyDrops`, `WardedPearlEvents` и `world_generation_nether`. Sha выше отражает только порядок синхронизации, а пропущенное переносится отдельно.
 
 1. `git log --reverse <sha>..main`.
 2. Коммит только с ресурсами, lang или `tools/`: `git cherry-pick`, затем `python3 tools/gen_resources.py --mc 1.21.1`.

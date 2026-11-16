@@ -116,8 +116,6 @@ def spawn_modifiers(ctx):
         {"replace": False, "values": brainy_biomes},
     )
     modifiers = {
-        "brainy_zombie": (f"#{NS}:brainy_zombie_biomes", 10),
-        "pech": ("#c:is_magical", 10),
         "firebat": ("#minecraft:is_nether", 10, 1, 2),
         "wisp": ("#minecraft:is_nether", 5),
         "taintacle": (f"{NS}:tainted_land", 1),
@@ -125,14 +123,28 @@ def spawn_modifiers(ctx):
     for name, settings in modifiers.items():
         biomes, weight, *counts = settings
         ctx.write(
-            ctx.DATA / profile.biome_modifier_namespace / "biome_modifier" / f"{name}_spawns.json",
+            ctx.DATA / NS / profile.biome_modifier_namespace / "biome_modifier" / f"{name}_spawns.json",
             profile.spawn_modifier(biomes, f"{NS}:{name}", weight, *(counts or [1, 1])),
         )
     ctx.write(
-        ctx.DATA / profile.biome_modifier_namespace / "biome_modifier" / "halloween_firebat_spawns.json",
+        ctx.DATA / NS / profile.biome_modifier_namespace / "biome_modifier" / "brainy_zombie_spawns.json",
+        {"type": f"{NS}:monster_biome_spawns"},
+    )
+    for name, mob, biome, weight, minimum, maximum in [
+        ("forest_wisp", "wisp", "magical_forest", 10, 1, 2),
+        ("eerie_brainy", "brainy_zombie", "eerie", 32, 1, 1),
+        ("eerie_giant", "giant_brainy_zombie", "eerie", 8, 1, 1),
+        ("eerie_wisp", "wisp", "eerie", 3, 1, 1),
+        ("eerie_guardian", "eldritch_guardian", "eerie", 1, 1, 1),
+    ]:
+        ctx.write(
+            ctx.DATA / NS / profile.biome_modifier_namespace / "biome_modifier" / f"{name}_spawns.json",
+            profile.spawn_modifier(f"{NS}:{biome}", f"{NS}:{mob}", weight, minimum, maximum),
+        )
+    ctx.write(
+        ctx.DATA / NS / profile.biome_modifier_namespace / "biome_modifier" / "halloween_firebat_spawns.json",
         {"type": f"{NS}:halloween_firebat_spawns", "biomes": f"#{NS}:brainy_zombie_biomes"},
     )
-
 
 def generate(ctx):
     damage_types(ctx)
