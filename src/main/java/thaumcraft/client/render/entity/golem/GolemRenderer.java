@@ -43,7 +43,7 @@ public final class GolemRenderer extends MobRenderer<GolemBase, GolemRenderState
     @Override
     public void extractRenderState(GolemBase entity, GolemRenderState state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
-        state.texture = Thaumcraft.id("textures/model/golem_" + entity.getGolemType().name().toLowerCase(java.util.Locale.ROOT) + ".png");
+        state.texture = entity.getGolemTexture();
         state.core = entity.getCore();
         state.decoration = entity.getGolemDecoration();
         state.advanced = entity.isAdvanced();
@@ -82,7 +82,7 @@ public final class GolemRenderer extends MobRenderer<GolemBase, GolemRenderState
         } else {
             state.coreItem.clear();
         }
-        state.upgradeCount = Math.min(state.upgrades.length, entity.getGolemType().upgrades + (entity.isAdvanced() ? 1 : 0));
+        state.upgradeCount = Math.min(state.upgrades.length, entity.golemStats().upgrades() + (entity.isAdvanced() ? 1 : 0));
         for (int index = 0; index < state.upgradeCount; index++) {
             int upgrade = entity.getUpgrade(index);
             if (upgrade >= 0) {

@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -114,6 +115,15 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
     }
 
     public GolemType getGolemType() { return GolemType.byId(entityData.get(TYPE)); }
+
+    public GolemStats golemStats() { return golemStats(getGolemType()); }
+
+    public GolemStats golemStats(GolemType type) { return GolemStats.of(type); }
+
+    public Identifier getGolemTexture() {
+        return Identifier.fromNamespaceAndPath("thaumcraft", "textures/model/golem_"
+            + getGolemType().name().toLowerCase(java.util.Locale.ROOT) + ".png");
+    }
     public int getCore() { return entityData.get(CORE); }
     public boolean isAdvanced() { return entityData.get(ADVANCED); }
     public String getGolemDecoration() { return entityData.get(DECORATION); }
@@ -166,8 +176,8 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
     public boolean checkOreDict() { return getToggles()[5]; }
     public boolean ignoreDamage() { return getToggles()[6]; }
     public boolean ignoreNBT() { return getToggles()[7]; }
-    public int getGolemStrength() { return getGolemType().strength + getUpgradeAmount(1); }
-    public int getCarryLimit() { int base = getGolemType().carry; return base + Math.min(16, Math.max(4, base)) * getUpgradeAmount(1); }
+    public int getGolemStrength() { return golemStats().strength() + getUpgradeAmount(1); }
+    public int getCarryLimit() { int base = golemStats().carry(); return base + Math.min(16, Math.max(4, base)) * getUpgradeAmount(1); }
     public int getFluidCarryLimit() { return (int) Math.sqrt(getCarryLimit()) * 1000; }
     public int getAttackSpeed() { return isAdvanced() ? 18 : 20; }
     public float getRange() {
@@ -244,11 +254,12 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
 
     public void configure(GolemType type, GolemSnapshot state) {
         entityData.set(TYPE, type.ordinal());
+        GolemStats stats = golemStats(type);
         entityData.set(CORE, state.core());
         entityData.set(ADVANCED, state.advanced());
         entityData.set(DECORATION, state.decoration());
         StringBuilder upgrades = new StringBuilder();
-        for (int slot = 0; slot < type.upgrades + (state.advanced() ? 1 : 0); slot++) {
+        for (int slot = 0; slot < stats.upgrades() + (state.advanced() ? 1 : 0); slot++) {
             int upgrade = slot < state.upgrades().size() ? state.upgrades().get(slot) : -1;
             upgrades.append(upgrade < 0 ? 'f' : Character.forDigit(upgrade, 16));
         }
@@ -261,10 +272,10 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
         StringBuilder colors = new StringBuilder();
         for (int slot = 0; slot < slots; slot++) { int color = slot < state.colors().size() ? state.colors().get(slot) : -1; colors.append(color < 0 ? 'h' : Character.forDigit(color, 16)); }
         entityData.set(COLORS, colors.toString());
-        getAttribute(Attributes.MAX_HEALTH).setBaseValue(type.health + (state.decoration().contains("H") ? 5 : 0));
-        getAttribute(Attributes.ARMOR).setBaseValue(type.armor + (state.decoration().contains("V") ? 1 : 0) + (state.decoration().contains("P") ? 4 : 0));
+        getAttribute(Attributes.MAX_HEALTH).setBaseValue(stats.health() + (state.decoration().contains("H") ? 5 : 0));
+        getAttribute(Attributes.ARMOR).setBaseValue(stats.armor() + (state.decoration().contains("V") ? 1 : 0) + (state.decoration().contains("P") ? 4 : 0));
         getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(2 + getGolemStrength() + getUpgradeAmount(1) + (state.decoration().contains("M") ? 2 : 0));
-        setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.WATER, type.ordinal() >= 5 ? 0 : 8);
+        setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.WATER, stats.heavy() ? 0 : 8);
         rebuildGoals();
         updateCarried();
     }
@@ -326,8 +337,8 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
         if (!level().isClientSide()) containers.tick();
         var state = level().getBlockState(blockPosition().below());
         inactive = state.is(ModBlocks.GOLEM_FETTER.get()) && state.getValue(GolemFetterBlock.ACTIVE);
-        float speed = getGolemType().speed * (getGolemDecoration().contains("B") ? 1.1F : 1) * (getGolemDecoration().contains("P") ? 0.88F : 1) * (1 + getUpgradeAmount(0) * 0.15F) * (isAdvanced() ? 1.1F : 1);
-        if (isInWater() && getGolemType().ordinal() >= 5) speed *= 2;
+        float speed = golemStats().speed() * (getGolemDecoration().contains("B") ? 1.1F : 1) * (getGolemDecoration().contains("P") ? 0.88F : 1) * (1 + getUpgradeAmount(0) * 0.15F) * (isAdvanced() ? 1.1F : 1);
+        if (isInWater() && golemStats().heavy()) speed *= 2;
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(isWorking() ? speed : 0);
         super.aiStep();
         if (action > 0) action--;
@@ -336,7 +347,7 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
         if (healing > 0) healing--;
         if (!level().isClientSide()) {
             if (regenTimer-- <= 0) {
-                regenTimer = (int) (getGolemType().regenDelay * (getGolemDecoration().contains("F") ? 0.66F : 1));
+                regenTimer = (int) (golemStats().regenDelay() * (getGolemDecoration().contains("F") ? 0.66F : 1));
                 if (getHealth() < getMaxHealth()) { heal(1); level().broadcastEntityEvent(this, (byte) 5); }
             }
             if (distanceToSqr(getHomePosition().getX(), getHomePosition().getY(), getHomePosition().getZ()) >= 2304 || isInWall()) returnHome();
@@ -428,7 +439,7 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
     @Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return thaumcraft.registry.ModSounds.CAMERACLACK.get(); }
     @Override protected float getSoundVolume() { return 0.1F; }
     @Override public boolean removeWhenFarAway(double distance) { return false; }
-    @Override public boolean fireImmune() { return getGolemType().fireResist; }
+    @Override public boolean fireImmune() { return golemStats().fireResist(); }
     @Override public boolean canBreatheUnderwater() { return true; }
     @Override protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean hit) { super.dropCustomDeathLoot(level, source, hit); dropCarried(); }
     @Override public Component getDisplayName() { return getName(); }

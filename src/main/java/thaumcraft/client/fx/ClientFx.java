@@ -8,6 +8,7 @@ import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,7 +30,31 @@ import thaumcraft.fx.FxProxy;
 public final class ClientFx implements FxProxy {
     private static final int EXCAVATION_COLOR = 65382;
     private final Map<Integer, WandBeamFx> beams = new HashMap<>();
+    private final Map<GlobalPos, BeamFx> machineBeams = new HashMap<>();
     private final Map<UUID, List<TaintSwarmFx>> taintSwarmParticles = new HashMap<>();
+
+    @Override
+    public void machineBeam(Level level, BlockPos key, Vec3 from, Vec3 to, int color, float width, int type) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        GlobalPos beamKey = GlobalPos.of(level.dimension(), key);
+        BeamFx beam = machineBeams.get(beamKey);
+        if (beam == null || beam.isDead()) {
+            float red = (color >> 16 & 255) / 255.0F;
+            float green = (color >> 8 & 255) / 255.0F;
+            float blue = (color & 255) / 255.0F;
+            beam = new BeamFx(level, from.x, from.y, from.z, to.x, to.y, to.z,
+                red, green, blue, 4);
+            beam.setType(type);
+            beam.setWidth(width);
+            beam.setPulse(false);
+            beam.setBlendMode(771);
+            WorldFxRenderer.add(beam);
+            machineBeams.put(beamKey, beam);
+        }
+        beam.updateBeam(from.x, from.y, from.z, to.x, to.y, to.z);
+    }
 
     @Override
     public void beamPulse(Level level, Entity source, Entity target, int color) {

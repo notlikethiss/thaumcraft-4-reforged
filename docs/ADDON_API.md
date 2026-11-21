@@ -17,6 +17,7 @@ All hooks are plain static calls on Thaumcraft classes. Call them from your mod 
 - `WandRegistry.registerCap(tag, discount, special, specialDiscount, item, craftCost, metal, texture)` and `WandRegistry.registerRod(base, capacity, item, craftCost, update, glowing, staff, runes, texture)`.
   - `item` and `texture` are full `Identifier`s in any namespace. A duplicate tag throws.
   - The add-on provides the research keys `CAP_<tag>` / `ROD_<tag>` and the translations `item.Wand.<tag>.cap` / `item.Wand.<tag>.rod`.
+- `Wands.isWand(stack)` accepts any `WandItem` subclass. An add-on wand sets its default parts and vis with `WandKeys.PARTS.apply(properties, new WandParts(...))` and `WandKeys.VIS.apply(properties, new WandVis(...))` in its `Item.Properties` operator; build these records directly, since components are not bound yet during registration.
 - `WandTriggers.register(Predicate<BlockState>, WandTrigger)` adds a wand right-click action on a block.
 - Focus pouches: subclass `FocusPouchItem` and override `pouchSize(stack)` and `canStore(stack)`. The static `getInventory` / `setInventory` and the wand focus switcher use the item's size and filter.
 
@@ -25,6 +26,18 @@ All hooks are plain static calls on Thaumcraft classes. Call them from your mod 
 - `ArcaneCrafting.registerDynamic(DynamicArcaneRecipe)` adds an arcane recipe computed at match time. Dynamic recipes are checked after the wand and sceptre recipes.
 - `TcStack.registerDataHandler(key, BiConsumer<ItemStack, String>)`: `TcStack.create()` calls the handler for a recipe stack with this `data` key. An infusion result with such a key is created through `create()` instead of copying the central item.
 - `TcStack.registerDataMatcher(key, BiPredicate<ItemStack, String>)`: `TcStack.matches()` requires the matcher to accept every `data` value with this key, like the metadata check in TC4 (for example a potion type).
+
+## Golems
+
+- `GolemBase.golemStats()` returns a `GolemStats` record (`health`, `armor`, `speed`, `fireResist`, `upgrades`, `carry`, `regenDelay`, `strength`, `visCost`, `heavy`) and may be overridden by an add-on golem that carries its own material stats. `GolemBase.getGolemTexture()` is overridable for the model texture. Stock `GolemType` values keep their existing behavior when no add-on overrides apply.
+
+## Nodes
+
+- `NodeTransducerBlockEntity.stopForVortexConversion()` stops an active transducer without touching the aura node or nearby blocks, so an add-on can take over the node safely.
+
+## FX
+
+- `Fx.get().machineBeam(level, key, from, to, color, width, type)` creates or updates one persistent client-side beam per dimension and block position. Color, width and texture type are fixed on creation; later calls only move the endpoints. On the dedicated server the call is a no-op.
 
 ## Other hooks
 
