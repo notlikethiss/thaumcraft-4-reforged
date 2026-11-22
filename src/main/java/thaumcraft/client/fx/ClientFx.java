@@ -38,6 +38,7 @@ public final class ClientFx implements FxProxy {
         if (!level.isClientSide()) {
             return;
         }
+        machineBeams.values().removeIf(entry -> entry.level() != level);
         GlobalPos beamKey = GlobalPos.of(level.dimension(), key);
         MachineBeam entry = machineBeams.get(beamKey);
         if (entry == null || entry.beam().isDead() || entry.level() != level) {
@@ -55,6 +56,11 @@ public final class ClientFx implements FxProxy {
             machineBeams.put(beamKey, entry);
         }
         entry.beam().updateBeam(from.x, from.y, from.z, to.x, to.y, to.z);
+    }
+
+    @Override
+    public void clearLevelBoundEffects() {
+        machineBeams.clear();
     }
 
     private record MachineBeam(Level level, BeamFx beam) {

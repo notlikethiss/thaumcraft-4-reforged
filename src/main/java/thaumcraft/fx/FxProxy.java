@@ -15,6 +15,9 @@ public interface FxProxy {
         net.minecraft.world.phys.Vec3 to, int color, float width, int type) {
     }
 
+    default void clearLevelBoundEffects() {
+    }
+
     default void beamPulse(Level level, Entity source, Entity target, int color) {
     }
 

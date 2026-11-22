@@ -19,6 +19,7 @@ All hooks are plain static calls on Thaumcraft classes. Call them from your mod 
   - The add-on provides the research keys `CAP_<tag>` / `ROD_<tag>` and the translations `item.Wand.<tag>.cap` / `item.Wand.<tag>.rod`.
 - `Wands.isWand(stack)` accepts any `WandItem` subclass. An add-on wand sets its default parts and vis with `WandKeys.PARTS.apply(properties, new WandParts(...))` and `WandKeys.VIS.apply(properties, new WandVis(...))` in its `Item.Properties` operator; build these records directly, since components are not bound yet during registration.
 - `WandTriggers.register(Predicate<BlockState>, WandTrigger)` adds a wand right-click action on a block.
+- Stock-only interactions, kept out of scope on purpose: the essentia tube and buffer trace shapes (`TubeBlock` / `EssentiaBufferBlock`) and the JEI/REI wand subtype listing still check the built-in wand item.
 - Focus pouches: subclass `FocusPouchItem` and override `pouchSize(stack)` and `canStore(stack)`. The static `getInventory` / `setInventory` and the wand focus switcher use the item's size and filter.
 
 ## Crafting

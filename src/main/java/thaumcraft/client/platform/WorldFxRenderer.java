@@ -14,6 +14,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.ExtractLevelRenderStateEvent;
 import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.fx.Fx;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class WorldFxRenderer {
@@ -32,6 +33,7 @@ public final class WorldFxRenderer {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null) {
             EFFECTS.clear();
+            Fx.get().clearLevelBoundEffects();
             return;
         }
         if (minecraft.isPaused()) {
