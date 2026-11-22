@@ -60,7 +60,9 @@ public final class ClientFx implements FxProxy {
 
     @Override
     public void clearLevelBoundEffects() {
+        beams.clear();
         machineBeams.clear();
+        taintSwarmParticles.clear();
     }
 
     private record MachineBeam(Level level, BeamFx beam) {
