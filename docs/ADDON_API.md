@@ -29,11 +29,11 @@ All hooks are plain static calls on Thaumcraft classes. Call them from your mod 
 
 ## Golems
 
-- `GolemBase.golemStats()` returns a `GolemStats` record (`health`, `armor`, `speed`, `fireResist`, `upgrades`, `carry`, `regenDelay`, `strength`, `visCost`, `heavy`) and may be overridden by an add-on golem that carries its own material stats. `GolemBase.getGolemTexture()` is overridable for the model texture. Stock `GolemType` values keep their existing behavior when no add-on overrides apply.
+- `GolemBase.golemStats()` returns a `GolemStats` record (`health`, `armor`, `speed`, `fireResist`, `upgrades`, `carry`, `regenDelay`, `strength`, `visCost`, `heavy`) and may be overridden by an add-on golem that carries its own material stats. `GolemBase.getGolemTexture()` is overridable for the model texture. Stock `GolemType` values keep their existing behavior when no add-on overrides apply. `visCost` is add-on data (stock types set 0) and is read through the same stats override; Thaumcraft itself does not consume it. Note that `GolemPlacerItem` spawns only stock `GolemBase` golems - an add-on golem type needs its own placer item or spawn mechanism, and `configure(GolemType, GolemSnapshot)` resolves stats through the overridable `golemStats()` chain.
 
 ## Nodes
 
-- `NodeTransducerBlockEntity.stopForVortexConversion()` stops an active transducer without touching the aura node or nearby blocks, so an add-on can take over the node safely.
+- `NodeTransducerBlockEntity.stopForVortexConversion()` parks an active transducer in its idle state (resumes normally when its conditions allow) without touching the aura node or nearby blocks, so an add-on can take over the node safely.
 
 ## FX
 

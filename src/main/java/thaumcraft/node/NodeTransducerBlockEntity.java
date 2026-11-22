@@ -36,7 +36,7 @@ public class NodeTransducerBlockEntity extends TcBlockEntity {
     }
 
     public void stopForVortexConversion() {
-        status = -1;
+        status = 0;
         count = 0;
         sync();
     }

@@ -254,7 +254,7 @@ public class GolemBase extends PathfinderMob implements MenuProvider, GolemConta
 
     public void configure(GolemType type, GolemSnapshot state) {
         entityData.set(TYPE, type.ordinal());
-        GolemStats stats = golemStats(type);
+        GolemStats stats = golemStats();
         entityData.set(CORE, state.core());
         entityData.set(ADVANCED, state.advanced());
         entityData.set(DECORATION, state.decoration());

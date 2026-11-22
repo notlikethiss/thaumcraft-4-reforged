@@ -30,7 +30,7 @@ import thaumcraft.fx.FxProxy;
 public final class ClientFx implements FxProxy {
     private static final int EXCAVATION_COLOR = 65382;
     private final Map<Integer, WandBeamFx> beams = new HashMap<>();
-    private final Map<GlobalPos, BeamFx> machineBeams = new HashMap<>();
+    private final Map<GlobalPos, MachineBeam> machineBeams = new HashMap<>();
     private final Map<UUID, List<TaintSwarmFx>> taintSwarmParticles = new HashMap<>();
 
     @Override
@@ -39,21 +39,25 @@ public final class ClientFx implements FxProxy {
             return;
         }
         GlobalPos beamKey = GlobalPos.of(level.dimension(), key);
-        BeamFx beam = machineBeams.get(beamKey);
-        if (beam == null || beam.isDead()) {
+        MachineBeam entry = machineBeams.get(beamKey);
+        if (entry == null || entry.beam().isDead() || entry.level() != level) {
             float red = (color >> 16 & 255) / 255.0F;
             float green = (color >> 8 & 255) / 255.0F;
             float blue = (color & 255) / 255.0F;
-            beam = new BeamFx(level, from.x, from.y, from.z, to.x, to.y, to.z,
+            BeamFx beam = new BeamFx(level, from.x, from.y, from.z, to.x, to.y, to.z,
                 red, green, blue, 4);
             beam.setType(type);
             beam.setWidth(width);
             beam.setPulse(false);
             beam.setBlendMode(771);
             WorldFxRenderer.add(beam);
-            machineBeams.put(beamKey, beam);
+            entry = new MachineBeam(level, beam);
+            machineBeams.put(beamKey, entry);
         }
-        beam.updateBeam(from.x, from.y, from.z, to.x, to.y, to.z);
+        entry.beam().updateBeam(from.x, from.y, from.z, to.x, to.y, to.z);
+    }
+
+    private record MachineBeam(Level level, BeamFx beam) {
     }
 
     @Override
