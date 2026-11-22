@@ -14,7 +14,7 @@ public final class Wands {
     }
 
     public static boolean isWand(ItemStack stack) {
-        return stack.is(ModItems.WAND.get());
+        return stack.getItem() instanceof WandItem;
     }
 
     public static ItemStack create(WandCap cap, WandRod rod, boolean sceptre) {

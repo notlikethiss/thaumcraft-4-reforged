@@ -35,6 +35,12 @@ public class NodeTransducerBlockEntity extends TcBlockEntity {
         return status;
     }
 
+    public void stopForVortexConversion() {
+        status = 0;
+        count = 0;
+        sync();
+    }
+
     private boolean isAuraNode(BlockPos pos) {
         return level.getBlockState(pos).is(ModBlocks.AURA_NODE.get());
     }
