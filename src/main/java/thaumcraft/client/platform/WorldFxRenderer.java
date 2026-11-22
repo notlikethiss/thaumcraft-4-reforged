@@ -19,6 +19,7 @@ import thaumcraft.Thaumcraft;
 public final class WorldFxRenderer {
     private static final ContextKey<Frame> DATA_KEY = new ContextKey<>(Thaumcraft.id("world_fx"));
     private static final List<WorldFx> EFFECTS = new ArrayList<>();
+
     private WorldFxRenderer() {
     }
 
@@ -30,6 +31,7 @@ public final class WorldFxRenderer {
     static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null) {
+            EFFECTS.clear();
             return;
         }
         if (minecraft.isPaused()) {
