@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,6 +21,7 @@ import thaumcraft.fx.Fx;
 public final class WorldFxRenderer {
     private static final ContextKey<Frame> DATA_KEY = new ContextKey<>(Thaumcraft.id("world_fx"));
     private static final List<WorldFx> EFFECTS = new ArrayList<>();
+    private static Level lastLevel;
 
     private WorldFxRenderer() {
     }
@@ -31,9 +33,13 @@ public final class WorldFxRenderer {
     @SubscribeEvent
     static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null) {
+        Level level = minecraft.level;
+        if (level != lastLevel) {
             EFFECTS.clear();
             Fx.get().clearLevelBoundEffects();
+            lastLevel = level;
+        }
+        if (level == null) {
             return;
         }
         if (minecraft.isPaused()) {
